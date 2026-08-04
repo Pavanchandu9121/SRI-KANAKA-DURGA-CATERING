@@ -264,9 +264,11 @@ function Index() {
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Stats bar */}
-        <div className="relative mx-auto -mb-16 max-w-[1400px] translate-y-8 px-6">
+      {/* Stats bar */}
+      <section className="relative z-10 mx-auto -mt-14 max-w-[1400px] px-6">
+
           <div className="grid grid-cols-1 gap-y-8 rounded-sm bg-cream px-8 py-9 text-forest-deep sm:grid-cols-2 lg:grid-cols-5">
             {stats.map(({ icon: Icon, value, label, note }, i) => (
               <div
