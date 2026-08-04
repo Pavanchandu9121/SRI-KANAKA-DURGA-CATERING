@@ -290,8 +290,8 @@ function Index() {
               </div>
             ))}
           </div>
-        </div>
       </section>
+
 
       {/* Services */}
       <section className="px-6 pt-32 pb-24">
