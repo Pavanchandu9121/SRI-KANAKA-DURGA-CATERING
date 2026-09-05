@@ -1,9 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
-import { useState } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
+import emailjs from "@emailjs/browser";
 
-import { PageHero } from "@/components/site/ui-bits";
-import { CONTACT, IMAGES } from "@/data/site";
+import { PageHero } from "@/components/layout/ui-bits";
+import { IMAGES } from "@/config/images";
+import { CONTACT } from "@/data/contact";
+import { useLanguage } from "@/hooks/use-language";
+import { l } from "@/i18n";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -22,41 +26,104 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const [sent, setSent] = useState(false);
+  const { lang, t } = useLanguage();
+  const [form, setForm] = useState({ name: "", phone: "", email: "", event: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const field =
     "w-full rounded-2xl border border-primary/25 bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-primary focus:outline-none";
+
+  const update =
+    (key: keyof typeof form) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      await emailjs.send(
+        "service_gny0bpl",
+        "template_24zyu5k",
+        {
+          name: form.name,
+          phone: form.phone,
+          email: form.email || "Not provided",
+          eventType: form.event || "General enquiry",
+          status: "Contact Page Enquiry",
+          bookingId: `ENQ-${Date.now().toString().slice(-6)}`,
+          details: form.event || "—",
+          menu: "—",
+          addons: "—",
+          instructions: form.message || "—",
+        },
+        "WzG4BYIic7BBDXipa",
+      );
+      setStatus("sent");
+      setForm({ name: "", phone: "", email: "", event: "", message: "" });
+    } catch (error) {
+      console.error("Failed to send enquiry:", error);
+      setStatus("error");
+    }
+  };
 
   return (
     <div>
       <PageHero
-        eyebrow="Contact"
-        title="Let's Plan Your Celebration"
-        subtitle="Tell us your date and guest count — we'll come back with a menu and quotation."
-        image={IMAGES.heroBiryani}
+        eyebrow={t("contactPage.heroEyebrow")}
+        title={t("contactPage.heroTitle")}
+        subtitle={t("contactPage.heroSubtitle")}
+        image={IMAGES.heroFeast}
       />
       <section className="px-6 pt-14">
-        <div className="mx-auto grid max-w-[1400px] gap-8 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-350 gap-8 lg:grid-cols-2">
           <div className="rounded-3xl border border-primary/25 bg-card p-8">
-            <h2 className="font-display text-2xl text-cream">Send an Enquiry</h2>
-            <form
-              className="mt-6 grid gap-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSent(true);
-              }}
-            >
-              <input required placeholder="Full Name" className={field} />
-              <input required placeholder="Phone Number" className={field} />
-              <input type="email" placeholder="Email" className={field} />
-              <input placeholder="Event Type & Date" className={field} />
-              <textarea rows={4} placeholder="Tell us about your event" className={field} />
-              <button className="btn-gold rounded-full px-8 py-4 text-[12px] tracking-[0.16em] uppercase">
-                Send Enquiry
+            <h2 className="font-display text-2xl text-cream">{t("contactPage.sendEnquiry")}</h2>
+            <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
+              <input
+                required
+                placeholder={t("contactPage.fullName")}
+                className={field}
+                value={form.name}
+                onChange={update("name")}
+              />
+              <input
+                required
+                placeholder={t("contactPage.phoneNumber")}
+                className={field}
+                value={form.phone}
+                onChange={update("phone")}
+              />
+              <input
+                type="email"
+                placeholder={t("contactPage.email")}
+                className={field}
+                value={form.email}
+                onChange={update("email")}
+              />
+              <input
+                placeholder={t("contactPage.eventTypeDate")}
+                className={field}
+                value={form.event}
+                onChange={update("event")}
+              />
+              <textarea
+                rows={4}
+                placeholder={t("contactPage.tellUs")}
+                className={field}
+                value={form.message}
+                onChange={update("message")}
+              />
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="btn-gold rounded-full px-8 py-4 text-[12px] tracking-[0.16em] uppercase disabled:opacity-60"
+              >
+                {status === "sending" ? t("contactPage.sending") : t("contactPage.sendBtn")}
               </button>
-              {sent && (
-                <p className="text-sm text-primary">
-                  Thank you! Our team will contact you shortly.
-                </p>
+              {status === "sent" && (
+                <p className="text-sm text-primary">{t("contactPage.thankYou")}</p>
+              )}
+              {status === "error" && (
+                <p className="text-sm text-red-400">{t("contactPage.submitError")}</p>
               )}
             </form>
           </div>
@@ -65,7 +132,7 @@ function ContactPage() {
             <div className="rounded-3xl border border-primary/25 bg-card p-8">
               <ul className="space-y-4 text-sm text-muted-foreground">
                 <li className="flex gap-3">
-                  <MapPin className="size-5 shrink-0 text-primary" /> {CONTACT.address}
+                  <MapPin className="size-5 shrink-0 text-primary" /> {l(CONTACT, "address", lang)}
                 </li>
                 <li className="flex gap-3">
                   <Phone className="size-5 shrink-0 text-primary" />
@@ -76,7 +143,7 @@ function ContactPage() {
                 <li className="flex gap-3">
                   <MessageCircle className="size-5 shrink-0 text-primary" />
                   <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="hover:text-primary">
-                    WhatsApp Us
+                    {t("contactPage.whatsappUs")}
                   </a>
                 </li>
                 <li className="flex gap-3">
@@ -86,12 +153,12 @@ function ContactPage() {
                   </a>
                 </li>
               </ul>
-              <h3 className="mt-6 font-display text-xl text-cream">Business Hours</h3>
+              <h3 className="mt-6 font-display text-xl text-cream">{t("contactPage.businessHours")}</h3>
               <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
                 {CONTACT.hours.map((h) => (
                   <li key={h.day} className="flex justify-between gap-4">
-                    <span>{h.day}</span>
-                    <span className="text-primary/80">{h.time}</span>
+                    <span>{l(h, "day", lang)}</span>
+                    <span className="text-primary/80">{l(h, "time", lang)}</span>
                   </li>
                 ))}
               </ul>

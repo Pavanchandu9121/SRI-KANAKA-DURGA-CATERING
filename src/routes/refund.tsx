@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { PageHero } from "@/components/site/ui-bits";
+import { PageHero } from "@/components/layout/ui-bits";
 
 export const Route = createFileRoute("/refund")({
   head: () => ({

@@ -6,8 +6,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { PageHero } from "@/components/site/ui-bits";
-import { FAQS, IMAGES } from "@/data/site";
+import { PageHero } from "@/components/layout/ui-bits";
+import { IMAGES } from "@/config/images";
+import { FAQS } from "@/data/services";
+import { useLanguage } from "@/hooks/use-language";
+import { l } from "@/i18n";
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
@@ -26,12 +29,13 @@ export const Route = createFileRoute("/faq")({
 });
 
 function FaqPage() {
+  const { lang, t } = useLanguage();
   return (
     <div>
       <PageHero
-        eyebrow="FAQ"
-        title="Frequently Asked Questions"
-        subtitle="Still unsure about something? Call us any time — we answer 24×7."
+        eyebrow={t("faqPage.heroEyebrow")}
+        title={t("faqPage.heroTitle")}
+        subtitle={t("faqPage.heroSubtitle")}
         image={IMAGES.aboutKitchen}
       />
       <section className="px-6 pt-14">
@@ -40,9 +44,9 @@ function FaqPage() {
             {FAQS.map((f) => (
               <AccordionItem key={f.q} value={f.q} className="border-primary/25">
                 <AccordionTrigger className="text-left font-display text-lg text-cream">
-                  {f.q}
+                  {l(f, "q", lang)}
                 </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">{f.a}</AccordionContent>
+                <AccordionContent className="text-sm text-muted-foreground">{l(f, "a", lang)}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

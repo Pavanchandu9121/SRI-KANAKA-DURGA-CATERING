@@ -186,3 +186,107 @@
   }
 }
 
+/*
+ * Cinematic brand intro — see components/layout/BrandIntro.tsx.
+ *
+ * The veil is an SVG rect masked by the brand letterforms, so the letters are
+ * true holes rather than a picture of the hero: what shows through them is the
+ * live homepage underneath, playing hero video and all. That is what lets the
+ * zoom finish *inside* a letter and open straight onto the hero section with no
+ * cut, fade-to-white, or layout shift.
+ *
+ * GSAP owns every transform and opacity below (it needs the display font's real
+ * metrics before it can aim the zoom). These rules only describe the resting
+ * state, so a slow script can never flash a half-built first frame.
+ */
+.brand-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: hidden;
+  /* Same colour as the page, so the very first paint is already on-brand. */
+  background-color: var(--forest-deep);
+  cursor: pointer;
+}
+
+.brand-intro__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-intro__veil {
+  fill: var(--forest-deep);
+}
+
+/*
+ * The glyph is declared once in <defs> and re-used twice — once as the mask's
+ * hole, once as the gold overlay — so the letters you see and the letters that
+ * cut through the veil can never drift apart.
+ */
+.brand-intro__glyph {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17vmin;
+  letter-spacing: 0.05em;
+}
+
+/*
+ * No will-change here on purpose. GSAP drives these groups through the SVG
+ * `transform` attribute, and promoting mask content to its own layer is what
+ * makes browsers rasterise the mask once and then stretch that bitmap — which
+ * is exactly how you get soft, pixelated letter edges at high zoom.
+ */
+
+/* Faded up by GSAP once the font has loaded and the mark has been measured. */
+.brand-intro__ink {
+  opacity: 0;
+}
+
+.brand-intro__stop-from {
+  stop-color: oklch(0.7 0.12 78);
+}
+
+.brand-intro__stop-to {
+  stop-color: var(--gold-soft);
+}
+
+.brand-intro__caption {
+  position: absolute;
+  left: 50%;
+  top: 61%;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.brand-intro__rule {
+  width: clamp(5rem, 22vmin, 11rem);
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+.brand-intro__caption-text {
+  font-family: var(--font-display);
+  font-size: clamp(0.58rem, 1.9vmin, 0.85rem);
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  text-align: center;
+  color: oklch(0.86 0.08 85 / 82%);
+}
+
+.brand-intro__skip {
+  position: absolute;
+  bottom: clamp(1.5rem, 5vh, 3rem);
+  left: 50%;
+  translate: -50% 0;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: oklch(0.86 0.08 85 / 38%);
+  opacity: 0;
+  pointer-events: none;
+}

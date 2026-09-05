@@ -1,0 +1,468 @@
+import type { Dish } from "@/types";
+
+/*
+ * The menu is grouped the way the kitchen quotes it: a non-veg catering list, a
+ * veg catering list, and the all-day items that go with either. The sidebar
+ * filter on /menu renders these groups in this order, so this is the single
+ * place to reorder or rename a section.
+ */
+export const MENU_SECTIONS: { label: string; categories: string[] }[] = [
+  {
+    label: "Non-Veg Catering",
+    categories: [
+      "Biryanis",
+      "Chicken Items",
+      "Mutton Items",
+      "Prawns Items",
+      "Snacks",
+      "Live Items",
+    ],
+  },
+  {
+    label: "Veg Catering",
+    categories: [
+      "Sweets",
+      "Hot Snacks & Starters",
+      "Biryanis & Rice Specialties",
+      "Curd Chutneys",
+      "Curries & Gravies",
+      "Dals",
+      "Fries",
+      "65 Varieties",
+      "Chutneys & Pickles",
+      "Spice Powders",
+      "Rasam, Sambar & Soups",
+    ],
+  },
+  {
+    label: "All Day",
+    categories: ["Breakfast", "Welcome Drinks", "Rotis", "Beverages", "Accompaniments"],
+  },
+];
+
+export const MENU_CATEGORIES = MENU_SECTIONS.flatMap((s) => s.categories);
+
+/* Long-form builder, used by the items that carry their own photograph. */
+const d = (
+  id: string,
+  name: string,
+  nameTe: string,
+  desc: string,
+  descTe: string,
+  category: string,
+  cuisine: string,
+  veg: boolean,
+  packages: string[],
+  extra: Partial<Dish> = {},
+): Dish => ({ id, name, nameTe, desc, descTe, category, cuisine, veg, packages, ...extra });
+
+type Row = [
+  id: string,
+  name: string,
+  nameTe: string,
+  desc: string,
+  descTe: string,
+  extra?: Partial<Dish>,
+];
+
+/*
+ * Compact builder for the catering sections, where category, cuisine, diet and
+ * package availability are the same for a whole run of dishes. Anything that
+ * differs for one item goes in that row's trailing override.
+ *
+ * `photo` names a file in assets/dishes and is only set where an existing
+ * photograph genuinely shows that dish; the rest fall back to a brand tile on
+ * /menu. Dropping <id>.jpg into assets/dishes is enough to give any item its
+ * own picture — no code change needed.
+ */
+const section = (
+  category: string,
+  defaults: { cuisine: string; veg: boolean; packages: string[] },
+  rows: Row[],
+): Dish[] =>
+  rows.map(([id, name, nameTe, desc, descTe, extra]) => ({
+    id,
+    name,
+    nameTe,
+    desc,
+    descTe,
+    category,
+    cuisine: defaults.cuisine,
+    veg: defaults.veg,
+    packages: defaults.packages,
+    ...extra,
+  }));
+
+const ALL = ["Silver", "Gold", "Premium", "Traditional Andhra", "Wedding Special"];
+const GOLD_UP = ["Gold", "Premium", "Wedding Special"];
+const PREMIUM = ["Premium", "Wedding Special"];
+const ANDHRA = ["Traditional Andhra", "Gold", "Premium"];
+
+/* ────────────────────────── Photographed classics ────────────────────────── */
+/* These carry their own image at assets/dishes/<id>.jpg. */
+const CLASSICS: Dish[] = [
+  d("idli", "Idli Sambar", "ఇడ్లీ సాంబార్", "Steamed rice cakes with hot sambar and chutney.", "వేడి సాంబార్ మరియు చట్నీతో ఆవిరి మీద ఉడికించిన అన్నపు వడలు.", "Breakfast", "South Indian", true, ["Silver", "Gold", "Traditional Andhra"], { popular: true }),
+  d("poori", "Poori Kurma", "పూరీ కుర్మా", "Puffed pooris with spiced potato kurma.", "మసాలా ఆలూ కుర్మాతో ఉబ్బిన పూరీలు.", "Breakfast", "South Indian", true, ["Gold", "Premium"]),
+  d("upma", "Upma", "ఉప్మా", "Soft semolina upma tempered with cashews.", "జీడిపప్పుతో తాలింపు చేసిన మెత్తని రవ్వ ఉప్మా.", "Breakfast", "South Indian", true, ["Silver"]),
+  d("dosa", "Ghee Karam Dosa", "నెయ్యి కారం దోశ", "Crisp dosa with Andhra karam podi and ghee.", "ఆంధ్ర కారం పొడి మరియు నెయ్యితో కరకరలాడే దోశ.", "Breakfast", "Andhra", true, ["Gold", "Traditional Andhra"], { popular: true }),
+
+  d("rosemilk", "Rose Milk", "రోజ్ మిల్క్", "Chilled milk with rose syrup and basil seeds.", "గులాబీ సిరప్ మరియు సబ్జా గింజలతో చల్లని పాలు.", "Welcome Drinks", "Indian", true, ["Silver", "Gold", "Premium"]),
+  d("panakam", "Panakam", "పానకం", "Traditional jaggery, ginger and cardamom cooler.", "సాంప్రదాయ బెల్లం, అల్లం మరియు ఏలకుల చల్లని పానీయం.", "Welcome Drinks", "Andhra", true, ["Traditional Andhra"]),
+  d("mojito", "Virgin Mojito", "వర్జిన్ మొజిటో", "Mint, lime and soda over crushed ice.", "పుదీనా, నిమ్మకాయ మరియు సోడాతో ఐస్ మీద.", "Welcome Drinks", "Continental", true, ["Premium", "Wedding Special"], { isNew: true }),
+
+  d("chicken65", "Chicken 65", "చికెన్ 65", "Spicy, crispy and flavorful chicken starter.", "కారంగా, కరకరలాడే రుచికరమైన చికెన్ స్టార్టర్.", "Chicken Items", "Andhra", false, GOLD_UP, { popular: true }),
+  d("paneertikka", "Paneer Tikka", "పనీర్ టిక్కా", "Char-grilled paneer in tandoori marinade.", "తందూరీ మసాలాలో కాల్చిన పనీర్.", "Hot Snacks & Starters", "North Indian", true, ["Gold", "Premium"], { popular: true }),
+  d("gobi", "Gobi Manchurian", "గోబీ మంచూరియన్", "Crispy cauliflower florets tossed in manchurian sauce.", "మంచూరియన్ సాస్‌లో వేయించిన కరకరలాడే గోబీ ముక్కలు.", "Hot Snacks & Starters", "Chinese", true, ["Silver", "Gold"]),
+  d("apollofish", "Apollo Fish", "అపోలో ఫిష్", "Boneless fish tossed with curry leaves and chilli.", "కరివేపాకు మరియు మిర్చితో వేయించిన ఎముకలు లేని చేప.", "Snacks", "Andhra", false, PREMIUM),
+  d("harabhara", "Hara Bhara Kabab", "హరా భరా కబాబ్", "Spinach and green pea patties.", "పాలకూర మరియు బఠానీ పటీస్.", "Hot Snacks & Starters", "North Indian", true, ["Silver", "Gold"]),
+
+  d("chickenbiryani", "Hyderabadi Chicken Biryani", "హైదరాబాదీ చికెన్ బిర్యానీ", "Tender chicken dum-cooked with fragrant rice.", "సుగంధ బియ్యంతో దమ్ వేసిన మెత్తని చికెన్.", "Biryanis", "Hyderabadi", false, GOLD_UP, { popular: true }),
+  d("vegbiryani", "Veg Biryani", "వెజ్ బిర్యానీ", "Aromatic basmati rice cooked with mixed vegetables.", "మిశ్రమ కూరగాయలతో వండిన సుగంధ బాస్మతి బియ్యం.", "Biryanis & Rice Specialties", "Hyderabadi", true, ["Silver", "Gold", "Premium"], { popular: true }),
+  d("jeerarice", "Jeera Rice", "జీరా రైస్", "Fragrant basmati rice tempered with cumin.", "జీలకర్ర తాలింపుతో సుగంధ బాస్మతి బియ్యం.", "Biryanis & Rice Specialties", "North Indian", true, ["Silver", "Gold"]),
+  d("pulihora", "Pulihora", "పులిహోర", "Tamarind rice with peanuts and curry leaves.", "వేరుశెనగ మరియు కరివేపాకుతో చింతపండు అన్నం.", "Biryanis & Rice Specialties", "Andhra", true, ["Traditional Andhra"]),
+  d("curdrice", "Daddojanam", "దద్దోజనం", "Creamy curd rice with a light tempering.", "తేలికపాటి తాలింపుతో క్రీమీ పెరుగన్నం.", "Biryanis & Rice Specialties", "Andhra", true, ["Silver", "Traditional Andhra"]),
+
+  d("paneerbutter", "Paneer Butter Masala", "పనీర్ బటర్ మసాలా", "Soft paneer cubes in rich butter tomato gravy.", "గొప్ప వెన్న టమాటో గ్రేవీలో మెత్తని పనీర్ ముక్కలు.", "Curries & Gravies", "North Indian", true, ["Gold", "Premium"], { popular: true }),
+  d("dal", "Dal Tadka", "దాల్ తడ్కా", "Yellow lentils tempered with spices and herbs.", "మసాలాలు మరియు ఆకుకూరలతో తాలింపు చేసిన పసుపు పప్పు.", "Dals", "North Indian", true, ["Silver", "Gold"]),
+  d("muttoncurry", "Mutton Curry", "మటన్ కర్రీ", "Succulent mutton in traditional spicy gravy.", "సాంప్రదాయ కారపు గ్రేవీలో రసవంతమైన మటన్.", "Mutton Items", "Andhra", false, PREMIUM),
+  d("gutti", "Gutti Vankaya", "గుత్తి వంకాయ", "Stuffed brinjal in peanut sesame masala.", "వేరుశెనగ నువ్వుల మసాలాలో కూర్చిన వంకాయ.", "Curries & Gravies", "Andhra", true, ["Traditional Andhra"], { isNew: true }),
+  d("sambar", "Sambar", "సాంబార్", "Lentil stew with vegetables and tamarind.", "కూరగాయలు మరియు చింతపండుతో పప్పు కూర.", "Rasam, Sambar & Soups", "South Indian", true, ["Silver", "Traditional Andhra"]),
+
+  d("pulka", "Pulka", "పుల్కా", "Soft Indian flatbread made with wheat flour.", "గోధుమ పిండితో చేసిన మెత్తని రొట్టె.", "Rotis", "North Indian", true, ["Silver", "Gold", "Premium"]),
+  d("naan", "Butter Naan", "బటర్ నాన్", "Tandoor-baked naan brushed with butter.", "వెన్నతో పూసిన తందూర్‌లో కాల్చిన నాన్.", "Rotis", "North Indian", true, ["Gold", "Premium"]),
+  d("chapati", "Chapati", "చపాతీ", "Everyday soft wheat rotis.", "ప్రతిరోజూ తినే మెత్తని గోధుమ రొట్టెలు.", "Rotis", "North Indian", true, ["Silver"]),
+
+  d("gulab", "Gulab Jamun", "గులాబ్ జామూన్", "Soft cottage cheese dumplings in sugar syrup.", "చక్కెర సిరప్‌లో మెత్తని పాల ఉండలు.", "Sweets", "Indian", true, ["Silver", "Gold", "Premium"], { popular: true }),
+  d("doubleka", "Double Ka Meetha", "డబల్ కా మీఠా", "Fried bread pudding in saffron milk.", "కుంకుమపువ్వు పాలలో వేయించిన బ్రెడ్ పుడ్డింగ్.", "Sweets", "Hyderabadi", true, ["Gold", "Wedding Special"]),
+  d("payasam", "Payasam", "పాయసం", "Milk and vermicelli kheer with dry fruits.", "డ్రై ఫ్రూట్స్‌తో పాలు మరియు సేమియా పాయసం.", "Sweets", "South Indian", true, ["Traditional Andhra"]),
+  d("bobbatlu", "Bobbatlu", "బొబ్బట్లు", "Sweet stuffed flatbread with ghee.", "నెయ్యితో తీపి కూర్చిన రొట్టె.", "Sweets", "Andhra", true, ["Traditional Andhra"]),
+  d("custard", "Fruit Custard", "ఫ్రూట్ కస్టర్డ్", "Fresh fruits in creamy custard.", "క్రీమీ కస్టర్డ్‌లో తాజా పండ్లు.", "Sweets", "Continental", true, ["Silver", "Gold"]),
+
+  d("vanilla", "Vanilla Scoop", "వెనిల్లా స్కూప్", "Classic vanilla ice cream.", "క్లాసిక్ వెనిల్లా ఐస్ క్రీం.", "Live Items", "Continental", true, ["Gold", "Premium"]),
+  d("kulfi", "Malai Kulfi", "మలై కుల్ఫీ", "Slow-cooked milk kulfi with pistachio.", "పిస్తాతో నెమ్మదిగా ఉడికించిన పాల కుల్ఫీ.", "Live Items", "Indian", true, PREMIUM, { popular: true }),
+  d("chaat", "Chaat Counter", "చాట్ కౌంటర్", "Pani puri, bhel and sev puri, made to order.", "ఆర్డర్ మీద చేసిన పానీ పూరి, భేల్ మరియు సేవ్ పూరి.", "Live Items", "North Indian", true, PREMIUM, { popular: true }),
+  d("pasta", "Pasta Counter", "పాస్తా కౌంటర్", "Penne tossed live in red or white sauce.", "రెడ్ లేదా వైట్ సాస్‌లో లైవ్‌గా వేయించిన పెన్నే.", "Live Items", "Continental", true, ["Premium"], { isNew: true }),
+  d("dosacounter", "Dosa Counter", "దోశ కౌంటర్", "Live dosas with three chutneys.", "మూడు చట్నీలతో లైవ్ దోశలు.", "Live Items", "South Indian", true, ["Gold", "Premium"]),
+
+  d("filtercoffee", "Filter Coffee", "ఫిల్టర్ కాఫీ", "Strong South Indian decoction coffee.", "బలమైన దక్షిణ భారత డికాక్షన్ కాఫీ.", "Beverages", "South Indian", true, ["Silver", "Gold", "Premium"]),
+  d("masalatea", "Masala Tea", "మసాలా టీ", "Spiced tea brewed with ginger and cardamom.", "అల్లం మరియు ఏలకులతో ఉడికించిన మసాలా టీ.", "Beverages", "Indian", true, ["Silver", "Gold"]),
+  d("buttermilk", "Spiced Buttermilk", "మసాలా మజ్జిగ", "Chilled majjiga with curry leaves.", "కరివేపాకుతో చల్లని మజ్జిగ.", "Beverages", "Andhra", true, ["Traditional Andhra"]),
+
+  d("avakaya", "Avakaya", "ఆవకాయ", "Classic Andhra mango pickle.", "క్లాసిక్ ఆంధ్ర మామిడి ఊరగాయ.", "Chutneys & Pickles", "Andhra", true, ["Traditional Andhra", "Silver"]),
+  d("gongura", "Gongura Pachadi", "గోంగూర పచ్చడి", "Tangy sorrel leaf chutney.", "పుల్లని గోంగూర పచ్చడి.", "Chutneys & Pickles", "Andhra", true, ["Traditional Andhra"], { popular: true }),
+
+  d("appadam", "Appadam", "అప్పడం", "Crisp fried papad.", "కరకరలాడే వేయించిన అప్పడాలు.", "Accompaniments", "Andhra", true, ["Silver", "Gold", "Traditional Andhra"]),
+  d("salad", "Garden Salad", "గార్డెన్ సలాడ్", "Fresh cut vegetables with lemon.", "నిమ్మకాయతో తాజా కట్ చేసిన కూరగాయలు.", "Accompaniments", "Continental", true, ["Gold", "Premium"]),
+  d("raita", "Mixed Raita", "మిక్స్‌డ్ రైతా", "Curd with onion, cucumber and tomato.", "ఉల్లిపాయ, దోసకాయ మరియు టమాటాతో పెరుగు.", "Curd Chutneys", "North Indian", true, ["Gold", "Premium"]),
+];
+
+/* ──────────────────────────── Non-veg catering ──────────────────────────── */
+
+const BIRYANIS = section("Biryanis", { cuisine: "Hyderabadi", veg: false, packages: GOLD_UP }, [
+  ["chicken-fry-piece-biryani", "Chicken Fry Piece Biryani", "చికెన్ ఫ్రై పీస్ బిర్యానీ", "Dum biryani layered with separately fried chicken pieces.", "వేరుగా వేయించిన చికెన్ ముక్కలతో పొరలుగా వేసిన దమ్ బిర్యానీ.", { photo: "chickenbiryani", popular: true }],
+  ["chicken-joint-biryani", "Chicken Joint Biryani", "చికెన్ జాయింట్ బిర్యానీ", "Biryani built on meaty leg joints for deeper flavour.", "మరింత రుచి కోసం కాలు జాయింట్ ముక్కలతో చేసిన బిర్యానీ.", { photo: "chickenbiryani" }],
+  ["mutton-dum-biryani", "Mutton Dum Biryani", "మటన్ దమ్ బిర్యానీ", "Slow dum-cooked mutton biryani sealed till the last steam.", "చివరి ఆవిరి వరకు మూసి నెమ్మదిగా ఉడికించిన మటన్ బిర్యానీ.", { popular: true }],
+  ["mutton-keema-biryani", "Mutton Keema Biryani", "మటన్ కీమా బిర్యానీ", "Minced mutton cooked through every layer of rice.", "బియ్యం ప్రతి పొరలో ఉడికించిన మటన్ కీమా.", {}],
+  ["fish-fry-piece-biryani", "Fish Fry Piece Biryani", "ఫిష్ ఫ్రై పీస్ బిర్యానీ", "Fried fish steaks folded into fragrant biryani rice.", "సుగంధ బిర్యానీ అన్నంలో కలిపిన వేయించిన చేప ముక్కలు.", {}],
+  ["natu-kodi-pulao", "Country Chicken (Natu Kodi) Pulao", "నాటు కోడి పులావ్", "Free-range country chicken pulao, light on spice, heavy on aroma.", "నాటు కోడితో చేసిన పులావ్ — తక్కువ కారం, ఎక్కువ సువాసన.", { photo: "chickenbiryani", cuisine: "Andhra", popular: true }],
+  ["prawns-biryani", "Prawns Biryani", "రొయ్యల బిర్యానీ", "Coastal prawns biryani finished with fresh coriander.", "తాజా కొత్తిమీరతో పూర్తి చేసిన కోస్తా రొయ్యల బిర్యానీ.", { cuisine: "Andhra" }],
+]);
+
+const CHICKEN = section("Chicken Items", { cuisine: "Andhra", veg: false, packages: GOLD_UP }, [
+  ["chicken-soup", "Chicken Soup", "చికెన్ సూప్", "Clear peppered chicken broth, served hot.", "మిరియాలతో వేడిగా అందించే స్పష్టమైన చికెన్ సూప్.", {}],
+  ["chicken-keema-balls", "Chicken Keema Balls (Hot)", "చికెన్ కీమా బాల్స్", "Spiced minced chicken balls, served straight off the fire.", "మసాలా చికెన్ కీమా ఉండలు, వేడివేడిగా అందిస్తాము.", {}],
+  ["chicken-lollipops", "Chicken Lollipops (Hot)", "చికెన్ లాలీపాప్స్", "Frenched wings in a hot, glossy coating.", "కారంగా మెరిసే పూతతో చికెన్ వింగ్స్.", { photo: "chicken65", popular: true }],
+  ["chicken-curry", "Chicken Curry", "చికెన్ కర్రీ", "Everyday Andhra chicken curry with onion tomato masala.", "ఉల్లి టమాటో మసాలాతో రోజువారీ ఆంధ్ర చికెన్ కర్రీ.", { packages: ALL }],
+  ["chicken-korma", "Chicken Korma (Biryani)", "చికెన్ కుర్మా", "Mild cashew korma, the traditional partner to biryani.", "బిర్యానీకి సాంప్రదాయ జోడీ — మెత్తని జీడిపప్పు కుర్మా.", {}],
+  ["chicken-gongura-curry", "Chicken Gongura Curry", "చికెన్ గోంగూర కర్రీ", "Chicken simmered with tart sorrel leaves.", "పుల్లని గోంగూర ఆకులతో ఉడికించిన చికెన్.", { popular: true }],
+  ["chicken-antu-iguru", "Chicken Antu Iguru", "చికెన్ అంటు ఇగురు", "Thick, clinging gravy cooked down till the masala coats each piece.", "మసాలా ప్రతి ముక్కకు అంటుకునేలా చిక్కగా ఉడికించిన ఇగురు.", {}],
+  ["chilli-chicken-fry", "Chilli Chicken (Fry)", "చిల్లీ చికెన్ ఫ్రై", "Dry-fried chicken tossed with green chilli and curry leaves.", "పచ్చిమిర్చి కరివేపాకుతో వేయించిన డ్రై చికెన్.", { photo: "chicken65" }],
+  ["kadai-chicken", "Kadai Chicken", "కడాయి చికెన్", "Chicken and capsicum seared in a kadai with crushed spices.", "దంచిన మసాలాలతో కడాయిలో వేయించిన చికెన్, క్యాప్సికమ్.", { cuisine: "North Indian" }],
+]);
+
+const MUTTON = section("Mutton Items", { cuisine: "Andhra", veg: false, packages: PREMIUM }, [
+  ["mutton-keema-balls", "Mutton Keema Balls (Hot)", "మటన్ కీమా బాల్స్", "Minced mutton balls, fried and served hot.", "వేయించి వేడిగా అందించే మటన్ కీమా ఉండలు.", {}],
+  ["gongura-mutton", "Gongura Mutton", "గోంగూర మటన్", "Mutton slow-cooked with sorrel leaves — an Andhra signature.", "గోంగూర ఆకులతో నెమ్మదిగా ఉడికించిన మటన్ — ఆంధ్ర ప్రత్యేకత.", { popular: true }],
+  ["head-meat-curry", "Head Meat Curry (Talakaya Mamsam)", "తలకాయ మాంసం కూర", "Traditional head meat curry, deeply spiced.", "గాఢమైన మసాలాతో సాంప్రదాయ తలకాయ మాంసం కూర.", {}],
+  ["gongura-boti", "Gongura Boti", "గోంగూర బోటి", "Tripe cooked with tangy gongura.", "పుల్లని గోంగూరతో ఉడికించిన బోటి.", {}],
+  ["boti-fry", "Boti Fry", "బోటి ఫ్రై", "Dry-fried tripe with pepper and curry leaves.", "మిరియాలు కరివేపాకుతో వేయించిన బోటి.", {}],
+  ["paya", "Paya (Trotters Soup)", "పాయ", "Trotters simmered overnight into a rich soup.", "రాత్రంతా ఉడికించిన గొర్రె కాళ్ల సూప్.", {}],
+  ["mutton-drumstick-curry", "Mutton Drumstick Curry", "మటన్ మునగకాయ కూర", "Mutton and drumstick in a tangy gravy.", "పుల్లని గ్రేవీలో మటన్ మరియు మునగకాయ.", {}],
+]);
+
+const PRAWNS = section("Prawns Items", { cuisine: "Andhra", veg: false, packages: PREMIUM }, [
+  ["prawns-curry", "Prawns Curry", "రొయ్యల కూర", "Coastal prawns curry with coconut and tamarind.", "కొబ్బరి చింతపండుతో కోస్తా రొయ్యల కూర.", { popular: true }],
+  ["prawns-gongura-curry", "Prawns Gongura Curry", "రొయ్యల గోంగూర కూర", "Prawns cooked down with sorrel leaves.", "గోంగూర ఆకులతో ఉడికించిన రొయ్యలు.", {}],
+  ["prawns-65", "Prawns 65", "రొయ్యల 65", "Crisp-fried prawns in a fiery 65 masala.", "కారపు 65 మసాలాలో కరకరలాడే వేయించిన రొయ్యలు.", {}],
+  ["prawns-antu-iguru", "Prawns Antu Iguru", "రొయ్యల అంటు ఇగురు", "Thick gravy prawns, reduced till the masala clings.", "మసాలా అంటుకునేలా చిక్కబెట్టిన రొయ్యల ఇగురు.", {}],
+]);
+
+const SNACKS = section("Snacks", { cuisine: "North Indian", veg: true, packages: GOLD_UP }, [
+  ["pani-puri", "Pani Puri", "పానీ పూరీ", "Crisp puris with spiced mint water.", "మసాలా పుదీనా నీటితో కరకరలాడే పూరీలు.", { photo: "chaat", popular: true }],
+  ["batani-chat", "Peas (Batani) Chat", "బటానీ చాట్", "Boiled white peas tossed with onion, chilli and lime.", "ఉల్లి, మిర్చి, నిమ్మతో కలిపిన ఉడికించిన బటానీ.", { photo: "chaat" }],
+  ["samosa-chat", "Samosa Chat", "సమోసా చాట్", "Crushed samosa under chutneys, curd and sev.", "చట్నీలు, పెరుగు, సేవ్‌తో పగలగొట్టిన సమోసా.", { photo: "chaat" }],
+  ["aloo-chat", "Aloo Chat", "ఆలూ చాట్", "Fried potato cubes with chaat masala.", "చాట్ మసాలాతో వేయించిన ఆలూ ముక్కలు.", { photo: "chaat" }],
+  ["batani-mixture", "Peas (Batani) Mixture", "బటానీ మిక్చర్", "Dry peas mixture with a crunchy tempering.", "కరకరలాడే తాలింపుతో పొడి బటానీ మిక్చర్.", {}],
+  ["egg-mixture", "Egg Mixture", "ఎగ్ మిక్చర్", "Boiled egg tossed through a spiced mixture.", "మసాలా మిక్చర్‌లో కలిపిన ఉడికించిన గుడ్డు.", { veg: false }],
+  ["bajji-mixture", "Bajji Mixture", "బజ్జీ మిక్చర్", "Chopped bajjis tossed with onion and masala.", "ఉల్లి మసాలాతో కలిపిన తరిగిన బజ్జీలు.", {}],
+  ["french-fries", "French Fries", "ఫ్రెంచ్ ఫ్రైస్", "Golden salted potato fries.", "ఉప్పు వేసిన బంగారు వర్ణపు ఆలూ ఫ్రైస్.", { cuisine: "Continental" }],
+  ["aloo-slices", "Aloo Slices", "ఆలూ స్లైసెస్", "Thin potato slices fried crisp.", "కరకరలాడేలా వేయించిన సన్నని ఆలూ చక్రాలు.", {}],
+  ["corn-samosa", "Corn Samosa", "కార్న్ సమోసా", "Sweet corn and cheese in a crisp samosa shell.", "కరకరలాడే సమోసాలో స్వీట్ కార్న్ మరియు చీజ్.", {}],
+  ["spring-rolls", "Spring Rolls", "స్ప్రింగ్ రోల్స్", "Vegetable rolls fried till shatteringly crisp.", "కరకరలాడేలా వేయించిన కూరగాయల రోల్స్.", { cuisine: "Chinese" }],
+]);
+
+const LIVE = section("Live Items", { cuisine: "Indian", veg: true, packages: PREMIUM }, [
+  ["ice-creams", "Ice Creams", "ఐస్ క్రీంలు", "Assorted scoops served from a live freezer counter.", "లైవ్ ఫ్రీజర్ కౌంటర్ నుండి రకరకాల ఐస్ క్రీంలు.", { photo: "vanilla", popular: true }],
+  ["fruit-salad", "Fruit Salad", "ఫ్రూట్ సలాడ్", "Seasonal fruit cut fresh at the counter.", "కౌంటర్‌లో తాజాగా కట్ చేసిన కాలానుగుణ పండ్లు.", { photo: "custard" }],
+  ["sweet-paan", "Sweet Paan", "స్వీట్ పాన్", "Betel leaf with gulkand, coconut and sweet fillings.", "గుల్కంద్, కొబ్బరి, తీపి పూరణలతో తమలపాకు.", {}],
+]);
+
+/* ────────────────────────────── Veg catering ────────────────────────────── */
+
+const SWEETS = section("Sweets", { cuisine: "Indian", veg: true, packages: GOLD_UP }, [
+  ["hangoor-basundi", "Hangoor Basundi", "హంగూర్ బాసుంది", "Reduced milk basundi studded with hangoor pearls.", "హంగూర్ ముత్యాలతో చిక్కబెట్టిన పాల బాసుంది.", { photo: "payasam" }],
+  ["chakra-pongali", "Chakra Pongali", "చక్ర పొంగలి", "Temple-style sweet pongal with jaggery, ghee and cashews.", "బెల్లం, నెయ్యి, జీడిపప్పుతో గుడి శైలి తీపి పొంగలి.", { photo: "payasam", cuisine: "Andhra", packages: ANDHRA, popular: true }],
+  ["poornam", "Poornam", "పూర్ణం", "Sweet lentil-coconut filling in a crisp fried shell.", "కరకరలాడే పైపొరలో తీపి పప్పు కొబ్బరి పూరణం.", { photo: "bobbatlu", cuisine: "Andhra", packages: ANDHRA }],
+  ["basundi", "Basundi", "బాసుంది", "Slow-reduced milk sweet with cardamom and nuts.", "ఏలకులు, డ్రై ఫ్రూట్స్‌తో నెమ్మదిగా చిక్కబెట్టిన పాల తీపి.", { photo: "payasam" }],
+  ["kaju-barfi-badam", "Kaju Barfi Badam", "కాజు బర్ఫీ బాదం", "Cashew and almond barfi cut into silver-leafed diamonds.", "వెండి రేకుతో వజ్రాకారంలో కత్తిరించిన జీడిపప్పు బాదం బర్ఫీ.", { packages: PREMIUM }],
+  ["badam-halwa", "Badam Halwa", "బాదం హల్వా", "Almond halwa cooked down in ghee till glossy.", "నెయ్యిలో మెరిసేవరకు ఉడికించిన బాదం హల్వా.", { photo: "doubleka" }],
+  ["kaju-jamkaya", "Kaju Jamkaya (Guava Shape)", "కాజు జామకాయ", "Cashew marzipan shaped and coloured like a guava.", "జామకాయ ఆకారంలో తీర్చిదిద్దిన జీడిపప్పు స్వీట్.", { packages: PREMIUM }],
+  ["kaju-apple", "Kaju Apple", "కాజు ఆపిల్", "Cashew sweet moulded into a blushing apple.", "ఆపిల్ ఆకారంలో తీర్చిదిద్దిన జీడిపప్పు స్వీట్.", { packages: PREMIUM }],
+  ["agra-paan", "Agra Paan", "ఆగ్రా పాన్", "Paan-flavoured sweet with gulkand and fennel.", "గుల్కంద్, సోంపుతో పాన్ రుచి స్వీట్.", {}],
+  ["mango-jalebi", "Mango Jalebi", "మామిడి జిలేబీ", "Jalebi coils soaked in mango-scented syrup.", "మామిడి సువాసన సిరప్‌లో నానబెట్టిన జిలేబీ.", {}],
+  ["pista-roll", "Pista Roll", "పిస్తా రోల్", "Pistachio log rolled in fine khoya.", "మెత్తని ఖోవాలో చుట్టిన పిస్తా రోల్.", { packages: PREMIUM }],
+  ["dry-fruit-halwa", "Dry Fruit Halwa", "డ్రై ఫ్రూట్ హల్వా", "Halwa loaded with almond, cashew and raisin.", "బాదం, జీడిపప్పు, ఎండుద్రాక్షతో నిండిన హల్వా.", { photo: "doubleka" }],
+  ["dry-fruit-piece", "Dry Fruit Piece", "డ్రై ఫ్రూట్ పీస్", "Pressed dry-fruit slab cut into neat pieces.", "చక్కగా కత్తిరించిన డ్రై ఫ్రూట్ ముక్కలు.", {}],
+  ["malai-balls", "Malai Balls", "మలై బాల్స్", "Feather-light milk balls in thickened cream.", "చిక్కని క్రీంలో తేలికపాటి పాల ఉండలు.", { photo: "gulab" }],
+  ["bread-halwa", "Bread Halwa", "బ్రెడ్ హల్వా", "Fried bread simmered in sweetened milk and ghee.", "తీపి పాలు, నెయ్యిలో ఉడికించిన వేయించిన బ్రెడ్.", { photo: "doubleka" }],
+  ["mixed-halwa", "Mixed Halwa", "మిక్స్‌డ్ హల్వా", "Layered halwa of semolina, carrot and dry fruit.", "రవ్వ, క్యారెట్, డ్రై ఫ్రూట్ పొరలతో హల్వా.", { photo: "doubleka" }],
+  ["malai-chops", "Malai Chops", "మలై చాప్స్", "Bengali malai chop split and filled with cream.", "క్రీంతో నింపిన బెంగాలీ మలై చాప్.", { photo: "gulab", packages: PREMIUM }],
+  ["dry-fruit-laddu", "Dry Fruit Laddu", "డ్రై ఫ్రూట్ లడ్డు", "No-sugar laddu bound with dates and nuts.", "ఖర్జూరం, గింజలతో కట్టిన చక్కెర లేని లడ్డు.", {}],
+  ["dry-fruit-balls", "Dry Fruit Balls", "డ్రై ఫ్రూట్ బాల్స్", "Bite-sized nut and fig truffles.", "గింజలు, అంజీర్‌తో చిన్న ఉండలు.", {}],
+  ["malpua", "Malpua", "మాల్‌పువా", "Fried batter discs soaked in cardamom syrup.", "ఏలకుల సిరప్‌లో నానబెట్టిన వేయించిన మాల్‌పువా.", {}],
+  ["pista-bajji", "Pista Bajji", "పిస్తా బజ్జీ", "Pistachio-stuffed sweet fritters in syrup.", "సిరప్‌లో పిస్తా కూర్చిన తీపి బజ్జీలు.", {}],
+  ["khajoor-balls", "Dates (Khajoor) Balls", "ఖర్జూర బాల్స్", "Dates rolled with roasted nuts and coconut.", "వేయించిన గింజలు, కొబ్బరితో చుట్టిన ఖర్జూరం.", {}],
+  ["cham-cham", "Bengali Cham Cham", "బెంగాలీ చమ్ చమ్", "Oblong Bengali sweet dusted with coconut.", "కొబ్బరి పొడితో బెంగాలీ చమ్ చమ్.", { photo: "gulab" }],
+  ["rasgulla", "Rasgulla", "రసగుల్లా", "Spongy chenna balls in light sugar syrup.", "తేలికపాటి చక్కెర సిరప్‌లో మెత్తని రసగుల్లాలు.", { photo: "gulab", popular: true }],
+  ["rasmalai", "Rasmalai", "రసమలై", "Chenna patties resting in saffron cream.", "కుంకుమపువ్వు క్రీంలో మెత్తని రసమలై.", { photo: "gulab", packages: PREMIUM, popular: true }],
+  ["papaya-halwa", "Papaya Halwa", "బొప్పాయి హల్వా", "Grated papaya cooked slowly with ghee and milk.", "నెయ్యి, పాలతో నెమ్మదిగా ఉడికించిన బొప్పాయి తురుము.", { photo: "doubleka" }],
+  ["jalebi", "Jalebi", "జిలేబీ", "Crisp coils straight from the syrup pot.", "సిరప్ నుండి నేరుగా కరకరలాడే జిలేబీ.", {}],
+  ["honey-jalebi", "Honey Jalebi", "హనీ జిలేబీ", "Jalebi finished with honey instead of syrup.", "సిరప్ స్థానంలో తేనెతో పూర్తి చేసిన జిలేబీ.", {}],
+  ["paneer-jalebi", "Paneer Jalebi", "పనీర్ జిలేబీ", "Soft paneer jalebi, thicker and milkier than the classic.", "క్లాసిక్ కంటే మెత్తగా, పాల రుచితో పనీర్ జిలేబీ.", {}],
+]);
+
+const VEG_STARTERS = section(
+  "Hot Snacks & Starters",
+  { cuisine: "Andhra", veg: true, packages: ALL },
+  [
+    ["bread-avada", "Bread Avada", "బ్రెడ్ అవడ", "Bread-crumbed vada, crisp outside and soft within.", "బయట కరకరా, లోపల మెత్తగా ఉండే బ్రెడ్ అవడ.", {}],
+    ["plain-gare", "Plain Gare (Vada)", "ప్లెయిన్ గారె", "The classic urad dal vada, fried to order.", "ఆర్డర్ మీద వేయించిన సాంప్రదాయ మినప గారె.", {}],
+    ["masala-gare", "Masala Gare", "మసాలా గారె", "Vada batter spiked with onion, chilli and ginger.", "ఉల్లి, మిర్చి, అల్లం కలిపిన గారె పిండి.", {}],
+    ["masala-vada", "Masala Vada", "మసాలా వడ", "Coarse chana dal vada with curry leaves.", "కరివేపాకుతో సెనగపప్పు మసాలా వడ.", { popular: true }],
+    ["vegetable-cut-bajji", "Vegetable Cut Bajji", "వెజిటబుల్ కట్ బజ్జీ", "Mixed vegetable bajji, chopped and tossed with masala.", "మసాలాతో తరిగి కలిపిన మిశ్రమ కూరగాయల బజ్జీ.", {}],
+    ["hazaman-pakodi", "Hazaman Pakodi", "హజమాన్ పకోడి", "House-special pakodi, crunchy and heavily spiced.", "ఇంటి ప్రత్యేక పకోడి — కరకరా, ఘాటుగా.", {}],
+    ["paneer-cutlet", "Paneer Cutlet", "పనీర్ కట్లెట్", "Pan-seared paneer and potato cutlets.", "పనీర్, ఆలూతో పెనంలో వేయించిన కట్లెట్లు.", { cuisine: "North Indian", packages: GOLD_UP }],
+    ["vegetable-balls", "Vegetable Balls", "వెజిటబుల్ బాల్స్", "Minced vegetable balls fried golden.", "బంగారు వర్ణం వచ్చేవరకు వేయించిన కూరగాయల ఉండలు.", {}],
+    ["vegetable-bullet", "Vegetable Bullet", "వెజిటబుల్ బుల్లెట్", "Cylindrical veg croquettes with a crumb crust.", "బ్రెడ్ పొరతో స్థూపాకార కూరగాయల క్రొకెట్స్.", {}],
+    ["madras-pakodi", "Madras Pakodi", "మద్రాస్ పకోడి", "Onion-heavy Madras-style pakodi.", "ఉల్లిపాయలు ఎక్కువగా వేసిన మద్రాస్ శైలి పకోడి.", { cuisine: "South Indian" }],
+    ["capsicum-bajji", "Capsicum Bajji", "క్యాప్సికమ్ బజ్జీ", "Capsicum rings in a light gram-flour batter.", "శనగపిండి పిండిలో క్యాప్సికమ్ రింగులు.", {}],
+    ["mirchi-bajji", "Mirchi Bajji", "మిర్చి బజ్జీ", "Stuffed green chillies fried in besan batter.", "శనగపిండిలో వేయించిన కూర్చిన పచ్చిమిర్చి.", { popular: true }],
+    ["tamalapaku-bajji", "Betel Leaf (Tamalapaku) Bajji", "తమలపాకు బజ్జీ", "Betel leaf dipped in batter and fried crisp.", "పిండిలో ముంచి కరకరలాడేలా వేయించిన తమలపాకు.", {}],
+    ["aratikaya-bajji", "Raw Banana (Aratikaya) Bajji", "అరటికాయ బజ్జీ", "Raw banana slices in a spiced batter.", "మసాలా పిండిలో అరటికాయ చక్రాలు.", {}],
+    ["corn-roll", "Corn Roll", "కార్న్ రోల్", "Creamed sweet corn rolled and fried.", "క్రీమ్ స్వీట్ కార్న్‌తో చుట్టి వేయించిన రోల్.", { cuisine: "Continental", packages: GOLD_UP }],
+    ["shanghai-roll", "Shanghai Roll", "షాంఘై రోల్", "Chinese-style veg roll with a shattering shell.", "కరకరలాడే పైపొరతో చైనీస్ శైలి వెజ్ రోల్.", { cuisine: "Chinese", packages: GOLD_UP }],
+    ["gold-capsin", "Gold Capsin", "గోల్డ్ క్యాప్సిన్", "Batter-fried capsicum fingers in a golden crust.", "బంగారు పొరలో వేయించిన క్యాప్సికమ్ ఫింగర్స్.", { packages: GOLD_UP }],
+    ["perugu-avada", "Perugu Avada (Dahi Vada)", "పెరుగు అవడ", "Vada soaked in seasoned curd and topped with masala.", "మసాలా పెరుగులో నానబెట్టిన అవడ.", {}],
+  ],
+);
+
+const VEG_RICE = section(
+  "Biryanis & Rice Specialties",
+  { cuisine: "Hyderabadi", veg: true, packages: ALL },
+  [
+    ["vegetable-pulao", "Vegetable Pulao", "వెజిటబుల్ పులావ్", "Lightly spiced pulao with garden vegetables.", "కూరగాయలతో తేలికపాటి మసాలా పులావ్.", { photo: "vegbiryani" }],
+    ["veg-dum-fried-rice", "Vegetable Dum Fried Rice", "వెజ్ దమ్ ఫ్రైడ్ రైస్", "Fried rice finished under dum for a smoky edge.", "పొగ రుచి కోసం దమ్ వేసి పూర్తి చేసిన ఫ్రైడ్ రైస్.", { photo: "vegbiryani", cuisine: "Chinese" }],
+    ["veg-kashai-fried-rice", "Vegetable Kashai Fried Rice", "వెజ్ కషాయి ఫ్రైడ్ రైస్", "Fried rice tossed in a spiced kashai stock.", "మసాలా కషాయంలో వేయించిన ఫ్రైడ్ రైస్.", { photo: "vegbiryani", cuisine: "Chinese" }],
+    ["soya-chunks-biryani", "Soya Chunks (Meal Maker) Biryani", "సోయా చంక్స్ బిర్యానీ", "Protein-rich soya biryani, dum-cooked like the classic.", "క్లాసిక్ లాగే దమ్ వేసిన ప్రొటీన్ సోయా బిర్యానీ.", { photo: "vegbiryani" }],
+    ["paneer-biryani", "Paneer Biryani", "పనీర్ బిర్యానీ", "Marinated paneer layered into fragrant rice.", "సుగంధ అన్నంలో పొరలుగా వేసిన మసాలా పనీర్.", { photo: "vegbiryani", packages: GOLD_UP, popular: true }],
+    ["corn-biryani", "Corn Biryani", "కార్న్ బిర్యానీ", "Sweet corn biryani, mild and buttery.", "తేలికపాటి, వెన్న రుచితో స్వీట్ కార్న్ బిర్యానీ.", { photo: "vegbiryani" }],
+    ["gongura-biryani", "Gongura Biryani", "గోంగూర బిర్యానీ", "Sorrel-leaf biryani with an unmistakable tang.", "స్పష్టమైన పులుపుతో గోంగూర బిర్యానీ.", { photo: "vegbiryani", cuisine: "Andhra", popular: true }],
+    ["palak-biryani", "Palak Biryani", "పాలక్ బిర్యానీ", "Spinach biryani, green and gently spiced.", "పచ్చగా, తేలికపాటి మసాలాతో పాలకూర బిర్యానీ.", { photo: "vegbiryani" }],
+    ["panasa-biryani", "Jackfruit (Panasa) Biryani", "పనస బిర్యానీ", "Raw jackfruit biryani with a meaty bite.", "మాంసం లాంటి పట్టుతో పచ్చి పనసకాయ బిర్యానీ.", { photo: "vegbiryani", cuisine: "Andhra" }],
+    ["mushroom-biryani", "Mushroom Biryani", "మష్రూమ్ బిర్యానీ", "Button mushrooms dum-cooked with basmati.", "బాస్మతితో దమ్ వేసిన బటన్ మష్రూమ్.", { photo: "vegbiryani" }],
+    ["tomato-rice", "Tomato Rice", "టమాటో రైస్", "Tangy tomato rice tempered with curry leaves.", "కరివేపాకు తాలింపుతో పుల్లని టమాటో రైస్.", { photo: "pulihora", cuisine: "South Indian" }],
+    ["plain-biryani", "Plain Biryani", "ప్లెయిన్ బిర్యానీ", "Unadorned dum rice, the base for any curry.", "ఏ కూరకైనా ఆధారమైన సాదా దమ్ అన్నం.", { photo: "vegbiryani" }],
+    ["coconut-rice", "Coconut Rice", "కొబ్బరి అన్నం", "Fresh coconut rice with cashew and curry leaf.", "జీడిపప్పు, కరివేపాకుతో తాజా కొబ్బరి అన్నం.", { photo: "pulihora", cuisine: "South Indian" }],
+  ],
+);
+
+const CURD_CHUTNEYS = section(
+  "Curd Chutneys",
+  { cuisine: "Andhra", veg: true, packages: ALL },
+  [
+    ["curd-chutney", "Curd Chutney (Raita)", "పెరుగు పచ్చడి", "Plain seasoned curd chutney to cool the meal.", "భోజనాన్ని చల్లబరిచే సాదా పెరుగు పచ్చడి.", { photo: "raita" }],
+    ["cucumber-curd-chutney", "Cucumber Curd Chutney", "దోసకాయ పెరుగు పచ్చడి", "Grated cucumber folded into whisked curd.", "గిలకొట్టిన పెరుగులో దోసకాయ తురుము.", { photo: "raita" }],
+    ["sago-curd-chutney", "Sago (Saggubiyyam) Curd Chutney", "సగ్గుబియ్యం పెరుగు పచ్చడి", "Boiled sago pearls in lightly salted curd.", "కొద్దిగా ఉప్పు వేసిన పెరుగులో ఉడికించిన సగ్గుబియ్యం.", { photo: "raita" }],
+  ],
+);
+
+const CURRIES = section(
+  "Curries & Gravies",
+  { cuisine: "Andhra", veg: true, packages: ALL },
+  [
+    ["mixed-korma", "Mixed Korma", "మిక్స్‌డ్ కుర్మా", "Mixed vegetables in a mild cashew-coconut korma.", "జీడిపప్పు కొబ్బరి కుర్మాలో మిశ్రమ కూరగాయలు.", { popular: true }],
+    ["mushroom-korma", "Mushroom Korma", "మష్రూమ్ కుర్మా", "Button mushrooms simmered in a silky korma.", "మృదువైన కుర్మాలో ఉడికించిన బటన్ మష్రూమ్.", {}],
+    ["jackfruit-korma", "Jackfruit Korma", "పనసకాయ కుర్మా", "Raw jackfruit in a rich, nutty korma.", "గొప్ప గింజల కుర్మాలో పచ్చి పనసకాయ.", {}],
+    ["tomato-cashew-korma", "Tomato Cashew Korma", "టమాటో కాజు కుర్మా", "Tomato korma thickened with ground cashew.", "జీడిపప్పు ముద్దతో చిక్కబెట్టిన టమాటో కుర్మా.", {}],
+    ["baby-corn-korma", "Baby Corn Korma", "బేబీ కార్న్ కుర్మా", "Tender baby corn in a creamy korma.", "క్రీమీ కుర్మాలో మెత్తని బేబీ కార్న్.", {}],
+    ["soya-chunks-korma", "Soya Chunks Korma", "సోయా చంక్స్ కుర్మా", "Soya chunks soaked through with korma gravy.", "కుర్మా గ్రేవీ పూర్తిగా పట్టిన సోయా చంక్స్.", {}],
+    ["gongura-makhana-korma", "Gongura Phool Makhana Korma", "గోంగూర ఫూల్ మఖాన కుర్మా", "Fox nuts and sorrel leaves in a tangy korma.", "పుల్లని కుర్మాలో ఫూల్ మఖాన, గోంగూర.", { packages: GOLD_UP }],
+    ["capsicum-korma", "Capsicum Korma", "క్యాప్సికమ్ కుర్మా", "Capsicum korma with a gentle sweetness.", "తేలికపాటి తీపితో క్యాప్సికమ్ కుర్మా.", {}],
+    ["paneer-korma", "Paneer Korma", "పనీర్ కుర్మా", "Paneer cubes in a mild, fragrant korma.", "సువాసనగల మెత్తని కుర్మాలో పనీర్ ముక్కలు.", { photo: "paneerbutter", cuisine: "North Indian", packages: GOLD_UP }],
+    ["makhana-korma", "Phool Makhana Korma", "ఫూల్ మఖాన కుర్మా", "Roasted fox nuts in a cashew gravy.", "జీడిపప్పు గ్రేవీలో వేయించిన ఫూల్ మఖాన.", { packages: GOLD_UP }],
+    ["pesara-punugu-korma", "Green Gram (Pesara Punugu) Korma", "పెసర పునుగు కుర్మా", "Green gram dumplings dropped into korma.", "కుర్మాలో వేసిన పెసర పునుగులు.", {}],
+    ["gujju-kurma", "Cashew Thick Curry (Gujju Kurma)", "గుజ్జు కుర్మా", "Thick cashew curry, the wedding-feast standard.", "పెళ్లి విందు ప్రామాణికం — చిక్కని జీడిపప్పు కుర్మా.", { packages: PREMIUM, popular: true }],
+    ["drumstick-tomato-curry", "Drumstick Tomato Curry", "మునగకాయ టమాటో కూర", "Drumstick and tomato cooked into a tangy gravy.", "పుల్లని గ్రేవీలో ఉడికించిన మునగకాయ, టమాటో.", {}],
+    ["tomato-gravy-curry", "Tomato Gravy Curry", "టమాటో గ్రేవీ కూర", "Everyday tomato gravy, generous with the tempering.", "తాలింపు ఎక్కువగా వేసిన రోజువారీ టమాటో గ్రేవీ.", {}],
+    ["mushroom-cashew-gravy", "Mushroom Cashew Gravy Curry", "మష్రూమ్ కాజు గ్రేవీ కూర", "Mushrooms in a smooth cashew gravy.", "మృదువైన జీడిపప్పు గ్రేవీలో మష్రూమ్.", {}],
+    ["jackfruit-cashew-gravy", "Jackfruit Cashew Gravy Curry", "పనసకాయ కాజు గ్రేవీ కూర", "Jackfruit chunks in cashew gravy.", "జీడిపప్పు గ్రేవీలో పనసకాయ ముక్కలు.", {}],
+    ["paan-liver-gravy", "Paan Liver Gravy Curry", "పాన్ లివర్ గ్రేవీ కూర", "Andhra-style paan liver in a thick gravy.", "చిక్కని గ్రేవీలో ఆంధ్ర శైలి పాన్ లివర్.", {}],
+    ["mixed-vegetable-curry", "Mixed Vegetable Curry", "మిక్స్‌డ్ వెజిటబుల్ కూర", "Seasonal vegetables in a homely gravy.", "ఇంటి రుచి గ్రేవీలో కాలానుగుణ కూరగాయలు.", {}],
+    ["drumstick-single-jeans", "Drumstick Single Jeans Curry", "మునగకాయ సింగిల్ జీన్స్ కూర", "Whole drumstick lengths braised in spiced gravy.", "మసాలా గ్రేవీలో ఉడికించిన పొడవాటి మునగకాయలు.", {}],
+    ["brinjal-chickpea-curry", "Brinjal Chickpea Curry", "వంకాయ శనగల కూర", "Brinjal and chickpea in tamarind gravy.", "చింతపండు గ్రేవీలో వంకాయ, శనగలు.", {}],
+    ["brinjal-barani-curry", "Brinjal Barani Curry", "వంకాయ బరణి కూర", "Slow-cooked brinjal barani, deeply spiced.", "గాఢమైన మసాలాతో నెమ్మదిగా ఉడికించిన వంకాయ బరణి.", {}],
+    ["ridge-gourd-chana-dal", "Ridge Gourd Chana Dal Curry", "బీరకాయ శనగపప్పు కూర", "Ridge gourd cooked with soaked chana dal.", "నానబెట్టిన శనగపప్పుతో ఉడికించిన బీరకాయ.", {}],
+    ["baby-corn-gravy", "Baby Corn Gravy Curry", "బేబీ కార్న్ గ్రేవీ కూర", "Baby corn in an onion-tomato gravy.", "ఉల్లి టమాటో గ్రేవీలో బేబీ కార్న్.", {}],
+    ["capsicum-gravy", "Capsicum Gravy Curry", "క్యాప్సికమ్ గ్రేవీ కూర", "Capsicum in a peanut-sesame gravy.", "వేరుశెనగ నువ్వుల గ్రేవీలో క్యాప్సికమ్.", {}],
+    ["cabbage-curry", "Cabbage Curry", "క్యాబేజీ కూర", "Shredded cabbage with a simple tempering.", "సాదా తాలింపుతో క్యాబేజీ తురుము.", {}],
+    ["natu-chikkullu", "Country Broad Beans (Natu Chikkullu)", "నాటు చిక్కుళ్ళు", "Country broad beans cooked the village way.", "పల్లె పద్ధతిలో వండిన నాటు చిక్కుళ్ళు.", { packages: ANDHRA }],
+    ["methi-chaman-curry", "Methi Chaman Curry", "మేతి చమన్ కూర", "Fenugreek leaves and paneer in a green gravy.", "పచ్చి గ్రేవీలో మెంతికూర, పనీర్.", { cuisine: "North Indian", packages: GOLD_UP }],
+  ],
+);
+
+const DALS = section("Dals", { cuisine: "Andhra", veg: true, packages: ALL }, [
+  ["vakaya-dal", "Cranberry (Vakaya) Dal", "వాకాయ పప్పు", "Toor dal soured with tart vakaya.", "పుల్లని వాకాయతో కందిపప్పు.", { photo: "dal" }],
+  ["tomato-dal", "Tomato Dal", "టమాటో పప్పు", "Everyday toor dal cooked with ripe tomato.", "పండిన టమాటాతో రోజువారీ కందిపప్పు.", { photo: "dal", popular: true }],
+  ["aakukura-dal", "Leafy Greens (Aakukura) Dal", "ఆకుకూర పప్పు", "Dal cooked down with seasonal greens.", "కాలానుగుణ ఆకుకూరలతో ఉడికించిన పప్పు.", { photo: "dal" }],
+  ["dosakaya-dal", "Cucumber (Dosakaya) Dal", "దోసకాయ పప్పు", "Yellow cucumber dal, mild and cooling.", "తేలికపాటి, చల్లబరిచే దోసకాయ పప్పు.", { photo: "dal" }],
+  ["gongura-dal", "Gongura Dal", "గోంగూర పప్పు", "Sorrel leaf dal with a sharp tang.", "పులుపు ఘాటుతో గోంగూర పప్పు.", { photo: "dal", popular: true }],
+  ["chinta-chiguru-dal", "Tender Tamarind Leaf (Chinta Chiguru) Dal", "చింత చిగురు పప్పు", "Dal soured with the first tamarind shoots.", "చింత చిగురుతో పులుపు వేసిన పప్పు.", { photo: "dal", packages: ANDHRA }],
+  ["mango-dal", "Mango Dal", "మామిడికాయ పప్పు", "Raw mango dal, the summer favourite.", "వేసవి ఇష్టం — పచ్చి మామిడికాయ పప్పు.", { photo: "dal" }],
+  ["menthi-dal", "Fenugreek Leaves (Menthi) Dal", "మెంతికూర పప్పు", "Dal with fenugreek leaves and a hint of bitterness.", "కొద్దిపాటి చేదుతో మెంతికూర పప్పు.", { photo: "dal" }],
+]);
+
+const FRIES = section("Fries", { cuisine: "Andhra", veg: true, packages: ALL }, [
+  ["brinjal-pakodi-fry", "Brinjal Pakodi Fry", "వంకాయ పకోడి ఫ్రై", "Brinjal slices fried till crisp-edged.", "అంచులు కరకరలాడేవరకు వేయించిన వంకాయ చక్రాలు.", {}],
+  ["bhindi-cashew-coconut-fry", "Bhindi Cashew Coconut Fry", "బెండకాయ కాజు కొబ్బరి ఫ్రై", "Okra tossed with cashew and fresh coconut.", "జీడిపప్పు, తాజా కొబ్బరితో వేయించిన బెండకాయ.", { packages: GOLD_UP }],
+  ["dondakaya-pakodi-fry", "Ivy Gourd (Dondakaya) Pakodi Fry", "దొండకాయ పకోడి ఫ్రై", "Ivy gourd fried dry with pakodi crumbs.", "పకోడి పొడితో పొడిగా వేయించిన దొండకాయ.", {}],
+  ["carrot-beans-cabbage-fry", "Carrot, Beans & Cabbage Fry", "క్యారెట్ బీన్స్ క్యాబేజీ ఫ్రై", "Three-vegetable dry fry with coconut.", "కొబ్బరితో మూడు కూరగాయల డ్రై ఫ్రై.", {}],
+  ["natu-chikkullu-fry", "Country Broad Beans Fry", "నాటు చిక్కుళ్ళు ఫ్రై", "Broad beans dry-fried with garlic.", "వెల్లుల్లితో పొడిగా వేయించిన చిక్కుళ్ళు.", { packages: ANDHRA }],
+  ["mushroom-fry", "Mushroom Fry", "మష్రూమ్ ఫ్రై", "Mushrooms seared till the water cooks off.", "నీరు పూర్తిగా ఆరేవరకు వేయించిన మష్రూమ్.", {}],
+  ["potato-chips", "Potato Chips", "ఆలూ చిప్స్", "Wafer-thin potato chips, salted warm.", "వెచ్చగా ఉప్పు వేసిన సన్నని ఆలూ చిప్స్.", {}],
+  ["kandi-porutu", "Toor Dal (Kandi) Porutu", "కంది పొరుటు", "Coarse toor dal patties shallow-fried.", "పెనంలో వేయించిన కంది పప్పు వడలు.", { packages: ANDHRA }],
+  ["raw-banana-chips", "Raw Banana Chips", "అరటికాయ చిప్స్", "Thin raw banana chips fried in coconut oil.", "కొబ్బరి నూనెలో వేయించిన సన్నని అరటికాయ చిప్స్.", {}],
+  ["potato-fry", "Potato Fry", "ఆలూ ఫ్రై", "Cubed potato fry with turmeric and chilli.", "పసుపు, మిర్చితో ఆలూ ముక్కల ఫ్రై.", { popular: true }],
+  ["raw-banana-porutu", "Raw Banana Porutu", "అరటికాయ పొరుటు", "Raw banana rounds crusted with karam podi.", "కారం పొడి పూతతో అరటికాయ చక్రాలు.", {}],
+  ["chamadumpala-fry", "Taro Root (Chamadumpala) Fry", "చామదుంపల ఫ్రై", "Taro root fried crisp with ajwain.", "వాముతో కరకరలాడేలా వేయించిన చామదుంపలు.", {}],
+]);
+
+const SIXTY_FIVES = section("65 Varieties", { cuisine: "Andhra", veg: true, packages: GOLD_UP }, [
+  ["cabbage-65", "Cabbage 65", "క్యాబేజీ 65", "Shredded cabbage fritters in 65 masala.", "65 మసాలాలో క్యాబేజీ తురుము వడలు.", {}],
+  ["kanda-65", "Yam (Kanda) 65", "కంద 65", "Yam cubes crisp-fried in a fiery batter.", "కారపు పిండిలో కరకరలాడేలా వేయించిన కంద ముక్కలు.", {}],
+  ["cauliflower-65", "Cauliflower 65", "కాలీఫ్లవర్ 65", "Cauliflower florets tossed in 65 masala.", "65 మసాలాలో కాలీఫ్లవర్ ముక్కలు.", { photo: "gobi", popular: true }],
+  ["potato-65", "Potato 65", "ఆలూ 65", "Potato cubes double-fried and spiced.", "రెండుసార్లు వేయించి మసాలా వేసిన ఆలూ ముక్కలు.", {}],
+  ["potato-poosa-65", "Potato Poosa 65", "ఆలూ పూస 65", "Baby potatoes in a clinging 65 coating.", "అంటుకునే 65 పూతతో చిన్న బంగాళాదుంపలు.", {}],
+  ["paneer-65", "Paneer 65", "పనీర్ 65", "Paneer cubes fried and tossed with curry leaves.", "కరివేపాకుతో వేయించిన పనీర్ ముక్కలు.", { photo: "paneertikka", popular: true }],
+  ["potlakaya-65", "Snake Gourd (Potlakaya) 65", "పొట్లకాయ 65", "Snake gourd rings in a crisp 65 batter.", "కరకరలాడే 65 పిండిలో పొట్లకాయ రింగులు.", {}],
+  ["raw-banana-fingers-65", "Raw Banana Fingers 65", "అరటికాయ ఫింగర్స్ 65", "Raw banana fingers, spiced and crunchy.", "మసాలా, కరకరలాడే అరటికాయ ఫింగర్స్.", {}],
+  ["baby-corn-65", "Baby Corn 65", "బేబీ కార్న్ 65", "Baby corn fried and tossed in 65 masala.", "65 మసాలాలో వేయించిన బేబీ కార్న్.", {}],
+  ["paan-liver-fry", "Paan Liver Fry", "పాన్ లివర్ ఫ్రై", "Dry paan liver fry with pepper.", "మిరియాలతో పొడి పాన్ లివర్ ఫ్రై.", {}],
+  ["kandi-liver-fry", "Kandi Liver Fry", "కంది లివర్ ఫ్రై", "Toor-dal liver fry, an Andhra vegetarian classic.", "ఆంధ్ర శాకాహార ప్రత్యేకత — కంది లివర్ ఫ్రై.", { packages: ANDHRA }],
+  ["dosakaya-65", "Cucumber (Dosakaya) 65", "దోసకాయ 65", "Yellow cucumber cubes in 65 batter.", "65 పిండిలో దోసకాయ ముక్కలు.", {}],
+  ["totakura-liver", "Amaranth Leaves (Totakura) Liver", "తోటకూర లివర్", "Amaranth leaf liver fry, soft and spiced.", "మెత్తగా, మసాలాతో తోటకూర లివర్ ఫ్రై.", {}],
+  ["capsicum-65", "Capsicum 65", "క్యాప్సికమ్ 65", "Capsicum chunks in a hot 65 coating.", "కారపు 65 పూతలో క్యాప్సికమ్ ముక్కలు.", {}],
+]);
+
+const PICKLES = section(
+  "Chutneys & Pickles",
+  { cuisine: "Andhra", veg: true, packages: ALL },
+  [
+    ["red-chilli-gongura-chutney", "Red Chilli Gongura Chutney", "ఎండుమిర్చి గోంగూర పచ్చడి", "Gongura ground with roasted red chilli.", "వేయించిన ఎండుమిర్చితో రుబ్బిన గోంగూర.", { photo: "gongura" }],
+    ["brinjal-cucumber-chutney", "Brinjal Cucumber Chutney", "వంకాయ దోసకాయ పచ్చడి", "Roasted brinjal and cucumber ground together.", "కాల్చిన వంకాయ, దోసకాయ కలిపి రుబ్బిన పచ్చడి.", {}],
+    ["beerakaya-chutney", "Ridge Gourd (Beerakaya) Chutney", "బీరకాయ పచ్చడి", "Ridge gourd peel chutney with sesame.", "నువ్వులతో బీరకాయ తొక్క పచ్చడి.", {}],
+    ["amla-chutney", "Gooseberry (Amla) Chutney", "ఉసిరికాయ పచ్చడి", "Sharp gooseberry chutney with green chilli.", "పచ్చిమిర్చితో ఘాటైన ఉసిరికాయ పచ్చడి.", {}],
+    ["totakura-chutney", "Amaranth Leaves (Totakura) Chutney", "తోటకూర పచ్చడి", "Amaranth greens ground with tamarind.", "చింతపండుతో రుబ్బిన తోటకూర.", {}],
+    ["guava-chutney", "Guava Chutney", "జామకాయ పచ్చడి", "Raw guava chutney, tangy and fresh.", "పుల్లగా, తాజాగా పచ్చి జామకాయ పచ్చడి.", {}],
+    ["tomato-chutney", "Tomato Chutney", "టమాటో పచ్చడి", "Cooked tomato chutney with garlic tempering.", "వెల్లుల్లి తాలింపుతో ఉడికించిన టమాటో పచ్చడి.", { popular: true }],
+    ["green-chilli-ginger-chutney", "Green Chilli Ginger Chutney", "పచ్చిమిర్చి అల్లం పచ్చడి", "Fiery green chilli and ginger chutney.", "కారంగా పచ్చిమిర్చి అల్లం పచ్చడి.", {}],
+    ["red-chilli-ginger-chutney", "Red Chilli Ginger Chutney", "ఎండుమిర్చి అల్లం పచ్చడి", "Red chilli and ginger ground to a thick paste.", "చిక్కగా రుబ్బిన ఎండుమిర్చి అల్లం పచ్చడి.", {}],
+    ["coriander-chutney", "Coriander Chutney", "కొత్తిమీర పచ్చడి", "Fresh coriander chutney with lime.", "నిమ్మతో తాజా కొత్తిమీర పచ్చడి.", {}],
+    ["mint-chutney", "Mint Chutney", "పుదీనా పచ్చడి", "Cool mint chutney for starters and rice.", "స్టార్టర్లు, అన్నానికి చల్లని పుదీనా పచ్చడి.", {}],
+    ["cucumber-avakaya", "Cucumber Avakaya Pickle", "దోసావకాయ", "Yellow cucumber avakaya in mustard oil.", "ఆవ నూనెలో దోసావకాయ.", { photo: "avakaya", packages: ANDHRA }],
+    ["mango-pieces-pickle", "Mango Pieces Pickle", "మామిడి ముక్కల పచ్చడి", "Cut mango pickle, sun-cured the old way.", "పాత పద్ధతిలో ఎండలో ఊరవేసిన మామిడి ముక్కలు.", { photo: "avakaya", packages: ANDHRA }],
+    ["shredded-mango-chutney", "Shredded Mango Chutney", "మామిడి తురుము పచ్చడి", "Grated raw mango pickle, ready the same day.", "అదే రోజు సిద్ధమయ్యే మామిడి తురుము పచ్చడి.", { photo: "avakaya" }],
+    ["cabbage-pickle", "Cabbage Pickle", "క్యాబేజీ పచ్చడి", "Quick cabbage pickle with mustard.", "ఆవాలతో త్వరిత క్యాబేజీ పచ్చడి.", {}],
+    ["papaya-pickle", "Papaya Pickle", "బొప్పాయి పచ్చడి", "Raw papaya pickle, crunchy and hot.", "కరకరా, కారంగా పచ్చి బొప్పాయి పచ్చడి.", {}],
+    ["potato-pickle", "Potato Pickle", "ఆలూ పచ్చడి", "Fried potato pickle in spiced oil.", "మసాలా నూనెలో వేయించిన ఆలూ పచ్చడి.", {}],
+    ["cashew-pickle", "Cashew Pickle", "జీడిపప్పు పచ్చడి", "Whole cashew pickle, a wedding-menu luxury.", "పెళ్లి మెనూ విలాసం — జీడిపప్పు పచ్చడి.", { packages: PREMIUM }],
+    ["madras-onion-pickle", "Madras Onion Pickle", "మద్రాస్ ఉల్లి పచ్చడి", "Small onions pickled whole.", "పూర్తిగా ఊరవేసిన చిన్న ఉల్లిపాయలు.", {}],
+    ["guava-pieces-pickle", "Guava Pieces Pickle", "జామకాయ ముక్కల పచ్చడి", "Guava pieces cured with chilli and mustard.", "మిర్చి, ఆవాలతో ఊరవేసిన జామకాయ ముక్కలు.", {}],
+    ["ivy-gourd-pickle", "Ivy Gourd Pieces Pickle", "దొండకాయ ముక్కల పచ్చడి", "Ivy gourd pickle that keeps its crunch.", "కరకరతనం నిలుపుకునే దొండకాయ పచ్చడి.", {}],
+    ["garlic-pickle", "Garlic Pickle", "వెల్లుల్లి పచ్చడి", "Whole garlic cloves in a dark, spiced masala.", "ముదురు మసాలాలో వెల్లుల్లి రెబ్బలు.", {}],
+    ["carrot-pickle", "Carrot Pickle", "క్యారెట్ పచ్చడి", "Carrot batons pickled with mustard and lime.", "ఆవాలు, నిమ్మతో ఊరవేసిన క్యారెట్ ముక్కలు.", {}],
+    ["cauliflower-pickle", "Cauliflower Pickle", "కాలీఫ్లవర్ పచ్చడి", "Blanched cauliflower in spiced pickle oil.", "మసాలా నూనెలో ఉడకబెట్టిన కాలీఫ్లవర్.", {}],
+    ["navaratna-pickle", "Navaratna (9-Jewel) Pickle", "నవరత్న పచ్చడి", "Nine vegetables pickled together.", "తొమ్మిది కూరగాయలతో కలిపి ఊరవేసిన పచ్చడి.", { packages: GOLD_UP, popular: true }],
+  ],
+);
+
+const PODULU = section("Spice Powders", { cuisine: "Andhra", veg: true, packages: ALL }, [
+  ["karivepaku-podi", "Curry Leaves Podi", "కరివేపాకు పొడి", "Roasted curry leaf powder for hot rice and ghee.", "వేడి అన్నం, నెయ్యికి వేయించిన కరివేపాకు పొడి.", {}],
+  ["kobbari-podi", "Coconut Podi", "కొబ్బరి పొడి", "Dry coconut and chilli powder.", "ఎండు కొబ్బరి, మిర్చి పొడి.", {}],
+  ["nalla-karam", "Nalla Karam", "నల్ల కారం", "The black karam podi — urad, chilli and garlic.", "నల్ల కారం పొడి — మినుములు, మిర్చి, వెల్లుల్లి.", { popular: true }],
+  ["kandi-podi", "Kandi Podi", "కంది పొడి", "Toor dal podi, the everyday Andhra staple.", "రోజువారీ ఆంధ్ర ప్రధానం — కంది పొడి.", {}],
+  ["senagapappu-podi", "Chana Dal Podi", "శనగపప్పు పొడి", "Chana dal podi with sesame and chilli.", "నువ్వులు, మిర్చితో శనగపప్పు పొడి.", {}],
+  ["putnalu-podi", "Roasted Gram (Putnalu) Podi", "పుట్నాల పొడి", "Roasted gram podi, mild enough for children.", "పిల్లలకూ సరిపోయే తేలికపాటి పుట్నాల పొడి.", {}],
+]);
+
+const RASAMS = section(
+  "Rasam, Sambar & Soups",
+  { cuisine: "South Indian", veg: true, packages: ALL },
+  [
+    ["tomato-rasam", "Tomato Rasam", "టమాటో రసం", "Thin, peppery tomato rasam.", "సన్నగా, మిరియాల ఘాటుతో టమాటో రసం.", { popular: true }],
+    ["pepper-rasam", "Pepper Rasam", "మిరియాల రసం", "Crushed pepper rasam, cleansing and hot.", "దంచిన మిరియాలతో వేడి రసం.", {}],
+    ["pineapple-rasam", "Pineapple Rasam", "పైనాపిల్ రసం", "Pineapple rasam, sweet against the spice.", "కారానికి తీపి జోడు — పైనాపిల్ రసం.", { packages: GOLD_UP }],
+    ["beetroot-rasam", "Beetroot Rasam", "బీట్‌రూట్ రసం", "Beetroot rasam with a deep colour and earthy edge.", "గాఢమైన రంగు, మట్టి రుచితో బీట్‌రూట్ రసం.", {}],
+    ["methi-buttermilk", "Methi Buttermilk", "మెంతి మజ్జిగ", "Buttermilk tempered with fenugreek seeds.", "మెంతులతో తాలింపు చేసిన మజ్జిగ.", { photo: "buttermilk", cuisine: "Andhra" }],
+    ["pachi-pulusu", "Pachi Pulusu", "పచ్చి పులుసు", "Uncooked tamarind rasam with onion and chilli.", "ఉల్లి, మిర్చితో ఉడికించని చింతపండు పులుసు.", { cuisine: "Andhra", packages: ANDHRA }],
+    ["madras-sambar", "Madras Sambar", "మద్రాస్ సాంబార్", "Madras sambar, thicker and sweeter than Andhra style.", "ఆంధ్ర శైలి కంటే చిక్కగా, తీపిగా మద్రాస్ సాంబార్.", { photo: "sambar" }],
+    ["pappu-charu", "Pappu Charu", "పప్పు చారు", "Thin dal broth with vegetables and tamarind.", "కూరగాయలు, చింతపండుతో సన్నని పప్పు చారు.", { photo: "sambar", cuisine: "Andhra", packages: ANDHRA, popular: true }],
+    ["ulava-charu", "Ulava Charu", "ఉలవ చారు", "Horse gram broth, slow-simmered for hours.", "గంటలపాటు నెమ్మదిగా ఉడికించిన ఉలవ చారు.", { photo: "sambar", cuisine: "Andhra", packages: ANDHRA }],
+    ["mukkala-pulusu", "Mixed Vegetable Stew (Mukkala Pulusu)", "ముక్కల పులుసు", "Mixed vegetables stewed in sweet-sour tamarind.", "తీపి-పులుపు చింతపండులో ఉడికించిన కూరగాయలు.", { cuisine: "Andhra", packages: ANDHRA }],
+  ],
+);
+
+const ROTIS = section("Rotis", { cuisine: "North Indian", veg: true, packages: GOLD_UP }, [
+  ["rumali-roti", "Rumali Roti", "రుమాలీ రోటీ", "Handkerchief-thin roti stretched over an inverted tawa.", "తలకిందుల పెనం మీద సాగదీసిన రుమాలు మందం రోటీ.", {}],
+]);
+
+export const DISHES: Dish[] = [
+  ...CLASSICS,
+  ...BIRYANIS,
+  ...CHICKEN,
+  ...MUTTON,
+  ...PRAWNS,
+  ...SNACKS,
+  ...LIVE,
+  ...SWEETS,
+  ...VEG_STARTERS,
+  ...VEG_RICE,
+  ...CURD_CHUTNEYS,
+  ...CURRIES,
+  ...DALS,
+  ...FRIES,
+  ...SIXTY_FIVES,
+  ...PICKLES,
+  ...PODULU,
+  ...RASAMS,
+  ...ROTIS,
+];

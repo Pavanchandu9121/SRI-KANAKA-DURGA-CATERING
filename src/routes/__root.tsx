@@ -4,31 +4,35 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SiteHeader } from "../components/site/SiteHeader";
-import { SiteFooter } from "../components/site/SiteFooter";
+import { BrandIntro } from "../components/layout/BrandIntro";
+import { SiteHeader } from "../components/layout/SiteHeader";
+import { SiteFooter } from "../components/layout/SiteFooter";
+import { LanguageProvider } from "../context/LanguageContext";
+import { useLanguage } from "../hooks/use-language";
 
-function NotFoundComponent() {
+function NotFoundInner() {
+  const { t } = useLanguage();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h1 className="text-7xl font-bold text-foreground">{t("error.notFoundCode")}</h1>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("error.notFoundTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          {t("error.notFoundDesc")}
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            {t("error.goHome")}
           </Link>
         </div>
       </div>
@@ -36,21 +40,26 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+function NotFoundComponent() {
+  return (
+    <LanguageProvider>
+      <NotFoundInner />
+    </LanguageProvider>
+  );
+}
+
+function ErrorInner({ reset }: { reset: () => void }) {
+  const { t } = useLanguage();
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          {t("error.errorTitle")}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          {t("error.errorDesc")}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -60,17 +69,26 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            {t("error.tryAgain")}
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            {t("error.goHome")}
           </a>
         </div>
       </div>
     </div>
+  );
+}
+
+function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+  console.error(error);
+  return (
+    <LanguageProvider>
+      <ErrorInner reset={reset} />
+    </LanguageProvider>
   );
 }
 
@@ -79,14 +97,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering" },
+      {
+        name: "description",
+        content:
+          "Premium multi-cuisine catering across Andhra Pradesh for weddings, receptions, corporate events and temple functions.",
+      },
+      { name: "author", content: "Sri Kanaka Durga Caterings" },
+      { property: "og:title", content: "Sri Kanaka Durga Caterings" },
+      {
+        property: "og:description",
+        content:
+          "Premium multi-cuisine catering across Andhra Pradesh — weddings, receptions, corporate events and temple functions.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Sri Kanaka Durga Caterings" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -125,17 +151,29 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Home only: the intro is the landing moment, not a gate on every page.
+  const isHome = useRouterState({ select: (s) => s.location.pathname === "/" });
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-forest-deep">
-        <SiteHeader />
-        <main className="flex-1">
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
+      <LanguageProvider>
+        {/*
+          Mounted here, outside <main>, on purpose: SectionStack wraps each
+          landing section in a `transform-gpu` element, and a transformed
+          ancestor becomes the containing block for `position: fixed` — the
+          overlay would be trapped inside a section instead of covering the
+          viewport.
+        */}
+        {isHome && <BrandIntro />}
+        <div className="flex min-h-screen flex-col bg-forest-deep">
+          <SiteHeader />
+          <main className="flex-1">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

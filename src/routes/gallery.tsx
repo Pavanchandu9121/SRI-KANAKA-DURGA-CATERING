@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-import { PageHero } from "@/components/site/ui-bits";
-import { GALLERY, GALLERY_CATEGORIES, IMAGES } from "@/data/site";
+import { PageHero } from "@/components/layout/ui-bits";
+import { IMAGES } from "@/config/images";
+import { GALLERY, GALLERY_CATEGORIES } from "@/data/gallery";
+import { useLanguage } from "@/hooks/use-language";
+import { l } from "@/i18n";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -21,19 +24,20 @@ export const Route = createFileRoute("/gallery")({
 });
 
 function GalleryPage() {
+  const { lang, t } = useLanguage();
   const [cat, setCat] = useState("All");
   const items = cat === "All" ? GALLERY : GALLERY.filter((g) => g.category === cat);
 
   return (
     <div>
       <PageHero
-        eyebrow="Gallery"
-        title="Moments Worth Savouring"
-        subtitle="Food, buffets, events, kitchens and live counters — a glimpse of how we work."
+        eyebrow={t("galleryPage.heroEyebrow")}
+        title={t("galleryPage.heroTitle")}
+        subtitle={t("galleryPage.heroSubtitle")}
         image={IMAGES.galleryLive}
       />
       <section className="px-6 pt-14">
-        <div className="mx-auto max-w-[1400px]">
+        <div className="mx-auto max-w-350">
           <div className="flex flex-wrap gap-3">
             {["All", ...GALLERY_CATEGORIES].map((c) => (
               <button
@@ -45,7 +49,7 @@ function GalleryPage() {
                     : "border-primary/25 text-muted-foreground hover:text-primary"
                 }`}
               >
-                {c}
+                {t(`galleryCats.${c}`)}
               </button>
             ))}
           </div>
@@ -60,7 +64,7 @@ function GalleryPage() {
                   height={512}
                   className="h-60 w-full object-cover transition-transform duration-500 hover:scale-105"
                 />
-                <figcaption className="px-5 py-3 text-xs text-muted-foreground">{g.alt}</figcaption>
+                <figcaption className="px-5 py-3 text-xs text-muted-foreground">{l(g, "alt", lang)}</figcaption>
               </figure>
             ))}
           </div>

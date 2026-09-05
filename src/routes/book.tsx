@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Plus, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 import {
   Accordion,
@@ -8,19 +9,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { SectionHeading } from "@/components/site/ui-bits";
+import { SectionHeading } from "@/components/layout/ui-bits";
 import {
   ADDITIONAL_SERVICES,
-  DISHES,
   EVENT_TYPES,
-  MENU_CATEGORIES,
   PACKAGES,
-} from "@/data/site";
+} from "@/data/packages";
+import { DISHES, MENU_CATEGORIES } from "@/data/dishes";
+import { useLanguage } from "@/hooks/use-language";
+import { l } from "@/i18n";
 
 export const Route = createFileRoute("/book")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    event: typeof search.event === "string" ? search.event : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { event?: string } => {
+    const event = typeof search["event"] === "string" ? search["event"] : undefined;
+    return event ? { event } : {};
+  },
   head: () => ({
     meta: [
       { title: "Book Catering — Request a Custom Quotation" },
@@ -36,7 +39,7 @@ export const Route = createFileRoute("/book")({
   component: BookPage,
 });
 
-const STEPS = ["Event", "Details", "Menu", "Services", "Your Details", "Review"];
+const STEPS = ["Event", "Details", "Your Details", "Menu", "Services", "Review"];
 
 const field =
   "w-full rounded-2xl border border-primary/25 bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-primary focus:outline-none";
@@ -44,9 +47,12 @@ const field =
 function BookPage() {
   const navigate = useNavigate();
   const { event: presetEvent } = Route.useSearch();
+  const { lang, t } = useLanguage();
 
   const [step, setStep] = useState(0);
-  const [eventType, setEventType] = useState(presetEvent ?? "");
+  const [eventType, setEventType] = useState(
+    presetEvent && EVENT_TYPES.includes(presetEvent) ? presetEvent : "",
+  );
   const [details, setDetails] = useState({
     date: "",
     time: "",
@@ -64,7 +70,7 @@ function BookPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [requests, setRequests] = useState<{ name: string; category: string; notes: string }[]>([]);
-  const [reqForm, setReqForm] = useState({ name: "", category: MENU_CATEGORIES[0], notes: "" });
+  const [reqForm, setReqForm] = useState<{ name: string; category: string; notes: string }>({ name: "", category: MENU_CATEGORIES[0] || "", notes: "" });
   const [files, setFiles] = useState<string[]>([]);
   const [addons, setAddons] = useState<string[]>([]);
   const [customer, setCustomer] = useState({
@@ -81,6 +87,9 @@ function BookPage() {
     contactTime: "Morning",
     instructions: "",
   });
+  // Track if we already sent the lead email to avoid duplicates if they go back and forth
+  const [leadCaptured, setLeadCaptured] = useState(false);
+  const [showMoreDetails, setShowMoreDetails] = useState(false);
 
   const toggle = (list: string[], set: (v: string[]) => void, value: string) =>
     set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
@@ -106,7 +115,7 @@ function BookPage() {
       (!search || d.name.toLowerCase().includes(search.toLowerCase())),
   );
 
-  const submit = () => {
+  const submit = async () => {
     const bookingId = `SKD-${Date.now().toString().slice(-6)}`;
     const summary = {
       bookingId,
@@ -119,7 +128,31 @@ function BookPage() {
       files,
       addons,
       customer,
+      status: "submitted",
+      updatedAt: new Date().toISOString(),
     };
+
+    // Send final booking details email (fire and forget so UI doesn't freeze)
+    emailjs.send(
+      "service_gny0bpl",
+      "template_24zyu5k",
+      {
+        name: customer.name,
+        phone: customer.phone,
+        email: customer.email || "Not provided",
+        eventType: eventType,
+        status: "Booking Submitted - Menu Finished",
+        bookingId: bookingId,
+        details: `Date: ${details.date}, Guests: ${details.guests}, Venue: ${details.venue}`,
+        menu: selectedDishes.map(d => d.name).join(", "),
+        addons: addons.join(", "),
+        instructions: customer.instructions || "None"
+      },
+      "WzG4BYIic7BBDXipa"
+    ).catch(error => {
+      console.error("Failed to send final email:", error);
+    });
+
     if (typeof window !== "undefined") {
       window.sessionStorage.setItem("skd-booking", JSON.stringify(summary));
     }
@@ -129,15 +162,15 @@ function BookPage() {
   const canNext =
     (step === 0 && !!eventType) ||
     (step === 1 && !!details.date && !!details.guests) ||
-    (step === 2 && selected.length + requests.length > 0) ||
-    step === 3 ||
-    (step === 4 && !!customer.name && !!customer.phone) ||
+    (step === 2 && !!customer.name && !!customer.phone) ||
+    (step === 3 && selected.length + requests.length > 0) ||
+    step === 4 ||
     step === 5;
 
   return (
     <div className="px-6 py-16">
-      <div className="mx-auto max-w-[1200px]">
-        <SectionHeading eyebrow="Booking" title="Plan Your Catering" />
+      <div className="mx-auto max-w-300">
+        <SectionHeading eyebrow={t("bookPage.heroEyebrow")} title={t("bookPage.heroTitle")} />
 
         <ol className="mt-10 flex flex-wrap justify-center gap-3">
           {STEPS.map((s, i) => (
@@ -151,7 +184,7 @@ function BookPage() {
                     : "border-primary/20 text-muted-foreground"
               }`}
             >
-              {i + 1}. {s}
+              {i + 1}. {t(`bookSteps.${s}`)}
             </li>
           ))}
         </ol>
@@ -169,44 +202,29 @@ function BookPage() {
                       : "border-primary/25 text-cream hover:border-primary/60"
                   }`}
                 >
-                  {e}
+                  {t(`eventTypes.${e}`)}
                 </button>
               ))}
             </div>
           )}
 
-          {step === 1 && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <input type="date" className={field} value={details.date} onChange={(e) => setDetails({ ...details, date: e.target.value })} />
-              <input type="time" className={field} value={details.time} onChange={(e) => setDetails({ ...details, time: e.target.value })} />
-              <input placeholder="Venue Name" className={field} value={details.venue} onChange={(e) => setDetails({ ...details, venue: e.target.value })} />
-              <input placeholder="Venue Address" className={field} value={details.address} onChange={(e) => setDetails({ ...details, address: e.target.value })} />
-              <input placeholder="District" className={field} value={details.district} onChange={(e) => setDetails({ ...details, district: e.target.value })} />
-              <input placeholder="State" className={field} value={details.state} onChange={(e) => setDetails({ ...details, state: e.target.value })} />
-              <input placeholder="Google Maps Location (optional)" className={field} value={details.maps} onChange={(e) => setDetails({ ...details, maps: e.target.value })} />
-              <input placeholder="Expected Guests" type="number" className={field} value={details.guests} onChange={(e) => setDetails({ ...details, guests: e.target.value })} />
-              <select className={field} value={details.setting} onChange={(e) => setDetails({ ...details, setting: e.target.value })}>
-                <option>Indoor</option>
-                <option>Outdoor</option>
-              </select>
-            </div>
-          )}
 
-          {step === 2 && (
+
+          {step === 3 && (
             <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
               <div>
                 {!mode && (
                   <div className="grid gap-5 sm:grid-cols-2">
                     <button onClick={() => setMode("package")} className="rounded-3xl border border-primary/30 p-8 text-left hover:border-primary">
-                      <h3 className="font-display text-2xl text-cream">Choose a Package</h3>
+                      <h3 className="font-display text-2xl text-cream">{t("book.choosePackage")}</h3>
                       <p className="mt-2 text-sm text-muted-foreground">
-                        Start from a ready menu and modify every dish freely.
+                        {t("book.choosePackageDesc")}
                       </p>
                     </button>
                     <button onClick={() => setMode("custom")} className="rounded-3xl border border-primary/30 p-8 text-left hover:border-primary">
-                      <h3 className="font-display text-2xl text-cream">Build a Custom Menu</h3>
+                      <h3 className="font-display text-2xl text-cream">{t("book.buildCustom")}</h3>
                       <p className="mt-2 text-sm text-muted-foreground">
-                        Pick dishes category by category, just the way you like.
+                        {t("book.buildCustomDesc")}
                       </p>
                     </button>
                   </div>
@@ -216,8 +234,8 @@ function BookPage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     {PACKAGES.map((p) => (
                       <button key={p.name} onClick={() => applyPackage(p.name)} className="rounded-2xl border border-primary/25 p-6 text-left hover:border-primary">
-                        <h3 className="font-display text-xl text-cream">{p.name}</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">{p.note}</p>
+                        <h3 className="font-display text-xl text-cream">{l(p, "name", lang)}</h3>
+                        <p className="mt-1 text-sm text-muted-foreground">{l(p, "note", lang)}</p>
                       </button>
                     ))}
                   </div>
@@ -234,7 +252,7 @@ function BookPage() {
                       />
                       <select className={`${field} max-w-xs`} value={category} onChange={(e) => setCategory(e.target.value)}>
                         {["All", ...MENU_CATEGORIES].map((c) => (
-                          <option key={c}>{c}</option>
+                          <option key={c} value={c}>{t(`categories.${c}`)}</option>
                         ))}
                       </select>
                     </div>
@@ -244,9 +262,9 @@ function BookPage() {
                         return (
                           <div key={d.id} className="flex items-start justify-between gap-3 rounded-2xl border border-primary/20 p-4">
                             <div>
-                              <p className="font-display text-lg text-cream">{d.name}</p>
-                              <p className="text-xs text-muted-foreground">{d.desc}</p>
-                              <p className="mt-1 text-[10px] tracking-[0.14em] text-primary/80 uppercase">{d.category}</p>
+                              <p className="font-display text-lg text-cream">{l(d, "name", lang)}</p>
+                              <p className="text-xs text-muted-foreground">{l(d, "desc", lang)}</p>
+                              <p className="mt-1 text-[10px] tracking-[0.14em] text-primary/80 uppercase">{t(`categories.${d.category}`)}</p>
                             </div>
                             <button
                               onClick={() => toggle(selected, setSelected, d.id)}
@@ -268,7 +286,7 @@ function BookPage() {
                         <input placeholder="Dish Name" className={field} value={reqForm.name} onChange={(e) => setReqForm({ ...reqForm, name: e.target.value })} />
                         <select className={field} value={reqForm.category} onChange={(e) => setReqForm({ ...reqForm, category: e.target.value })}>
                           {MENU_CATEGORIES.map((c) => (
-                            <option key={c}>{c}</option>
+                            <option key={c} value={c}>{t(`categories.${c}`)}</option>
                           ))}
                         </select>
                         <input placeholder="Notes" className={field} value={reqForm.notes} onChange={(e) => setReqForm({ ...reqForm, notes: e.target.value })} />
@@ -279,7 +297,7 @@ function BookPage() {
                           <button
                             onClick={() => {
                               if (!selected.includes(duplicate.id)) setSelected([...selected, duplicate.id]);
-                              setReqForm({ name: "", category: MENU_CATEGORIES[0], notes: "" });
+                              setReqForm({ name: "", category: MENU_CATEGORIES[0] || "", notes: "" });
                             }}
                             className="btn-gold rounded-full px-4 py-2 text-[11px] tracking-[0.12em] uppercase"
                           >
@@ -291,7 +309,7 @@ function BookPage() {
                           onClick={() => {
                             if (!reqForm.name.trim()) return;
                             setRequests([...requests, reqForm]);
-                            setReqForm({ name: "", category: MENU_CATEGORIES[0], notes: "" });
+                            setReqForm({ name: "", category: MENU_CATEGORIES[0] || "", notes: "" });
                           }}
                           className="btn-gold mt-4 rounded-full px-5 py-2.5 text-[11px] tracking-[0.12em] uppercase"
                         >
@@ -327,18 +345,18 @@ function BookPage() {
               </div>
 
               <aside className="h-fit rounded-3xl border border-primary/25 p-6">
-                <h3 className="font-display text-xl text-cream">Your Menu</h3>
-                {pkg && <p className="mt-1 text-xs text-primary uppercase">{pkg} package</p>}
+                <h3 className="font-display text-xl text-cream">{t("book.yourMenu")}</h3>
+                {pkg && <p className="mt-1 text-xs text-primary uppercase">{pkg} {t("book.pkg")}</p>}
                 {grouped.length === 0 && requests.length === 0 && (
-                  <p className="mt-3 text-sm text-muted-foreground">No dishes selected yet.</p>
+                  <p className="mt-3 text-sm text-muted-foreground">{t("book.noDishes")}</p>
                 )}
                 {grouped.map((g) => (
                   <div key={g.category} className="mt-4">
-                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">{g.category}</p>
+                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">{t(`categories.${g.category}`)}</p>
                     <ul className="mt-1 space-y-1">
                       {g.items.map((d) => (
                         <li key={d.id} className="flex items-center justify-between gap-2 text-sm text-muted-foreground">
-                          {d.name}
+                          {l(d, "name", lang)}
                           <button onClick={() => toggle(selected, setSelected, d.id)} aria-label={`Remove ${d.name}`}>
                             <Trash2 className="size-3.5 text-primary/70" />
                           </button>
@@ -349,7 +367,7 @@ function BookPage() {
                 ))}
                 {requests.length > 0 && (
                   <div className="mt-4">
-                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">Requested</p>
+                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">{t("book.requested")}</p>
                     <ul className="mt-1 space-y-1 text-sm text-muted-foreground">
                       {requests.map((r) => (
                         <li key={r.name}>{r.name}</li>
@@ -365,14 +383,14 @@ function BookPage() {
                     }}
                     className="mt-6 text-xs text-primary hover:underline"
                   >
-                    Change menu type
+                    {t("book.changeMenuType")}
                   </button>
                 )}
               </aside>
             </div>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {ADDITIONAL_SERVICES.map((a) => (
                 <label
@@ -387,30 +405,118 @@ function BookPage() {
                     onChange={() => toggle(addons, setAddons, a)}
                     className="size-4 accent-[oklch(0.75_0.13_82)]"
                   />
-                  {a}
+                  {t(`bookServices.${a}`)}
                 </label>
               ))}
             </div>
           )}
 
-          {step === 4 && (
+          {step === 1 && (
             <div className="grid gap-4 sm:grid-cols-2">
-              <input placeholder="Full Name" className={field} value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} />
-              <input placeholder="Phone Number" className={field} value={customer.phone} onChange={(e) => setCustomer({ ...customer, phone: e.target.value })} />
-              <input placeholder="WhatsApp Number" className={field} value={customer.whatsapp} onChange={(e) => setCustomer({ ...customer, whatsapp: e.target.value })} />
-              <input placeholder="Email" type="email" className={field} value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} />
-              <input placeholder="Address Line 1" className={field} value={customer.address1} onChange={(e) => setCustomer({ ...customer, address1: e.target.value })} />
-              <input placeholder="Address Line 2" className={field} value={customer.address2} onChange={(e) => setCustomer({ ...customer, address2: e.target.value })} />
-              <input placeholder="Village / City" className={field} value={customer.city} onChange={(e) => setCustomer({ ...customer, city: e.target.value })} />
-              <input placeholder="District" className={field} value={customer.district} onChange={(e) => setCustomer({ ...customer, district: e.target.value })} />
-              <input placeholder="State" className={field} value={customer.state} onChange={(e) => setCustomer({ ...customer, state: e.target.value })} />
-              <input placeholder="Pincode" className={field} value={customer.pincode} onChange={(e) => setCustomer({ ...customer, pincode: e.target.value })} />
-              <select className={field} value={customer.contactTime} onChange={(e) => setCustomer({ ...customer, contactTime: e.target.value })}>
-                <option>Morning</option>
-                <option>Afternoon</option>
-                <option>Evening</option>
+              <label className="flex flex-col gap-1 text-sm text-muted-foreground">
+                {t("book.date")} *
+                <input
+                  type="date"
+                  required
+                  className={field}
+                  value={details.date}
+                  onChange={(e) => setDetails({ ...details, date: e.target.value })}
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-sm text-muted-foreground">
+                {t("book.time")}
+                <input
+                  type="time"
+                  className={field}
+                  value={details.time}
+                  onChange={(e) => setDetails({ ...details, time: e.target.value })}
+                />
+              </label>
+              <input
+                placeholder={`${t("book.venueName")}`}
+                className={field}
+                value={details.venue}
+                onChange={(e) => setDetails({ ...details, venue: e.target.value })}
+              />
+              <input
+                type="number"
+                min="1"
+                placeholder={`${t("book.expectedGuests")} *`}
+                className={field}
+                value={details.guests}
+                onChange={(e) => setDetails({ ...details, guests: e.target.value })}
+              />
+              <input
+                placeholder={t("book.venueAddress")}
+                className={`${field} sm:col-span-2`}
+                value={details.address}
+                onChange={(e) => setDetails({ ...details, address: e.target.value })}
+              />
+              <input
+                placeholder={t("book.district")}
+                className={field}
+                value={details.district}
+                onChange={(e) => setDetails({ ...details, district: e.target.value })}
+              />
+              <input
+                placeholder={t("book.state")}
+                className={field}
+                value={details.state}
+                onChange={(e) => setDetails({ ...details, state: e.target.value })}
+              />
+              <input
+                placeholder={t("book.googleMaps")}
+                className={`${field} sm:col-span-2`}
+                value={details.maps}
+                onChange={(e) => setDetails({ ...details, maps: e.target.value })}
+              />
+              <select
+                className={field}
+                value={details.setting}
+                onChange={(e) => setDetails({ ...details, setting: e.target.value })}
+              >
+                <option value="Indoor">{t("book.indoor")}</option>
+                <option value="Outdoor">{t("book.outdoor")}</option>
               </select>
-              <textarea rows={3} placeholder="Special Instructions" className={`${field} sm:col-span-2`} value={customer.instructions} onChange={(e) => setCustomer({ ...customer, instructions: e.target.value })} />
+            </div>
+          )}
+
+          {step === 2 && (
+            <div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input placeholder="Full Name *" required className={field} value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} />
+                <input placeholder="Phone Number *" required className={field} value={customer.phone} onChange={(e) => setCustomer({ ...customer, phone: e.target.value })} />
+                
+                {showMoreDetails && (
+                  <>
+                    <input placeholder="WhatsApp Number (optional)" className={field} value={customer.whatsapp} onChange={(e) => setCustomer({ ...customer, whatsapp: e.target.value })} />
+                    <input placeholder="Email (optional)" type="email" className={field} value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} />
+                    <input placeholder="Address Line 1" className={field} value={customer.address1} onChange={(e) => setCustomer({ ...customer, address1: e.target.value })} />
+                    <input placeholder="Address Line 2" className={field} value={customer.address2} onChange={(e) => setCustomer({ ...customer, address2: e.target.value })} />
+                    <input placeholder="Village / City" className={field} value={customer.city} onChange={(e) => setCustomer({ ...customer, city: e.target.value })} />
+                    <input placeholder="District" className={field} value={customer.district} onChange={(e) => setCustomer({ ...customer, district: e.target.value })} />
+                    <input placeholder="State" className={field} value={customer.state} onChange={(e) => setCustomer({ ...customer, state: e.target.value })} />
+                    <input placeholder="Pincode" className={field} value={customer.pincode} onChange={(e) => setCustomer({ ...customer, pincode: e.target.value })} />
+                    <select className={field} value={customer.contactTime} onChange={(e) => setCustomer({ ...customer, contactTime: e.target.value })}>
+                      <option>Morning</option>
+                      <option>Afternoon</option>
+                      <option>Evening</option>
+                    </select>
+                    <textarea rows={3} placeholder="Special Instructions" className={`${field} sm:col-span-2`} value={customer.instructions} onChange={(e) => setCustomer({ ...customer, instructions: e.target.value })} />
+                  </>
+                )}
+              </div>
+              
+              {!showMoreDetails && (
+                <div className="mt-6 text-center">
+                  <button 
+                    onClick={() => setShowMoreDetails(true)} 
+                    className="inline-flex items-center gap-1.5 text-[12px] tracking-wide text-primary hover:underline"
+                  >
+                    <Plus className="size-3.5" /> Add more details (Address, Email, etc.)
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -438,15 +544,38 @@ function BookPage() {
               disabled={step === 0}
               className="inline-flex items-center gap-2 rounded-full border border-primary/40 px-6 py-3 text-[11px] tracking-[0.14em] text-primary uppercase disabled:opacity-40"
             >
-              <ArrowLeft className="size-4" /> Back
+              <ArrowLeft className="size-4" /> {t("book.back")}
             </button>
             {step < STEPS.length - 1 ? (
               <button
-                onClick={() => canNext && setStep(step + 1)}
+                onClick={() => {
+                  if (!canNext) return;
+                  if (step === 2 && !leadCaptured) {
+                    setLeadCaptured(true);
+                    emailjs.send(
+                      "service_gny0bpl",
+                      "template_24zyu5k",
+                      {
+                        name: customer.name,
+                        phone: customer.phone,
+                        email: customer.email || "Not provided",
+                        eventType: eventType,
+                        status: "Lead Captured - Menu Not Yet Finished",
+                        details: `Date: ${details.date || "—"}, Guests: ${details.guests || "—"}, Venue: ${details.venue || "—"}`,
+                      },
+                      "WzG4BYIic7BBDXipa"
+                    ).catch(error => {
+                      console.error("Failed to capture lead via email:", error);
+                      // Reset so we can try again if needed, though they already moved to next step
+                      setLeadCaptured(false);
+                    });
+                  }
+                  setStep(step + 1);
+                }}
                 disabled={!canNext}
                 className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-3 text-[11px] tracking-[0.14em] uppercase disabled:opacity-50"
               >
-                Continue <ArrowRight className="size-4" />
+                {step === 2 ? "Next & Submit Inquiry" : t("book.continue")} <ArrowRight className="size-4" />
               </button>
             ) : (
               <button

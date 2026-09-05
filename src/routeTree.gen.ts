@@ -19,7 +19,6 @@ import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundRouteImport } from './routes/refund'
-import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as ServicesSlugRouteImport } from './routes/services/$slug'
@@ -74,11 +73,6 @@ const RefundRoute = RefundRouteImport.update({
   path: '/refund',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReviewsRoute = ReviewsRouteImport.update({
-  id: '/reviews',
-  path: '/reviews',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -106,7 +100,6 @@ export interface FileRoutesByFullPath {
   '/menu': typeof MenuRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
-  '/reviews': typeof ReviewsRoute
   '/terms': typeof TermsRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
@@ -122,7 +115,6 @@ export interface FileRoutesByTo {
   '/menu': typeof MenuRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
-  '/reviews': typeof ReviewsRoute
   '/terms': typeof TermsRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services': typeof ServicesIndexRoute
@@ -139,7 +131,6 @@ export interface FileRoutesById {
   '/menu': typeof MenuRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
-  '/reviews': typeof ReviewsRoute
   '/terms': typeof TermsRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
@@ -157,7 +148,6 @@ export interface FileRouteTypes {
     | '/menu'
     | '/privacy'
     | '/refund'
-    | '/reviews'
     | '/terms'
     | '/services/$slug'
     | '/services/'
@@ -173,7 +163,6 @@ export interface FileRouteTypes {
     | '/menu'
     | '/privacy'
     | '/refund'
-    | '/reviews'
     | '/terms'
     | '/services/$slug'
     | '/services'
@@ -189,7 +178,6 @@ export interface FileRouteTypes {
     | '/menu'
     | '/privacy'
     | '/refund'
-    | '/reviews'
     | '/terms'
     | '/services/$slug'
     | '/services/'
@@ -206,7 +194,6 @@ export interface RootRouteChildren {
   MenuRoute: typeof MenuRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundRoute: typeof RefundRoute
-  ReviewsRoute: typeof ReviewsRoute
   TermsRoute: typeof TermsRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
@@ -284,13 +271,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RefundRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/reviews': {
-      id: '/reviews'
-      path: '/reviews'
-      fullPath: '/reviews'
-      preLoaderRoute: typeof ReviewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -326,7 +306,6 @@ const rootRouteChildren: RootRouteChildren = {
   MenuRoute: MenuRoute,
   PrivacyRoute: PrivacyRoute,
   RefundRoute: RefundRoute,
-  ReviewsRoute: ReviewsRoute,
   TermsRoute: TermsRoute,
   ServicesSlugRoute: ServicesSlugRoute,
   ServicesIndexRoute: ServicesIndexRoute,
