@@ -4,7 +4,6 @@ import { Award, Heart, Sparkles, Target, Users } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/ui-bits";
 import { SectionStack } from "@/components/layout/SectionStack";
 import { IMAGES } from "@/config/images";
-import { GALLERY } from "@/data/gallery";
 import { WHY_CHOOSE } from "@/data/services";
 import { useLanguage } from "@/hooks/use-language";
 import { l } from "@/i18n";
@@ -39,8 +38,6 @@ const TIMELINE = [
 const TEAM = [
   { key: "m1" },
   { key: "m2" },
-  { key: "m3" },
-  { key: "m4" },
 ];
 
 function About() {
@@ -92,9 +89,9 @@ function About() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("about.teamEyebrow")} title={t("about.teamTitle")} />
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 flex flex-col items-center sm:flex-row sm:justify-center gap-6 sm:gap-8">
             {TEAM.map((m) => (
-              <div key={m.key} className="rounded-3xl border border-primary/25 bg-card p-6 text-center">
+              <div key={m.key} className="w-full max-w-[320px] rounded-3xl border border-primary/25 bg-card p-6 text-center">
                 <span className="mx-auto grid size-14 place-items-center rounded-full border border-primary/40 text-primary">
                   <Users className="size-6" />
                 </span>
@@ -118,33 +115,6 @@ function About() {
                 <p className="mt-2 text-sm text-muted-foreground">{l(w, "copy", lang)}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-350">
-          <SectionHeading eyebrow={t("about.kitchenEyebrow")} title={t("about.kitchenTitle")} />
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {GALLERY.slice(3, 9).map((g) => (
-              <img
-                key={g.alt}
-                src={g.src}
-                alt={g.alt}
-                loading="lazy"
-                width={640}
-                height={512}
-                className="h-56 w-full rounded-3xl border border-primary/25 object-cover"
-              />
-            ))}
-          </div>
-          <div className="mt-10 text-center">
-            <Link
-              to="/book"
-              className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-4 text-[12px] tracking-[0.16em] uppercase"
-            >
-              {t("about.bookCatering")}
-            </Link>
           </div>
         </div>
       </section>

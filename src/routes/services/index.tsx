@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 import { PageHero } from "@/components/layout/ui-bits";
 import { IMAGES } from "@/config/images";
+import { SERVICE_EVENT_TYPE } from "@/data/packages";
 import { SERVICES } from "@/data/services";
 import { useLanguage } from "@/hooks/use-language";
 import { l } from "@/i18n";
@@ -19,7 +20,8 @@ export const Route = createFileRoute("/services/")({
       { property: "og:title", content: "Our Catering Services" },
       {
         property: "og:description",
-        content: "Eight dedicated catering services, each with sample menus, galleries and booking.",
+        content:
+          "Eight dedicated catering services, each with sample menus, galleries and booking.",
       },
     ],
   }),
@@ -66,7 +68,7 @@ function ServicesIndex() {
                   </Link>
                   <Link
                     to="/book"
-                    search={{ event: s.title }}
+                    search={{ event: SERVICE_EVENT_TYPE[s.slug] ?? "Other" }}
                     className="btn-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[11px] tracking-[0.14em] uppercase"
                   >
                     {t("servicesPage.bookThisService")}

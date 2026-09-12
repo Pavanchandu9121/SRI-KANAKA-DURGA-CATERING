@@ -174,12 +174,17 @@ export const WHY_CHOOSE: WhyChooseItem[] = [
   { title: "Trusted Service", titleTe: "నమ్మకమైన సేవ", copy: "1000+ celebrations and a decade of referrals.", copyTe: "1000+ వేడుకలు మరియు దశాబ్దం రెఫరల్‌లు." },
 ];
 
+/*
+ * `value` is the gold headline, `label` the line under it, `note` the two-line
+ * caption. Kept short on purpose — the row is five columns wide, so anything
+ * longer wraps to a third line and breaks the alignment across cards.
+ */
 export const HIGHLIGHTS: HighlightItem[] = [
-  { value: "10+", label: "Years Experience", labelTe: "సంవత్సరాల అనుభవం", note: "Of culinary excellence and trusted service", noteTe: "వంట రంగంలో శ్రేష్ఠత మరియు నమ్మకమైన సేవ" },
-  { value: "1000+", label: "Successful Events", labelTe: "విజయవంతమైన ఈవెంట్‌లు", note: "Celebrations delivered across the state", noteTe: "రాష్ట్రం అంతటా అందించిన వేడుకలు" },
-  { value: "Multi-Cuisine", label: "Specialists", labelTe: "నిపుణులు", note: "Andhra, North Indian, Chinese & more", noteTe: "ఆంధ్ర, ఉత్తర భారత, చైనీస్ & ఇంకా" },
-  { value: "24×7", label: "Support", labelTe: "సపోర్ట్", note: "We're here for you, anytime, anywhere", noteTe: "ఎప్పుడైనా, ఎక్కడైనా మీ కోసం ఉన్నాము" },
-  { value: "Statewide", label: "Service", labelTe: "సేవ", note: "Delivering happiness to every district", noteTe: "ప్రతి జిల్లాకు ఆనందాన్ని అందిస్తూ" },
+  { value: "6+", label: "Years Experience", labelTe: "సంవత్సరాల అనుభవం", note: "Of culinary excellence and trusted service", noteTe: "వంట రంగంలో శ్రేష్ఠత మరియు నమ్మకమైన సేవ" },
+  { value: "1000+", label: "Events Completed", labelTe: "పూర్తయిన ఈవెంట్‌లు", note: "Successful celebrations across the state", noteTe: "రాష్ట్రం అంతటా విజయవంతమైన వేడుకలు" },
+  { value: "Multi-Cuisine", label: "Specialists", labelTe: "నిపుణులు", note: "Wide range of cuisines to suit every taste", noteTe: "ప్రతి రుచికి సరిపోయే విస్తృత వంటకాలు" },
+  { value: "24/7", label: "Support", labelTe: "సపోర్ట్", note: "We're here for you, anytime, anywhere", noteTe: "ఎప్పుడైనా, ఎక్కడైనా మీ కోసం ఉన్నాము" },
+  { value: "Across", label: "Andhra Pradesh", labelTe: "ఆంధ్రప్రదేశ్", note: "Delivering happiness to every corner", noteTe: "ప్రతి మూలకు ఆనందాన్ని అందిస్తూ" },
 ];
 
 export const TESTIMONIALS: Testimonial[] = [

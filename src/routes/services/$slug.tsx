@@ -7,7 +7,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { PageHero, SectionHeading } from "@/components/layout/ui-bits";
-import { GALLERY } from "@/data/gallery";
 import { SERVICE_EVENT_TYPE } from "@/data/packages";
 import { SERVICES } from "@/data/services";
 import { useLanguage } from "@/hooks/use-language";
@@ -73,25 +72,6 @@ function ServiceDetail() {
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 pt-24">
-        <div className="mx-auto max-w-350">
-          <SectionHeading eyebrow={t("serviceDetail.galEyebrow")} title={t("serviceDetail.galTitle")} />
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {GALLERY.slice(0, 6).map((g) => (
-              <img
-                key={g.alt}
-                src={g.src}
-                alt={g.alt}
-                loading="lazy"
-                width={640}
-                height={512}
-                className="h-56 w-full rounded-3xl border border-primary/25 object-cover"
-              />
             ))}
           </div>
         </div>

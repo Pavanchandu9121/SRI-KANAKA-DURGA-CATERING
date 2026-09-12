@@ -10,7 +10,6 @@ const NAV = [
   { key: "about", to: "/about" },
   { key: "services", to: "/services" },
   { key: "menu", to: "/menu" },
-  { key: "gallery", to: "/gallery" },
   { key: "faq", to: "/faq" },
   { key: "contact", to: "/contact" },
 ] as const;
