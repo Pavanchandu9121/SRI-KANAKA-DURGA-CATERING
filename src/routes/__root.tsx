@@ -16,6 +16,7 @@ import { SiteHeader } from "../components/layout/SiteHeader";
 import { SiteFooter } from "../components/layout/SiteFooter";
 import { LanguageProvider } from "../context/LanguageContext";
 import { useLanguage } from "../hooks/use-language";
+import { GlobalLoader } from "../components/ui/global-loader";
 
 function NotFoundInner() {
   const { t } = useLanguage();
@@ -24,9 +25,7 @@ function NotFoundInner() {
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">{t("error.notFoundCode")}</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">{t("error.notFoundTitle")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("error.notFoundDesc")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("error.notFoundDesc")}</p>
         <div className="mt-6">
           <Link
             to="/"
@@ -58,9 +57,7 @@ function ErrorInner({ reset }: { reset: () => void }) {
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           {t("error.errorTitle")}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("error.errorDesc")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("error.errorDesc")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -127,7 +124,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
-
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -153,6 +149,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   // Home only: the intro is the landing moment, not a gate on every page.
   const isHome = useRouterState({ select: (s) => s.location.pathname === "/" });
+  const isLoading = useRouterState({ select: (s) => s.status === 'pending' || s.isLoading });
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -165,6 +162,7 @@ function RootComponent() {
           viewport.
         */}
         {isHome && <BrandIntro />}
+        {isLoading && <GlobalLoader />}
         <div className="flex min-h-screen flex-col bg-forest-deep">
           <SiteHeader />
           <main className="flex-1">

@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { type ChangeEvent, type FormEvent, useState } from "react";
-import emailjs from "@emailjs/browser";
 
 import { PageHero } from "@/components/layout/ui-bits";
 import { IMAGES } from "@/config/images";
@@ -19,7 +18,10 @@ export const Route = createFileRoute("/contact")({
           "Call, WhatsApp or email our catering team in Vijayawada, Andhra Pradesh. Business hours, location map and enquiry form.",
       },
       { property: "og:title", content: "Contact Us" },
-      { property: "og:description", content: "Reach our catering team 24×7 for enquiries and quotations." },
+      {
+        property: "og:description",
+        content: "Reach our catering team 24×7 for enquiries and quotations.",
+      },
     ],
   }),
   component: ContactPage,
@@ -40,25 +42,30 @@ function ContactPage() {
     e.preventDefault();
     setStatus("sending");
     try {
-      await emailjs.send(
-        "service_gny0bpl",
-        "template_24zyu5k",
-        {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "4c615995-e55e-4f88-bc8e-62edd4cceb06",
+          subject: "New Contact Enquiry from Sri Kanaka Durga Caterings",
           name: form.name,
           phone: form.phone,
           email: form.email || "Not provided",
           eventType: form.event || "General enquiry",
-          status: "Contact Page Enquiry",
-          bookingId: `ENQ-${Date.now().toString().slice(-6)}`,
-          details: form.event || "—",
-          menu: "—",
-          addons: "—",
-          instructions: form.message || "—",
-        },
-        "WzG4BYIic7BBDXipa",
-      );
-      setStatus("sent");
-      setForm({ name: "", phone: "", email: "", event: "", message: "" });
+          message: form.message || "No message provided",
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setStatus("sent");
+        setForm({ name: "", phone: "", email: "", event: "", message: "" });
+      } else {
+        throw new Error(result.message);
+      }
     } catch (error) {
       console.error("Failed to send enquiry:", error);
       setStatus("error");
@@ -142,7 +149,12 @@ function ContactPage() {
                 </li>
                 <li className="flex gap-3">
                   <MessageCircle className="size-5 shrink-0 text-primary" />
-                  <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="hover:text-primary">
+                  <a
+                    href={CONTACT.whatsapp}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-primary"
+                  >
                     {t("contactPage.whatsappUs")}
                   </a>
                 </li>
@@ -153,7 +165,9 @@ function ContactPage() {
                   </a>
                 </li>
               </ul>
-              <h3 className="mt-6 font-display text-xl text-cream">{t("contactPage.businessHours")}</h3>
+              <h3 className="mt-6 font-display text-xl text-cream">
+                {t("contactPage.businessHours")}
+              </h3>
               <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
                 {CONTACT.hours.map((h) => (
                   <li key={h.day} className="flex justify-between gap-4">

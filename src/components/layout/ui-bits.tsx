@@ -10,6 +10,44 @@ export function Flourish() {
   );
 }
 
+/*
+ * Laurel wreath for the "Years Experience" highlight. Hand-drawn because lucide
+ * has no laurel — its `award` rosette reads as a medal, not the classical wreath
+ * the brand uses. Two mirrored halves of five leaves each, sized and stroked to
+ * sit alongside the lucide icons in the same row.
+ */
+export function LaurelWreath({ className }: { className?: string }) {
+  // One half: the arc plus five leaves fanning off it, drawn for the left side
+  // and mirrored for the right so both halves stay identical.
+  const half = (
+    <>
+      <path d="M11.2 3.4C6.5 5.1 3.6 9.2 3.6 13.4c0 3.4 1.9 6.1 4.6 7.2" />
+      <path d="M7.4 6.6c-1.7.1-3 .9-3.6 2.2.8 1.1 2.2 1.6 3.7 1.2" />
+      <path d="M5.2 10.5c-1.6.4-2.7 1.4-3 2.8 1 .9 2.5 1.1 3.9.4" />
+      <path d="M4.6 14.4c-1.4.7-2.2 1.9-2.2 3.3 1.2.6 2.7.4 3.8-.6" />
+      <path d="M5.5 18c-1.1 1-1.5 2.4-1 3.7 1.3.2 2.6-.4 3.4-1.7" />
+      <path d="M9.4 4.6c-1.5-.5-3-.3-4 .7.4 1.3 1.6 2.2 3.1 2.4" />
+    </>
+  );
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      {half}
+      {/* Mirror across the vertical centre line rather than re-drawing. */}
+      <g transform="translate(24,0) scale(-1,1)">{half}</g>
+    </svg>
+  );
+}
+
 export function SectionHeading({
   eyebrow,
   title,

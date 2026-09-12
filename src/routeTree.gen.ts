@@ -15,7 +15,6 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as BookingConfirmedRouteImport } from './routes/booking-confirmed'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqRouteImport } from './routes/faq'
-import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundRouteImport } from './routes/refund'
@@ -51,11 +50,6 @@ const ContactRoute = ContactRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GalleryRoute = GalleryRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MenuRoute = MenuRouteImport.update({
@@ -96,7 +90,6 @@ export interface FileRoutesByFullPath {
   '/booking-confirmed': typeof BookingConfirmedRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/gallery': typeof GalleryRoute
   '/menu': typeof MenuRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -111,7 +104,6 @@ export interface FileRoutesByTo {
   '/booking-confirmed': typeof BookingConfirmedRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/gallery': typeof GalleryRoute
   '/menu': typeof MenuRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -127,7 +119,6 @@ export interface FileRoutesById {
   '/booking-confirmed': typeof BookingConfirmedRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/gallery': typeof GalleryRoute
   '/menu': typeof MenuRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -144,7 +135,6 @@ export interface FileRouteTypes {
     | '/booking-confirmed'
     | '/contact'
     | '/faq'
-    | '/gallery'
     | '/menu'
     | '/privacy'
     | '/refund'
@@ -159,7 +149,6 @@ export interface FileRouteTypes {
     | '/booking-confirmed'
     | '/contact'
     | '/faq'
-    | '/gallery'
     | '/menu'
     | '/privacy'
     | '/refund'
@@ -174,7 +163,6 @@ export interface FileRouteTypes {
     | '/booking-confirmed'
     | '/contact'
     | '/faq'
-    | '/gallery'
     | '/menu'
     | '/privacy'
     | '/refund'
@@ -190,7 +178,6 @@ export interface RootRouteChildren {
   BookingConfirmedRoute: typeof BookingConfirmedRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
-  GalleryRoute: typeof GalleryRoute
   MenuRoute: typeof MenuRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundRoute: typeof RefundRoute
@@ -241,13 +228,6 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gallery': {
-      id: '/gallery'
-      path: '/gallery'
-      fullPath: '/gallery'
-      preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/menu': {
@@ -302,7 +282,6 @@ const rootRouteChildren: RootRouteChildren = {
   BookingConfirmedRoute: BookingConfirmedRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
-  GalleryRoute: GalleryRoute,
   MenuRoute: MenuRoute,
   PrivacyRoute: PrivacyRoute,
   RefundRoute: RefundRoute,

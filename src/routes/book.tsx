@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Plus, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
 
 import {
   Accordion,
@@ -10,11 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SectionHeading } from "@/components/layout/ui-bits";
-import {
-  ADDITIONAL_SERVICES,
-  EVENT_TYPES,
-  PACKAGES,
-} from "@/data/packages";
+import { ADDITIONAL_SERVICES, EVENT_TYPES, OCCASION_MENU, PACKAGES } from "@/data/packages";
 import { DISHES, MENU_CATEGORIES } from "@/data/dishes";
 import { useLanguage } from "@/hooks/use-language";
 import { l } from "@/i18n";
@@ -33,13 +28,16 @@ export const Route = createFileRoute("/book")({
           "Book catering in a few steps: choose your event, share venue and guest details, build a package or custom menu, add services and submit your request.",
       },
       { property: "og:title", content: "Book Your Catering" },
-      { property: "og:description", content: "Build your menu and request a quotation in minutes." },
+      {
+        property: "og:description",
+        content: "Build your menu and request a quotation in minutes.",
+      },
     ],
   }),
   component: BookPage,
 });
 
-const STEPS = ["Event", "Details", "Your Details", "Menu", "Services", "Review"];
+const STEPS = ["Event", "Your Details", "Menu", "Services", "Review"];
 
 const field =
   "w-full rounded-2xl border border-primary/25 bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-primary focus:outline-none";
@@ -49,30 +47,9 @@ function BookPage() {
   const { event: presetEvent } = Route.useSearch();
   const { lang, t } = useLanguage();
 
-  const [step, setStep] = useState(0);
-  const [eventType, setEventType] = useState(
-    presetEvent && EVENT_TYPES.includes(presetEvent) ? presetEvent : "",
-  );
-  const [details, setDetails] = useState({
-    date: "",
-    time: "",
-    venue: "",
-    address: "",
-    district: "",
-    state: "Andhra Pradesh",
-    maps: "",
-    guests: "",
-    setting: "Indoor",
-  });
-  const [mode, setMode] = useState<"package" | "custom" | "">("");
-  const [pkg, setPkg] = useState("");
-  const [selected, setSelected] = useState<string[]>([]);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [requests, setRequests] = useState<{ name: string; category: string; notes: string }[]>([]);
-  const [reqForm, setReqForm] = useState<{ name: string; category: string; notes: string }>({ name: "", category: MENU_CATEGORIES[0] || "", notes: "" });
-  const [files, setFiles] = useState<string[]>([]);
-  const [addons, setAddons] = useState<string[]>([]);
+  const isValidPreset = presetEvent && EVENT_TYPES.includes(presetEvent);
+  const [step, setStep] = useState(isValidPreset ? 1 : 0);
+  const [eventType, setEventType] = useState(isValidPreset ? presetEvent : "");
   const [customer, setCustomer] = useState({
     name: "",
     phone: "",
@@ -87,20 +64,38 @@ function BookPage() {
     contactTime: "Morning",
     instructions: "",
   });
-  // Track if we already sent the lead email to avoid duplicates if they go back and forth
   const [leadCaptured, setLeadCaptured] = useState(false);
   const [showMoreDetails, setShowMoreDetails] = useState(false);
+  const [mode, setMode] = useState<"package" | "custom" | "">("");
+  const [pkg, setPkg] = useState("");
+  const [selected, setSelected] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+  const [requests, setRequests] = useState<{ name: string; category: string; notes: string }[]>([]);
+  const [reqForm, setReqForm] = useState<{ name: string; category: string; notes: string }>({
+    name: "",
+    category: MENU_CATEGORIES[0] || "",
+    notes: "",
+  });
+  const [files, setFiles] = useState<File[]>([]);
+  const [addons, setAddons] = useState<string[]>([]);
 
   const toggle = (list: string[], set: (v: string[]) => void, value: string) =>
     set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
 
   const applyPackage = (name: string) => {
     setPkg(name);
-    setSelected(DISHES.filter((d) => d.packages.includes(name)).map((d) => d.id));
+    if (name === "Our Special Selection" && eventType && OCCASION_MENU[eventType]) {
+      setSelected(OCCASION_MENU[eventType]);
+    } else {
+      setSelected(DISHES.filter((d) => d.packages.includes(name)).map((d) => d.id));
+    }
   };
 
   const duplicate = DISHES.find(
-    (d) => reqForm.name.trim().length > 2 && d.name.toLowerCase().includes(reqForm.name.trim().toLowerCase()),
+    (d) =>
+      reqForm.name.trim().length > 2 &&
+      d.name.toLowerCase().includes(reqForm.name.trim().toLowerCase()),
   );
 
   const selectedDishes = DISHES.filter((d) => selected.includes(d.id));
@@ -120,36 +115,39 @@ function BookPage() {
     const summary = {
       bookingId,
       eventType,
-      details,
+      customer,
       mode,
       pkg,
       dishes: selectedDishes.map((d) => ({ name: d.name, category: d.category })),
       requests,
-      files,
+      files: files.map((f) => f.name),
       addons,
-      customer,
       status: "submitted",
       updatedAt: new Date().toISOString(),
     };
 
+    const formData = new FormData();
+    formData.append("access_key", "4c615995-e55e-4f88-bc8e-62edd4cceb06");
+    formData.append("subject", `New Booking Request: ${bookingId} - ${eventType}`);
+    formData.append("name", customer.name);
+    formData.append("phone", customer.phone);
+    formData.append("email", customer.email || "Not provided");
+    formData.append("eventType", eventType);
+    formData.append("status", "Booking Submitted - Menu Finished");
+    formData.append("bookingId", bookingId);
+    formData.append("menu", selectedDishes.map((d) => d.name).join(", "));
+    formData.append("addons", addons.join(", "));
+    formData.append("instructions", customer.instructions || "None");
+
+    files.forEach((file) => {
+      formData.append("attachment", file);
+    });
+
     // Send final booking details email (fire and forget so UI doesn't freeze)
-    emailjs.send(
-      "service_gny0bpl",
-      "template_24zyu5k",
-      {
-        name: customer.name,
-        phone: customer.phone,
-        email: customer.email || "Not provided",
-        eventType: eventType,
-        status: "Booking Submitted - Menu Finished",
-        bookingId: bookingId,
-        details: `Date: ${details.date}, Guests: ${details.guests}, Venue: ${details.venue}`,
-        menu: selectedDishes.map(d => d.name).join(", "),
-        addons: addons.join(", "),
-        instructions: customer.instructions || "None"
-      },
-      "WzG4BYIic7BBDXipa"
-    ).catch(error => {
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    }).catch((error) => {
       console.error("Failed to send final email:", error);
     });
 
@@ -161,11 +159,10 @@ function BookPage() {
 
   const canNext =
     (step === 0 && !!eventType) ||
-    (step === 1 && !!details.date && !!details.guests) ||
-    (step === 2 && !!customer.name && !!customer.phone) ||
-    (step === 3 && selected.length + requests.length > 0) ||
-    step === 4 ||
-    step === 5;
+    (step === 1 && !!customer.name && !!customer.phone) ||
+    (step === 2 && selected.length + requests.length > 0) ||
+    step === 3 ||
+    step === 4;
 
   return (
     <div className="px-6 py-16">
@@ -208,20 +205,26 @@ function BookPage() {
             </div>
           )}
 
-
-
-          {step === 3 && (
+          {step === 2 && (
             <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
               <div>
                 {!mode && (
                   <div className="grid gap-5 sm:grid-cols-2">
-                    <button onClick={() => setMode("package")} className="rounded-3xl border border-primary/30 p-8 text-left hover:border-primary">
-                      <h3 className="font-display text-2xl text-cream">{t("book.choosePackage")}</h3>
+                    <button
+                      onClick={() => setMode("package")}
+                      className="rounded-3xl border border-primary/30 p-8 text-left hover:border-primary"
+                    >
+                      <h3 className="font-display text-2xl text-cream">
+                        {t("book.choosePackage")}
+                      </h3>
                       <p className="mt-2 text-sm text-muted-foreground">
                         {t("book.choosePackageDesc")}
                       </p>
                     </button>
-                    <button onClick={() => setMode("custom")} className="rounded-3xl border border-primary/30 p-8 text-left hover:border-primary">
+                    <button
+                      onClick={() => setMode("custom")}
+                      className="rounded-3xl border border-primary/30 p-8 text-left hover:border-primary"
+                    >
                       <h3 className="font-display text-2xl text-cream">{t("book.buildCustom")}</h3>
                       <p className="mt-2 text-sm text-muted-foreground">
                         {t("book.buildCustomDesc")}
@@ -233,7 +236,11 @@ function BookPage() {
                 {mode === "package" && !pkg && (
                   <div className="grid gap-4 sm:grid-cols-2">
                     {PACKAGES.map((p) => (
-                      <button key={p.name} onClick={() => applyPackage(p.name)} className="rounded-2xl border border-primary/25 p-6 text-left hover:border-primary">
+                      <button
+                        key={p.name}
+                        onClick={() => applyPackage(p.name)}
+                        className="rounded-2xl border border-primary/25 p-6 text-left hover:border-primary"
+                      >
                         <h3 className="font-display text-xl text-cream">{l(p, "name", lang)}</h3>
                         <p className="mt-1 text-sm text-muted-foreground">{l(p, "note", lang)}</p>
                       </button>
@@ -250,9 +257,15 @@ function BookPage() {
                         onChange={(e) => setSearch(e.target.value)}
                         className={`${field} max-w-xs`}
                       />
-                      <select className={`${field} max-w-xs`} value={category} onChange={(e) => setCategory(e.target.value)}>
+                      <select
+                        className={`${field} max-w-xs`}
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                      >
                         {["All", ...MENU_CATEGORIES].map((c) => (
-                          <option key={c} value={c}>{t(`categories.${c}`)}</option>
+                          <option key={c} value={c}>
+                            {t(`categories.${c}`)}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -260,17 +273,26 @@ function BookPage() {
                       {visible.map((d) => {
                         const on = selected.includes(d.id);
                         return (
-                          <div key={d.id} className="flex items-start justify-between gap-3 rounded-2xl border border-primary/20 p-4">
+                          <div
+                            key={d.id}
+                            className="flex items-start justify-between gap-3 rounded-2xl border border-primary/20 p-4"
+                          >
                             <div>
-                              <p className="font-display text-lg text-cream">{l(d, "name", lang)}</p>
+                              <p className="font-display text-lg text-cream">
+                                {l(d, "name", lang)}
+                              </p>
                               <p className="text-xs text-muted-foreground">{l(d, "desc", lang)}</p>
-                              <p className="mt-1 text-[10px] tracking-[0.14em] text-primary/80 uppercase">{t(`categories.${d.category}`)}</p>
+                              <p className="mt-1 text-[10px] tracking-[0.14em] text-primary/80 uppercase">
+                                {t(`categories.${d.category}`)}
+                              </p>
                             </div>
                             <button
                               onClick={() => toggle(selected, setSelected, d.id)}
                               aria-label={on ? `Remove ${d.name}` : `Add ${d.name}`}
                               className={`grid size-9 shrink-0 place-items-center rounded-full border ${
-                                on ? "border-primary bg-primary/15 text-primary" : "border-primary/40 text-primary"
+                                on
+                                  ? "border-primary bg-primary/15 text-primary"
+                                  : "border-primary/40 text-primary"
                               }`}
                             >
                               {on ? <Check className="size-4" /> : <Plus className="size-4" />}
@@ -283,21 +305,42 @@ function BookPage() {
                     <div className="mt-8 rounded-2xl border border-primary/25 p-6">
                       <h3 className="font-display text-xl text-cream">Can't find a dish?</h3>
                       <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                        <input placeholder="Dish Name" className={field} value={reqForm.name} onChange={(e) => setReqForm({ ...reqForm, name: e.target.value })} />
-                        <select className={field} value={reqForm.category} onChange={(e) => setReqForm({ ...reqForm, category: e.target.value })}>
+                        <input
+                          placeholder="Dish Name"
+                          className={field}
+                          value={reqForm.name}
+                          onChange={(e) => setReqForm({ ...reqForm, name: e.target.value })}
+                        />
+                        <select
+                          className={field}
+                          value={reqForm.category}
+                          onChange={(e) => setReqForm({ ...reqForm, category: e.target.value })}
+                        >
                           {MENU_CATEGORIES.map((c) => (
-                            <option key={c} value={c}>{t(`categories.${c}`)}</option>
+                            <option key={c} value={c}>
+                              {t(`categories.${c}`)}
+                            </option>
                           ))}
                         </select>
-                        <input placeholder="Notes" className={field} value={reqForm.notes} onChange={(e) => setReqForm({ ...reqForm, notes: e.target.value })} />
+                        <input
+                          placeholder="Notes"
+                          className={field}
+                          value={reqForm.notes}
+                          onChange={(e) => setReqForm({ ...reqForm, notes: e.target.value })}
+                        />
                       </div>
                       {duplicate ? (
                         <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-primary">
                           Already available: {duplicate.name}
                           <button
                             onClick={() => {
-                              if (!selected.includes(duplicate.id)) setSelected([...selected, duplicate.id]);
-                              setReqForm({ name: "", category: MENU_CATEGORIES[0] || "", notes: "" });
+                              if (!selected.includes(duplicate.id))
+                                setSelected([...selected, duplicate.id]);
+                              setReqForm({
+                                name: "",
+                                category: MENU_CATEGORIES[0] || "",
+                                notes: "",
+                              });
                             }}
                             className="btn-gold rounded-full px-4 py-2 text-[11px] tracking-[0.12em] uppercase"
                           >
@@ -328,14 +371,17 @@ function BookPage() {
                         multiple
                         accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
                         onChange={(e) =>
-                          setFiles([...files, ...Array.from(e.target.files ?? []).map((f) => f.name)])
+                          setFiles([
+                            ...files,
+                            ...Array.from(e.target.files ?? []),
+                          ])
                         }
                         className="mx-auto mt-4 block text-xs text-muted-foreground"
                       />
                       {files.length > 0 && (
                         <ul className="mt-3 text-xs text-primary">
                           {files.map((f) => (
-                            <li key={f}>{f}</li>
+                            <li key={f.name}>{f.name}</li>
                           ))}
                         </ul>
                       )}
@@ -346,18 +392,30 @@ function BookPage() {
 
               <aside className="h-fit rounded-3xl border border-primary/25 p-6">
                 <h3 className="font-display text-xl text-cream">{t("book.yourMenu")}</h3>
-                {pkg && <p className="mt-1 text-xs text-primary uppercase">{pkg} {t("book.pkg")}</p>}
+                {pkg && (
+                  <p className="mt-1 text-xs text-primary uppercase">
+                    {pkg} {t("book.pkg")}
+                  </p>
+                )}
                 {grouped.length === 0 && requests.length === 0 && (
                   <p className="mt-3 text-sm text-muted-foreground">{t("book.noDishes")}</p>
                 )}
                 {grouped.map((g) => (
                   <div key={g.category} className="mt-4">
-                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">{t(`categories.${g.category}`)}</p>
+                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">
+                      {t(`categories.${g.category}`)}
+                    </p>
                     <ul className="mt-1 space-y-1">
                       {g.items.map((d) => (
-                        <li key={d.id} className="flex items-center justify-between gap-2 text-sm text-muted-foreground">
+                        <li
+                          key={d.id}
+                          className="flex items-center justify-between gap-2 text-sm text-muted-foreground"
+                        >
                           {l(d, "name", lang)}
-                          <button onClick={() => toggle(selected, setSelected, d.id)} aria-label={`Remove ${d.name}`}>
+                          <button
+                            onClick={() => toggle(selected, setSelected, d.id)}
+                            aria-label={`Remove ${d.name}`}
+                          >
                             <Trash2 className="size-3.5 text-primary/70" />
                           </button>
                         </li>
@@ -367,7 +425,9 @@ function BookPage() {
                 ))}
                 {requests.length > 0 && (
                   <div className="mt-4">
-                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">{t("book.requested")}</p>
+                    <p className="text-[10px] tracking-[0.18em] text-primary/80 uppercase">
+                      {t("book.requested")}
+                    </p>
                     <ul className="mt-1 space-y-1 text-sm text-muted-foreground">
                       {requests.map((r) => (
                         <li key={r.name}>{r.name}</li>
@@ -390,13 +450,15 @@ function BookPage() {
             </div>
           )}
 
-          {step === 4 && (
+          {step === 3 && (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {ADDITIONAL_SERVICES.map((a) => (
                 <label
                   key={a}
                   className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-5 py-4 text-sm ${
-                    addons.includes(a) ? "border-primary text-primary" : "border-primary/25 text-muted-foreground"
+                    addons.includes(a)
+                      ? "border-primary text-primary"
+                      : "border-primary/25 text-muted-foreground"
                   }`}
                 >
                   <input
@@ -412,105 +474,98 @@ function BookPage() {
           )}
 
           {step === 1 && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="flex flex-col gap-1 text-sm text-muted-foreground">
-                {t("book.date")} *
-                <input
-                  type="date"
-                  required
-                  className={field}
-                  value={details.date}
-                  onChange={(e) => setDetails({ ...details, date: e.target.value })}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-muted-foreground">
-                {t("book.time")}
-                <input
-                  type="time"
-                  className={field}
-                  value={details.time}
-                  onChange={(e) => setDetails({ ...details, time: e.target.value })}
-                />
-              </label>
-              <input
-                placeholder={`${t("book.venueName")}`}
-                className={field}
-                value={details.venue}
-                onChange={(e) => setDetails({ ...details, venue: e.target.value })}
-              />
-              <input
-                type="number"
-                min="1"
-                placeholder={`${t("book.expectedGuests")} *`}
-                className={field}
-                value={details.guests}
-                onChange={(e) => setDetails({ ...details, guests: e.target.value })}
-              />
-              <input
-                placeholder={t("book.venueAddress")}
-                className={`${field} sm:col-span-2`}
-                value={details.address}
-                onChange={(e) => setDetails({ ...details, address: e.target.value })}
-              />
-              <input
-                placeholder={t("book.district")}
-                className={field}
-                value={details.district}
-                onChange={(e) => setDetails({ ...details, district: e.target.value })}
-              />
-              <input
-                placeholder={t("book.state")}
-                className={field}
-                value={details.state}
-                onChange={(e) => setDetails({ ...details, state: e.target.value })}
-              />
-              <input
-                placeholder={t("book.googleMaps")}
-                className={`${field} sm:col-span-2`}
-                value={details.maps}
-                onChange={(e) => setDetails({ ...details, maps: e.target.value })}
-              />
-              <select
-                className={field}
-                value={details.setting}
-                onChange={(e) => setDetails({ ...details, setting: e.target.value })}
-              >
-                <option value="Indoor">{t("book.indoor")}</option>
-                <option value="Outdoor">{t("book.outdoor")}</option>
-              </select>
-            </div>
-          )}
-
-          {step === 2 && (
             <div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <input placeholder="Full Name *" required className={field} value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} />
-                <input placeholder="Phone Number *" required className={field} value={customer.phone} onChange={(e) => setCustomer({ ...customer, phone: e.target.value })} />
-                
+                <input
+                  placeholder={`${t("book.fullName")} *`}
+                  required
+                  className={field}
+                  value={customer.name}
+                  onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+                />
+                <input
+                  placeholder={`${t("book.phoneNumber")} *`}
+                  required
+                  className={field}
+                  value={customer.phone}
+                  onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
+                />
+
                 {showMoreDetails && (
                   <>
-                    <input placeholder="WhatsApp Number (optional)" className={field} value={customer.whatsapp} onChange={(e) => setCustomer({ ...customer, whatsapp: e.target.value })} />
-                    <input placeholder="Email (optional)" type="email" className={field} value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} />
-                    <input placeholder="Address Line 1" className={field} value={customer.address1} onChange={(e) => setCustomer({ ...customer, address1: e.target.value })} />
-                    <input placeholder="Address Line 2" className={field} value={customer.address2} onChange={(e) => setCustomer({ ...customer, address2: e.target.value })} />
-                    <input placeholder="Village / City" className={field} value={customer.city} onChange={(e) => setCustomer({ ...customer, city: e.target.value })} />
-                    <input placeholder="District" className={field} value={customer.district} onChange={(e) => setCustomer({ ...customer, district: e.target.value })} />
-                    <input placeholder="State" className={field} value={customer.state} onChange={(e) => setCustomer({ ...customer, state: e.target.value })} />
-                    <input placeholder="Pincode" className={field} value={customer.pincode} onChange={(e) => setCustomer({ ...customer, pincode: e.target.value })} />
-                    <select className={field} value={customer.contactTime} onChange={(e) => setCustomer({ ...customer, contactTime: e.target.value })}>
-                      <option>Morning</option>
-                      <option>Afternoon</option>
-                      <option>Evening</option>
+                    <input
+                      placeholder={`${t("book.whatsappNumber")} (optional)`}
+                      className={field}
+                      value={customer.whatsapp}
+                      onChange={(e) => setCustomer({ ...customer, whatsapp: e.target.value })}
+                    />
+                    <input
+                      placeholder={`${t("book.emailAddress")} (optional)`}
+                      type="email"
+                      className={field}
+                      value={customer.email}
+                      onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+                    />
+                    <input
+                      placeholder={t("book.address1")}
+                      className={field}
+                      value={customer.address1}
+                      onChange={(e) => setCustomer({ ...customer, address1: e.target.value })}
+                    />
+                    <input
+                      placeholder={t("book.address2")}
+                      className={field}
+                      value={customer.address2}
+                      onChange={(e) => setCustomer({ ...customer, address2: e.target.value })}
+                    />
+                    <input
+                      placeholder={t("book.villageCity")}
+                      className={field}
+                      value={customer.city}
+                      onChange={(e) => setCustomer({ ...customer, city: e.target.value })}
+                    />
+                    <input
+                      placeholder={t("book.district")}
+                      className={field}
+                      value={customer.district}
+                      onChange={(e) => setCustomer({ ...customer, district: e.target.value })}
+                    />
+                    <input
+                      placeholder={t("book.state")}
+                      className={field}
+                      value={customer.state}
+                      onChange={(e) => setCustomer({ ...customer, state: e.target.value })}
+                    />
+                    <input
+                      placeholder={t("book.pincode")}
+                      className={field}
+                      value={customer.pincode}
+                      onChange={(e) => setCustomer({ ...customer, pincode: e.target.value })}
+                    />
+                    <select
+                      className={field}
+                      value={customer.contactTime}
+                      onChange={(e) => setCustomer({ ...customer, contactTime: e.target.value })}
+                    >
+                      <option>{t("book.morning")}</option>
+                      <option>{t("book.afternoon")}</option>
+                      <option>{t("book.evening")}</option>
                     </select>
-                    <textarea rows={3} placeholder="Special Instructions" className={`${field} sm:col-span-2`} value={customer.instructions} onChange={(e) => setCustomer({ ...customer, instructions: e.target.value })} />
+                    <textarea
+                      rows={3}
+                      placeholder={t("book.specialInstructions")}
+                      className={`${field} sm:col-span-2`}
+                      value={customer.instructions}
+                      onChange={(e) => setCustomer({ ...customer, instructions: e.target.value })}
+                    />
                   </>
                 )}
               </div>
-              
+
               {!showMoreDetails && (
                 <div className="mt-6 text-center">
-                  <button 
-                    onClick={() => setShowMoreDetails(true)} 
+                  <button
+                    onClick={() => setShowMoreDetails(true)}
                     className="inline-flex items-center gap-1.5 text-[12px] tracking-wide text-primary hover:underline"
                   >
                     <Plus className="size-3.5" /> Add more details (Address, Email, etc.)
@@ -520,19 +575,43 @@ function BookPage() {
             </div>
           )}
 
-          {step === 5 && (
-            <Accordion type="multiple" defaultValue={["customer", "event", "menu"]}>
+          {step === 4 && (
+            <Accordion type="multiple" defaultValue={["event", "menu"]}>
               {[
-                { id: "customer", title: "Customer", body: `${customer.name || "—"} • ${customer.phone || "—"} • ${customer.city || "—"}` },
-                { id: "event", title: "Event", body: `${eventType || "—"} • ${details.date || "—"} ${details.time} • ${details.guests || "—"} guests • ${details.venue || "—"}, ${details.district}` },
-                { id: "menu", title: "Menu", body: `${pkg ? pkg + " package — " : ""}${selectedDishes.map((d) => d.name).join(", ") || "No dishes selected"}` },
-                { id: "addons", title: "Additional Services", body: addons.join(", ") || "None" },
-                { id: "files", title: "Uploaded Files", body: files.join(", ") || "None" },
-                { id: "requests", title: "Custom Requests", body: requests.map((r) => r.name).join(", ") || "None" },
+                {
+                  id: "customer",
+                  title: t("book.customer"),
+                  body: `${customer.name || "—"} • ${customer.phone || "—"} • ${customer.city || "—"}`,
+                },
+                { id: "event", title: t("book.event"), body: `${eventType || "—"}` },
+                {
+                  id: "menu",
+                  title: t("book.menu"),
+                  body: `${pkg ? pkg + " " + t("book.pkg") + " — " : ""}${selectedDishes.map((d) => l(d, "name", lang)).join(", ") || t("book.noDishesSelected")}`,
+                },
+                {
+                  id: "addons",
+                  title: t("book.addons"),
+                  body: addons.map((a) => t(`bookServices.${a}`)).join(", ") || t("book.none"),
+                },
+                {
+                  id: "files",
+                  title: t("book.files"),
+                  body: files.map((f) => f.name).join(", ") || t("book.none"),
+                },
+                {
+                  id: "requests",
+                  title: t("book.requests"),
+                  body: requests.length ? requests.map((r) => r.name).join(", ") : t("book.none"),
+                },
               ].map((s) => (
                 <AccordionItem key={s.id} value={s.id} className="border-primary/25">
-                  <AccordionTrigger className="font-display text-lg text-cream">{s.title}</AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground">{s.body}</AccordionContent>
+                  <AccordionTrigger className="font-display text-lg text-cream">
+                    {s.title}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground">
+                    {s.body}
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
@@ -550,21 +629,24 @@ function BookPage() {
               <button
                 onClick={() => {
                   if (!canNext) return;
-                  if (step === 2 && !leadCaptured) {
+                  if (step === 1 && !leadCaptured) {
                     setLeadCaptured(true);
-                    emailjs.send(
-                      "service_gny0bpl",
-                      "template_24zyu5k",
-                      {
+                    fetch("https://api.web3forms.com/submit", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                      },
+                      body: JSON.stringify({
+                        access_key: "4c615995-e55e-4f88-bc8e-62edd4cceb06",
+                        subject: `New Lead Captured: ${customer.name} - ${eventType}`,
                         name: customer.name,
                         phone: customer.phone,
                         email: customer.email || "Not provided",
                         eventType: eventType,
                         status: "Lead Captured - Menu Not Yet Finished",
-                        details: `Date: ${details.date || "—"}, Guests: ${details.guests || "—"}, Venue: ${details.venue || "—"}`,
-                      },
-                      "WzG4BYIic7BBDXipa"
-                    ).catch(error => {
+                      }),
+                    }).catch((error) => {
                       console.error("Failed to capture lead via email:", error);
                       // Reset so we can try again if needed, though they already moved to next step
                       setLeadCaptured(false);
@@ -575,7 +657,8 @@ function BookPage() {
                 disabled={!canNext}
                 className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-3 text-[11px] tracking-[0.14em] uppercase disabled:opacity-50"
               >
-                {step === 2 ? "Next & Submit Inquiry" : t("book.continue")} <ArrowRight className="size-4" />
+                {step === 1 ? "Next & Submit Inquiry" : t("book.continue")}{" "}
+                <ArrowRight className="size-4" />
               </button>
             ) : (
               <button

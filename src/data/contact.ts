@@ -1,6 +1,6 @@
 export const CONTACT = {
   phone: "+91 91234 56789",
-  phoneHref: "tel:+919123456789",
+  phoneHref: "tel:+9156789",
   whatsapp: "https://wa.me/919123456789",
   email: "hello@srikanakadurgacaterings.in",
   address: "Beside Sai Temple, Main Road, Vijayawada, Andhra Pradesh 520010",

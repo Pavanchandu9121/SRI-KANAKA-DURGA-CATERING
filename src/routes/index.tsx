@@ -1,26 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  Award,
   BookOpen,
   ChefHat,
   Clock,
+  ConciergeBell,
   Images,
   MapPin,
   Phone,
   Quote,
   Sparkles,
   Star,
-  UtensilsCrossed,
 } from "lucide-react";
 
-import { Flourish, SectionHeading } from "@/components/layout/ui-bits";
+import { Flourish, LaurelWreath, SectionHeading } from "@/components/layout/ui-bits";
 import { SectionStack } from "@/components/layout/SectionStack";
 import { CONTACT } from "@/config/contact";
 import { IMAGES } from "@/config/images";
 import heroVideo from "@/assets/hero.mp4";
 import { DISHES } from "@/data/dishes";
-import { GALLERY } from "@/data/gallery";
 import { SERVICE_EVENT_TYPE } from "@/data/packages";
 import { HIGHLIGHTS, SERVICES, TESTIMONIALS, WHY_CHOOSE } from "@/data/services";
 import { useLanguage } from "@/hooks/use-language";
@@ -46,9 +44,13 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+/*
+ * Parallel to HIGHLIGHTS. `undefined` in the first slot is deliberate — that row
+ * uses the hand-drawn LaurelWreath, since lucide has no laurel icon.
+ */
 const HIGHLIGHT_ICONS = [
-  Award,
-  UtensilsCrossed,
+  undefined,
+  ConciergeBell,
   ChefHat,
   Clock,
   MapPin,
@@ -118,12 +120,6 @@ function Index() {
               >
                 {t("home.exploreMenu")} <BookOpen className="size-4" />
               </Link>
-              <Link
-                to="/gallery"
-                className="inline-flex items-center gap-3 rounded-full border border-cream/50 px-8 py-4 text-[12px] tracking-[0.16em] text-cream uppercase transition-colors hover:border-primary hover:text-primary"
-              >
-                {t("home.viewGallery")} <Images className="size-4" />
-              </Link>
             </div>
           </div>
         </div>
@@ -132,28 +128,38 @@ function Index() {
       {/* Highlights card — cream, curved, gold-bordered */}
       <section className="relative z-10 mx-auto py-16 max-w-350 px-6">
         <div className="rounded-[2rem] border border-primary/60 bg-cream p-2 shadow-[0_30px_70px_-40px_oklch(0_0_0/0.9)]">
-          <div className="grid grid-cols-1 gap-y-8 rounded-[1.65rem] border border-primary/25 px-4 py-8 text-forest-deep sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-y-9 rounded-[1.65rem] border border-primary/25 px-2 py-9 text-forest-deep sm:grid-cols-2 lg:grid-cols-5">
             {HIGHLIGHTS.map((h, i) => {
               const Icon = HIGHLIGHT_ICONS[i];
-              if (!Icon) return null;
 
               return (
                 <div
                   key={h.label}
-                  className={`flex flex-col items-center gap-3 px-6 text-center ${i > 0 ? "lg:border-l lg:border-forest-deep/15" : ""
-                    }`}
+                  /*
+                   * Icon sits beside the text, both left-aligned. The divider is
+                   * a left border on every item but the first, so it falls
+                   * between columns — and only at lg, where the row is a single
+                   * five-across strip.
+                   */
+                  className={`flex items-center justify-center gap-4 px-5 ${
+                    i > 0 ? "lg:border-l lg:border-forest-deep/12" : ""
+                  }`}
                 >
-                  <span className="grid size-14 place-items-center rounded-full border border-[oklch(0.62_0.12_78)]/45 bg-[oklch(0.62_0.12_78)]/8">
-                    <Icon className="size-6 text-[oklch(0.55_0.11_78)]" />
+                  <span className="shrink-0 text-[oklch(0.58_0.12_74)]">
+                    {Icon ? (
+                      <Icon className="size-11" strokeWidth={1.3} />
+                    ) : (
+                      <LaurelWreath className="size-11" />
+                    )}
                   </span>
-                  <div>
-                    <p className="font-display text-2xl leading-tight text-[oklch(0.52_0.12_70)]">
+                  <div className="min-w-0">
+                    <p className="font-display text-[1.6rem] leading-[1.15] text-[oklch(0.58_0.12_74)]">
                       {h.value}
                     </p>
-                    <p className="font-display text-lg leading-tight">
+                    <p className="font-display text-[1.05rem] leading-tight text-forest-deep">
                       {l(h, "label", lang)}
                     </p>
-                    <p className="mt-1 text-xs leading-snug text-forest-deep/65">
+                    <p className="mt-2 text-[0.78rem] leading-[1.45] text-forest-deep/60">
                       {l(h, "note", lang)}
                     </p>
                   </div>
@@ -307,35 +313,6 @@ function Index() {
               className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-4 text-[12px] tracking-[0.16em] uppercase"
             >
               {t("home.exploreCompleteMenu")} <ArrowRight className="size-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery preview */}
-      <section className="px-6 py-28">
-        <div className="mx-auto max-w-350">
-          <SectionHeading eyebrow={t("home.galEyebrow")} title={t("home.galTitle")} />
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {GALLERY.slice(0, 6).map((g) => (
-              <figure key={g.alt} className="overflow-hidden rounded-3xl border border-primary/25">
-                <img
-                  src={g.src}
-                  alt={g.alt}
-                  loading="lazy"
-                  width={640}
-                  height={512}
-                  className="h-56 w-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </figure>
-            ))}
-          </div>
-          <div className="mt-10 text-center">
-            <Link
-              to="/gallery"
-              className="inline-flex items-center gap-2 rounded-full border border-primary/50 px-8 py-4 text-[12px] tracking-[0.16em] text-primary uppercase hover:bg-primary/10"
-            >
-              {t("home.viewGalleryBtn")} <Images className="size-4" />
             </Link>
           </div>
         </div>

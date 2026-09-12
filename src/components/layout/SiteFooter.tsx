@@ -43,7 +43,6 @@ export function SiteFooter() {
             {[
               { key: "aboutUs", to: "/about" },
               { key: "menuExplorer", to: "/menu" },
-              { key: "gallery", to: "/gallery" },
               { key: "faq", to: "/faq" },
               { key: "contact", to: "/contact" },
               { key: "bookCatering", to: "/book" },

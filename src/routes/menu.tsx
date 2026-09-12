@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 import { PageHero } from "@/components/layout/ui-bits";
 import { IMAGES } from "@/config/images";
-import { DISHES, MENU_SECTIONS } from "@/data/dishes";
+import { DISHES, MENU_CATEGORIES } from "@/data/dishes";
 import { useLanguage } from "@/hooks/use-language";
 import { l } from "@/i18n";
 import type { Dish } from "@/types";
@@ -46,7 +46,7 @@ function MenuPage() {
   const { lang, t } = useLanguage();
   const [q, setQ] = useState("");
   const [diet, setDiet] = useState<"all" | "veg" | "nonveg">("all");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState(MENU_CATEGORIES[0]);
   const [cuisine, setCuisine] = useState("All");
   const [tag, setTag] = useState<"none" | "popular" | "new">("none");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -78,12 +78,12 @@ function MenuPage() {
     return map;
   }, [pool]);
 
-  const filtered = q !== "" || diet !== "all" || category !== "All" || cuisine !== "All" || tag !== "none";
+  const filtered = q !== "" || diet !== "all" || category !== MENU_CATEGORIES[0] || cuisine !== "All" || tag !== "none";
 
   const resetAll = () => {
     setQ("");
     setDiet("all");
-    setCategory("All");
+    setCategory(MENU_CATEGORIES[0]);
     setCuisine("All");
     setTag("none");
   };
@@ -129,16 +129,9 @@ function MenuPage() {
       <div>
         {catRow("All", t("categories.All"), pool.length)}
       </div>
-      {MENU_SECTIONS.map((s) => (
-        <div key={s.label}>
-          <p className="px-3 pb-2 text-[10px] tracking-[0.22em] text-primary/70 uppercase">
-            {t(`menuSections.${s.label}`)}
-          </p>
-          <div className="space-y-0.5">
-            {s.categories.map((c) => catRow(c, t(`categories.${c}`), counts.get(c) ?? 0))}
-          </div>
-        </div>
-      ))}
+      <div className="space-y-0.5">
+        {MENU_CATEGORIES.map((c) => catRow(c, t(`categories.${c}`), counts.get(c) ?? 0))}
+      </div>
     </nav>
   );
 
