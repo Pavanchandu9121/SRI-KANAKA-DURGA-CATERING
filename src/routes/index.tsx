@@ -90,7 +90,7 @@ function Index() {
           <source src={heroVideo} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-linear-to-r from-forest-deep/75 via-forest-deep/40 to-forest-deep/20" />
-        <div className="relative mx-auto max-w-375 px-20 pt-20 pb-20">
+        <div className="relative mx-auto max-w-375 px-5 pt-20 pb-20 md:px-20">
           <div className="max-w-2xl">
             <p className="flex items-center gap-4 text-[12px] tracking-[0.32em] text-accent/90 uppercase">
               <Flourish /> {t("home.heroEyebrow")} <Flourish />
