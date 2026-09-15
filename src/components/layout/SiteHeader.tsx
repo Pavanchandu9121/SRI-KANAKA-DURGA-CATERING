@@ -61,7 +61,7 @@ export function SiteHeader() {
             <div className="hidden size-16 place-items-center rounded-full border-2 border-primary/50 text-primary">
               <Sparkles className="size-8" />
             </div>
-            <div className="leading-tight">
+            <div className="hidden leading-tight md:block">
               <p className="font-display text-[12px] font-bold tracking-[0.35em] text-primary/90">
                 {t("header.brandName")}
               </p>
