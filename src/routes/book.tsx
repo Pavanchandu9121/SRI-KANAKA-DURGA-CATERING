@@ -364,7 +364,7 @@ function BookPage() {
                     <div className="mt-6 rounded-2xl border border-dashed border-primary/40 p-6 text-center">
                       <Upload className="mx-auto size-6 text-primary" />
                       <p className="mt-2 text-sm text-muted-foreground">
-                        Have an existing menu? Upload an image, PDF, Excel or Word file.
+                        {t("book.uploadMenu")}
                       </p>
                       <input
                         type="file"
@@ -665,7 +665,7 @@ function BookPage() {
                 onClick={submit}
                 className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-3 text-[11px] tracking-[0.14em] uppercase"
               >
-                Submit Request <Check className="size-4" />
+                {t("book.submitRequest")} <Check className="size-4" />
               </button>
             )}
           </div>
