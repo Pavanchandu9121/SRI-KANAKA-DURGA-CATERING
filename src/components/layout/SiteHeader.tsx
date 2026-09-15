@@ -21,14 +21,14 @@ export function SiteHeader() {
   return (
     <div className="sticky top-0 z-50 bg-forest-deep/95 backdrop-blur-md">
       <div className="border-b border-border/60">
-        <div className="mx-auto flex max-w-375 flex-wrap items-center justify-between gap-3 px-6 py-2 text-[11px] tracking-wide text-muted-foreground">
-          <span className="flex items-center gap-2">
-            <Sparkles className="size-3.5 text-primary" />
-            {t("header.tagline")}
+        <div className="mx-auto flex max-w-375 items-center justify-between gap-2 px-4 py-2 text-[9px] tracking-wide text-muted-foreground sm:gap-3 sm:px-6 sm:text-[11px]">
+          <span className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+            <Sparkles className="size-3 shrink-0 text-primary sm:size-3.5" />
+            <span className="truncate">{t("header.tagline")}</span>
           </span>
-          <div className="flex items-center gap-x-6">
-            <a href={CONTACT.phoneHref} className="flex items-center gap-2 hover:text-primary">
-              <Phone className="size-3.5 text-primary" />
+          <div className="flex shrink-0 items-center gap-x-6">
+            <a href={CONTACT.phoneHref} className="flex items-center gap-1.5 whitespace-nowrap hover:text-primary sm:gap-2">
+              <Phone className="size-3 shrink-0 text-primary sm:size-3.5" />
               {CONTACT.phone}
             </a>
             <a
