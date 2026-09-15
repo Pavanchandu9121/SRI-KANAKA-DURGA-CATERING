@@ -90,12 +90,12 @@ function Index() {
           <source src={heroVideo} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-linear-to-r from-forest-deep/75 via-forest-deep/40 to-forest-deep/20" />
-        <div className="relative mx-auto max-w-375 px-5 pt-20 pb-20 md:px-20">
+        <div className="relative mx-auto max-w-375 px-5 pt-20 pb-20 sm:px-10 md:px-20">
           <div className="max-w-2xl">
-            <p className="flex items-center gap-4 text-[12px] tracking-[0.32em] text-accent/90 uppercase">
+            <p className="flex items-center gap-4 text-[10px] tracking-[0.32em] text-accent/90 uppercase sm:text-[12px]">
               <Flourish /> {t("home.heroEyebrow")} <Flourish />
             </p>
-            <h1 className="mt-6 font-display text-5xl leading-[1.1] text-cream md:text-6xl">
+            <h1 className="mt-6 font-display text-4xl leading-[1.1] text-cream sm:text-5xl md:text-6xl">
               {t("home.heroTitle")}
               <br />
               <span className="text-gradient-gold">{t("home.heroHighlight")}</span>
