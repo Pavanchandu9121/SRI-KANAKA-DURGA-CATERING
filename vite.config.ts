@@ -60,7 +60,7 @@ export default defineConfig(({ command }) => ({
       },
     }),
     // Deploy plugin: build-only, so `vite dev` never pays for it.
-    ...(command === "build" ? [nitro({ defaultPreset: "cloudflare-module" })] : []),
+    ...(command === "build" ? [nitro({ defaultPreset: "render-com" })] : []),
     viteReact(),
   ],
 }));
