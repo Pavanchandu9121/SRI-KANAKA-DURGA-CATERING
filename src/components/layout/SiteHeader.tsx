@@ -34,7 +34,7 @@ export function SiteHeader() {
             <a
               href={CONTACT.whatsapp}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="hidden items-center gap-2 hover:text-primary sm:flex"
             >
               <MessageCircle className="size-3.5 text-primary" />
@@ -50,7 +50,7 @@ export function SiteHeader() {
             <img 
               src="/logo.png" 
               alt="Sri Kanaka Durga Caterings Logo" 
-              className="h-20 w-auto object-contain drop-shadow-xl"
+              className="h-20 w-20 rounded-full object-cover shadow-xl"
               onError={(e) => {
                 // Fallback to icon if logo not yet provided
                 e.currentTarget.style.display = 'none';

@@ -18,7 +18,7 @@ export const Route = createFileRoute("/privacy")({
         <p>We collect only the details required to plan and deliver your event — name, contact numbers, email, venue address and menu preferences.</p>
         <p>Your information is never sold or shared with third parties, except with our own staff and vendors involved in servicing your event.</p>
         <p>Uploaded menu files are used solely to prepare your quotation and are deleted once your event is completed.</p>
-        <p>To request deletion of your data, contact us at hello@srikanakadurgacaterings.in.</p>
+        <p>To request deletion of your data, contact us at srikanakadurgacaterings112@gmail.com.</p>
       </section>
     </div>
   ),

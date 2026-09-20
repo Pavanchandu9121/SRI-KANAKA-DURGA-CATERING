@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, Phone, Send, Youtube } from "lucide-react";
-import { useState } from "react";
+import { Instagram, Mail, MapPin, Phone } from "lucide-react";
 
 import { CONTACT } from "@/config/contact";
 import { SERVICES } from "@/data/services";
@@ -8,8 +7,6 @@ import { useLanguage } from "@/hooks/use-language";
 import { l } from "@/i18n";
 
 export function SiteFooter() {
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
   const { lang, t } = useLanguage();
 
   return (
@@ -24,16 +21,15 @@ export function SiteFooter() {
             {t("footer.desc")}
           </p>
           <div className="mt-5 flex gap-3">
-            {[Facebook, Instagram, Youtube].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                aria-label="Social media"
-                className="grid size-9 place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary/10"
-              >
-                <Icon className="size-4" />
-              </a>
-            ))}
+            <a
+              href={CONTACT.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="grid size-9 place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary/10"
+            >
+              <Instagram className="size-4" />
+            </a>
           </div>
         </div>
 
@@ -110,28 +106,6 @@ export function SiteFooter() {
               className="h-40 w-full"
             />
           </div>
-          <h4 className="mt-6 font-display text-base text-cream">{t("footer.newsletter")}</h4>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setDone(true);
-              setEmail("");
-            }}
-            className="mt-3 flex gap-2"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder={t("footer.emailPlaceholder")}
-              className="min-w-0 flex-1 rounded-full border border-primary/30 bg-card px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-primary focus:outline-none"
-            />
-            <button className="btn-gold grid size-10 shrink-0 place-items-center rounded-full" aria-label="Subscribe">
-              <Send className="size-4" />
-            </button>
-          </form>
-          {done && <p className="mt-2 text-xs text-primary">{t("footer.subscribed")}</p>}
         </div>
       </div>
 

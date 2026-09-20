@@ -304,6 +304,8 @@ export const te: Record<string, unknown> = {
     submitRequest: "అభ్యర్థన సమర్పించు",
     preferToTalk: "మాట్లాడడానికి ఇష్టపడుతున్నారా?",
     contactTeam: "మా బృందాన్ని సంప్రదించండి",
+    addMoreDetails: "మరిన్ని వివరాలు జోడించండి (చిరునామా, ఇమెయిల్, మొదలైనవి)",
+    nextSubmit: "తదుపరి & విచారణ సమర్పించు",
   },
 
   /* ───── Booking Confirmed ───── */

@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { CONTACT, WEB3FORMS_KEY } from "@/config/contact";
 import { ArrowLeft, ArrowRight, Check, Plus, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
 
@@ -127,7 +128,7 @@ function BookPage() {
     };
 
     const formData = new FormData();
-    formData.append("access_key", "4c615995-e55e-4f88-bc8e-62edd4cceb06");
+    formData.append("access_key", WEB3FORMS_KEY);
     formData.append("subject", `New Booking Request: ${bookingId} - ${eventType}`);
     formData.append("name", customer.name);
     formData.append("phone", customer.phone);
@@ -303,7 +304,7 @@ function BookPage() {
                     </div>
 
                     <div className="mt-8 rounded-2xl border border-primary/25 p-6">
-                      <h3 className="font-display text-xl text-cream">Can't find a dish?</h3>
+                      <h3 className="font-display text-xl text-cream">{t("book.cantFind")}</h3>
                       <div className="mt-4 grid gap-3 sm:grid-cols-3">
                         <input
                           placeholder="Dish Name"
@@ -331,7 +332,7 @@ function BookPage() {
                       </div>
                       {duplicate ? (
                         <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-primary">
-                          Already available: {duplicate.name}
+                          {t("book.alreadyAvailable")} {l(duplicate, "name", lang)}
                           <button
                             onClick={() => {
                               if (!selected.includes(duplicate.id))
@@ -344,7 +345,7 @@ function BookPage() {
                             }}
                             className="btn-gold rounded-full px-4 py-2 text-[11px] tracking-[0.12em] uppercase"
                           >
-                            Add Existing Dish
+                            {t("book.addExisting")}
                           </button>
                         </div>
                       ) : (
@@ -356,7 +357,7 @@ function BookPage() {
                           }}
                           className="btn-gold mt-4 rounded-full px-5 py-2.5 text-[11px] tracking-[0.12em] uppercase"
                         >
-                          Add as Custom Request
+                          {t("book.addCustom")}
                         </button>
                       )}
                     </div>
@@ -568,7 +569,7 @@ function BookPage() {
                     onClick={() => setShowMoreDetails(true)}
                     className="inline-flex items-center gap-1.5 text-[12px] tracking-wide text-primary hover:underline"
                   >
-                    <Plus className="size-3.5" /> Add more details (Address, Email, etc.)
+                    <Plus className="size-3.5" /> {t("book.addMoreDetails")}
                   </button>
                 </div>
               )}
@@ -638,7 +639,7 @@ function BookPage() {
                         Accept: "application/json",
                       },
                       body: JSON.stringify({
-                        access_key: "4c615995-e55e-4f88-bc8e-62edd4cceb06",
+                        access_key: WEB3FORMS_KEY,
                         subject: `New Lead Captured: ${customer.name} - ${eventType}`,
                         name: customer.name,
                         phone: customer.phone,
@@ -657,7 +658,7 @@ function BookPage() {
                 disabled={!canNext}
                 className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-3 text-[11px] tracking-[0.14em] uppercase disabled:opacity-50"
               >
-                {step === 1 ? "Next & Submit Inquiry" : t("book.continue")}{" "}
+                {step === 1 ? t("book.nextSubmit") : t("book.continue")}{" "}
                 <ArrowRight className="size-4" />
               </button>
             ) : (
@@ -672,9 +673,9 @@ function BookPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Prefer to talk?{" "}
+          {t("book.preferToTalk")}{" "}
           <Link to="/contact" className="text-primary hover:underline">
-            Contact our team
+            {t("book.contactTeam")}
           </Link>
           .
         </p>
