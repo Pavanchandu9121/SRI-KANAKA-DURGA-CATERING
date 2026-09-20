@@ -16,6 +16,17 @@ dist-ssr
 .nitro
 *.local
 
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Development utility scripts
+scratch/
+run.sh
+filter.sh
+.agents/
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

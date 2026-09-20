@@ -299,6 +299,8 @@ export const en: Record<string, unknown> = {
     submitRequest: "Submit Request",
     preferToTalk: "Prefer to talk?",
     contactTeam: "Contact our team",
+    addMoreDetails: "Add more details (Address, Email, etc.)",
+    nextSubmit: "Next & Submit Inquiry",
   },
 
   /* ───── Booking Confirmed ───── */

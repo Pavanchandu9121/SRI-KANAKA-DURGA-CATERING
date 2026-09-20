@@ -4,7 +4,7 @@ import { type ChangeEvent, type FormEvent, useState } from "react";
 
 import { PageHero } from "@/components/layout/ui-bits";
 import { IMAGES } from "@/config/images";
-import { CONTACT } from "@/data/contact";
+import { CONTACT, WEB3FORMS_KEY } from "@/config/contact";
 import { useLanguage } from "@/hooks/use-language";
 import { l } from "@/i18n";
 
@@ -49,7 +49,7 @@ function ContactPage() {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "REDACTED_WEB3FORMS_KEY",
+          access_key: WEB3FORMS_KEY,
           subject: "New Contact Enquiry from Sri Kanaka Durga Caterings",
           name: form.name,
           phone: form.phone,

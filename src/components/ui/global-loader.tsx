@@ -30,7 +30,7 @@ export function GlobalLoader() {
           </svg>
         </div>
         <p className="mt-4 animate-pulse text-sm font-medium uppercase tracking-widest text-gold">
-          {lang === "te" ? "మీ విందును సిద్ధం చేస్తున్నాము..." : "Preparing your feast..."}
+          {lang === "te" ? "లోడ్ అవుతోంది..." : "Loading..."}
         </p>
       </div>
     </div>
