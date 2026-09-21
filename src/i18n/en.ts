@@ -55,7 +55,7 @@ export const en: Record<string, unknown> = {
     aboutSubtitle:
       "Sri Kanaka Durga Caterings began as a small family kitchen with one belief — Atithi Devo Bhava. Today, that same care goes into every event we cater, whether it's fifty guests or five thousand.",
     started: "Started",
-    startedText: "A small family kitchen serving neighbourhood functions in Vijayawada.",
+    startedText: "A small family kitchen serving neighbourhood functions in Gollapudi.",
     growth: "Growth",
     growthText: "Grew into a full catering house with dedicated chefs, transport and serving crew.",
     today: "Today",
@@ -101,7 +101,7 @@ export const en: Record<string, unknown> = {
     t1Year: "2019",
     t1Title: "Humble Beginnings",
     t1Text:
-      "Started as a family kitchen catering local housewarming and temple functions in Vijayawada.",
+      "Started as a family kitchen catering local housewarming and temple functions in Gollapudi.",
     t2Year: "2021",
     t2Title: "First Big Weddings",
     t2Text: "Expanded to full wedding catering with dedicated chefs, transport and serving staff.",

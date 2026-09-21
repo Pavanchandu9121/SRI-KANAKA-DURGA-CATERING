@@ -190,8 +190,8 @@ export const HIGHLIGHTS: HighlightItem[] = [
 export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Ramesh Varma",
-    place: "Vijayawada",
-    placeTe: "విజయవాడ",
+    place: "Gollapudi",
+    placeTe: "గొల్లపూడి",
     rating: 5,
     text: "They handled our daughter's wedding for 900 guests without a single complaint. The biryani is still being talked about.",
     textTe: "వారు 900 మంది అతిథులతో మా కూతురు పెళ్ళిని ఒక్క ఫిర్యాదు లేకుండా నిర్వహించారు. ఆ బిర్యానీ గురించి ఇప్పటికీ మాట్లాడుకుంటున్నారు.",
@@ -244,8 +244,8 @@ export const FAQS: FaqItem[] = [
   {
     q: "Can we taste the food before booking?",
     qTe: "బుకింగ్ చేయడానికి ముందు ఆహారాన్ని రుచి చూడవచ్చా?",
-    a: "Tasting sessions are available at our Vijayawada kitchen for confirmed large events. Contact us to schedule one.",
-    aTe: "నిర్ధారిత పెద్ద ఈవెంట్‌ల కోసం మా విజయవాడ కిచెన్‌లో రుచి చూడటం సెషన్‌లు అందుబాటులో ఉన్నాయి. ఒకదాన్ని షెడ్యూల్ చేయడానికి మమ్మల్ని సంప్రదించండి.",
+    a: "Tasting sessions are available at our Gollapudi kitchen for confirmed large events. Contact us to schedule one.",
+    aTe: "నిర్ధారిత పెద్ద ఈవెంట్‌ల కోసం మా గొల్లపూడి కిచెన్‌లో రుచి చూడటం సెషన్‌లు అందుబాటులో ఉన్నాయి. ఒకదాన్ని షెడ్యూల్ చేయడానికి మమ్మల్ని సంప్రదించండి.",
   },
   {
     q: "How do I get a quotation?",

@@ -102,8 +102,8 @@ const JSON_LD = JSON.stringify({
   email: "srikanakadurgacaterings112@gmail.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Beside Sai Temple, Main Road",
-    addressLocality: "Vijayawada",
+    streetAddress: "Sai Puram Colony, Beside Sai Baba Temple",
+    addressLocality: "Gollapudi",
     addressRegion: "Andhra Pradesh",
     postalCode: "520010",
     addressCountry: "IN",
@@ -171,7 +171,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Premium multi-cuisine catering across Andhra Pradesh — weddings, receptions, corporate events and temple functions." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
       { name: "geo.region", content: "IN-AP" },
-      { name: "geo.placename", content: "Vijayawada, Andhra Pradesh" },
+      { name: "geo.placename", content: "Gollapudi, Andhra Pradesh" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
