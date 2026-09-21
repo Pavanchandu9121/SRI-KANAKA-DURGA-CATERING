@@ -15,7 +15,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Call, WhatsApp or email our catering team in Vijayawada, Andhra Pradesh. Business hours, location map and enquiry form.",
+          "Call, WhatsApp or email our catering team in Gollapudi, Andhra Pradesh. Business hours, location map and enquiry form.",
       },
       { property: "og:title", content: "Contact Us" },
       {

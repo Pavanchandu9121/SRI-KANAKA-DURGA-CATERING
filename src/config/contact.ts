@@ -8,8 +8,8 @@ export const CONTACT = {
   phoneHref: "tel:+919247364197",
   whatsapp: "https://wa.me/919247364197",
   email: "srikanakadurgacaterings112@gmail.com",
-  address: "Beside Sai Temple, Main Road, Vijayawada, Andhra Pradesh 520010",
-  addressTe: "సాయి టెంపుల్ పక్కన, మెయిన్ రోడ్, విజయవాడ, ఆంధ్రప్రదేశ్ 520010",
+  address: "Sai Puram Colony, Beside Sai Baba Temple, Gollapudi, Andhra Pradesh 520010",
+  addressTe: "సాయి పురం కాలనీ, సాయి బాబా గుడి ప్రక్కన, గొల్లపూడి, ఆంధ్రప్రదేశ్ 520010",
   hours: [
     { day: "Monday – Saturday", dayTe: "సోమవారం – శనివారం", time: "8:00 AM – 9:00 PM", timeTe: "ఉదయం 8:00 – రాత్రి 9:00" },
     { day: "Sunday", dayTe: "ఆదివారం", time: "9:00 AM – 6:00 PM", timeTe: "ఉదయం 9:00 – సాయంత్రం 6:00" },
