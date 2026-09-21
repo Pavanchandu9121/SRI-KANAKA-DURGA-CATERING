@@ -102,10 +102,10 @@ const JSON_LD = JSON.stringify({
   email: "srikanakadurgacaterings112@gmail.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Sai Puram Colony, Beside Sai Baba Temple",
+    streetAddress: "Beside Sai Temple, Main Road",
     addressLocality: "Gollapudi",
     addressRegion: "Andhra Pradesh",
-    postalCode: "520010",
+    postalCode: "521225",
     addressCountry: "IN",
   },
   geo: {
