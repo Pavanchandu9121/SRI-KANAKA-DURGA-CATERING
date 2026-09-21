@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -83,12 +84,20 @@ const MENU_SECTIONS = [
 function Index() {
   const { lang, t } = useLanguage();
   const popular = DISHES.filter((d) => d.popular).slice(0, 8);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.5;
+    }
+  }, []);
 
   return (
     <SectionStack className="bg-forest-deep">
       {/* Hero */}
       <section className="relative overflow-hidden">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
