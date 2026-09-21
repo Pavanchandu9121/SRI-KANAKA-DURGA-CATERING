@@ -101,7 +101,7 @@ export const en: Record<string, unknown> = {
     t1Year: "2019",
     t1Title: "Humble Beginnings",
     t1Text:
-      "Started as a family kitchen catering local housewarming and temple functions in Gollapudi.",
+      "Started as a family kitchen catering local housewarming and temple functions in Vijayawada.",
     t2Year: "2021",
     t2Title: "First Big Weddings",
     t2Text: "Expanded to full wedding catering with dedicated chefs, transport and serving staff.",
@@ -285,13 +285,9 @@ export const en: Record<string, unknown> = {
     afternoon: "Afternoon",
     evening: "Evening",
     specialInstructions: "Special Instructions",
-    customer: "Customer",
-    event: "Event",
-    menu: "Menu",
     additionalServices: "Additional Services",
     uploadedFiles: "Uploaded Files",
     customRequests: "Custom Requests",
-    none: "None",
     guests: "guests",
     noMenuSelected: "No dishes selected",
     back: "Back",
@@ -372,7 +368,7 @@ export const en: Record<string, unknown> = {
     "Desserts": "Desserts",
     "Live Counters": "Live Counters",
   },
-  
+
   cuisines: {
     All: "All",
     "South Indian": "South Indian",
