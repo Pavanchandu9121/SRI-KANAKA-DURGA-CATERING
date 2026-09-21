@@ -89,6 +89,57 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FoodEstablishment",
+  name: "Sri Kanaka Durga Caterings",
+  url: "https://srikanakadurgacaterings.in",
+  logo: "https://srikanakadurgacaterings.in/logo.png",
+  image: "https://srikanakadurgacaterings.in/og-image.png",
+  description:
+    "Premium multi-cuisine catering across Andhra Pradesh for weddings, receptions, corporate events and temple functions.",
+  telephone: "+919247364197",
+  email: "srikanakadurgacaterings112@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Beside Sai Temple, Main Road",
+    addressLocality: "Vijayawada",
+    addressRegion: "Andhra Pradesh",
+    postalCode: "520010",
+    addressCountry: "IN",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 16.5486,
+    longitude: 80.5821,
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "08:00",
+      closes: "21:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Sunday"],
+      opens: "09:00",
+      closes: "18:00",
+    },
+  ],
+  servesCuisine: ["Indian", "Andhra", "Hyderabadi", "North Indian", "Chinese"],
+  priceRange: "₹₹",
+  currenciesAccepted: "INR",
+  paymentAccepted: "Cash, UPI, Bank Transfer",
+  areaServed: {
+    "@type": "State",
+    name: "Andhra Pradesh",
+  },
+  sameAs: [
+    "https://www.instagram.com/srikanakadurgacaterings",
+  ],
+});
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -109,7 +160,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Sri Kanaka Durga Caterings" },
+      { property: "og:url", content: "https://srikanakadurgacaterings.in" },
+      { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+      { property: "og:image:width", content: "1024" },
+      { property: "og:image:height", content: "1024" },
+      { property: "og:image:alt", content: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering" },
+      { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Sri Kanaka Durga Caterings" },
+      { name: "twitter:description", content: "Premium multi-cuisine catering across Andhra Pradesh — weddings, receptions, corporate events and temple functions." },
+      { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+      { name: "geo.region", content: "IN-AP" },
+      { name: "geo.placename", content: "Vijayawada, Andhra Pradesh" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -123,6 +185,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "canonical", href: "https://srikanakadurgacaterings.in" },
     ],
   }),
   shellComponent: RootShell,
@@ -136,6 +199,11 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {/* JSON-LD structured data for Google rich results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON_LD }}
+        />
       </head>
       <body>
         {children}

@@ -24,6 +24,14 @@ export const Route = createFileRoute("/menu")({
         content:
           "Hundreds of dishes across Andhra, Hyderabadi, North Indian and Chinese cuisines — filter by category to build your spread.",
       },
+      { property: "og:url", content: "https://srikanakadurgacaterings.in/menu" },
+      { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+      { name: "twitter:title", content: "Menu Explorer — Sri Kanaka Durga Caterings" },
+      { name: "twitter:description", content: "Hundreds of dishes across Andhra, Hyderabadi, North Indian and Chinese cuisines." },
+      { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://srikanakadurgacaterings.in/menu" },
     ],
   }),
   component: MenuPage,
