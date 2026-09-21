@@ -23,6 +23,14 @@ export const Route = createFileRoute("/services/")({
         content:
           "Eight dedicated catering services, each with sample menus, galleries and booking.",
       },
+      { property: "og:url", content: "https://srikanakadurgacaterings.in/services" },
+      { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+      { name: "twitter:title", content: "Catering Services — Sri Kanaka Durga Caterings" },
+      { name: "twitter:description", content: "Wedding, reception, birthday, corporate, temple and festival catering across Andhra Pradesh." },
+      { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://srikanakadurgacaterings.in/services" },
     ],
   }),
   component: ServicesIndex,

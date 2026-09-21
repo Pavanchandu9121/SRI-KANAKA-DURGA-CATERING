@@ -39,6 +39,15 @@ export const Route = createFileRoute("/")({
         content:
           "Crafting unforgettable celebrations through exceptional cuisine — weddings, receptions and grand events across Andhra Pradesh.",
       },
+      { property: "og:url", content: "https://srikanakadurgacaterings.in/" },
+      { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+      { property: "og:image:alt", content: "Sri Kanaka Durga Caterings Logo" },
+      { name: "twitter:title", content: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering" },
+      { name: "twitter:description", content: "Crafting unforgettable celebrations through exceptional cuisine — weddings, receptions and grand events across Andhra Pradesh." },
+      { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://srikanakadurgacaterings.in/" },
     ],
   }),
   component: Index,
