@@ -27,7 +27,7 @@ import gsap from "gsap";
 let introPlayed = false;
 
 /* Unmount regardless if GSAP never reports completion. */
-const FAILSAFE_MS = 7000;
+const FAILSAFE_MS = 10000;
 /* Don't wait on a slow font forever — the fallback serif still reads well. */
 const FONT_TIMEOUT_MS = 1200;
 
@@ -125,9 +125,9 @@ export function BrandIntro() {
           .to(".brand-intro__caption", { opacity: 1, duration: 0.7, ease: "power2.out" }, 0.25)
           .to(".brand-intro__skip", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.7)
           // Beat 2 — the gold burns off and the letters turn into windows.
-          .to(".brand-intro__caption", { opacity: 0, duration: 0.4, ease: "power2.in" }, 1.3)
-          .to(".brand-intro__skip", { opacity: 0, duration: 0.4, ease: "power2.in" }, 1.3)
-          .to(gold, { opacity: 0, duration: 0.6, ease: "power1.inOut" }, 1.35)
+          .to(".brand-intro__caption", { opacity: 0, duration: 0.4, ease: "power2.in" }, 3.8)
+          .to(".brand-intro__skip", { opacity: 0, duration: 0.4, ease: "power2.in" }, 3.8)
+          .to(gold, { opacity: 0, duration: 0.6, ease: "power1.inOut" }, 3.85)
           /*
            * Beat 3 — the flight into the "D".
            *
@@ -148,12 +148,12 @@ export function BrandIntro() {
                 gsap.set(zooms, { scale: Math.exp(flight.p * Math.log(scale)) });
               },
             },
-            1.3,
+            3.8,
           )
-          .to(zooms, { x: drift, duration: 1.2, ease: "power1.inOut" }, 1.3)
+          .to(zooms, { x: drift, duration: 1.2, ease: "power1.inOut" }, 3.8)
           // By now the aperture already covers the viewport; this only clears
           // any sliver left at the very edges.
-          .to(root, { opacity: 0, duration: 0.22, ease: "none" }, 2.68);
+          .to(root, { opacity: 0, duration: 0.22, ease: "none" }, 5.18);
 
         // Returning to Home: same motion, briskly.
         if (replay) tl.timeScale(1.9);
