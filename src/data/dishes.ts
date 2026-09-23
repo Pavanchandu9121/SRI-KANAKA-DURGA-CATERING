@@ -7,17 +7,17 @@ import type { Dish } from "@/types";
  * place to reorder or rename a section.
  */
 export const MENU_CATEGORIES = [
-  "Breakfast",
-  "Beverages",
-  "Soups & Salads",
-  "Veg Starters",
-  "Non-Veg Starters",
-  "Veg Mains",
-  "Non-Veg Mains",
-  "Biryani & Rice",
-  "Breads & Sides",
-  "Desserts",
-  "Live Counters",
+  " Beverages",
+  " Breakfast",
+  " Soups & Salads",
+  " Veg Starters",
+  " Non-Veg Starters",
+  " Veg Mains",
+  " Non-Veg Mains",
+  " Biryani & Rice",
+  " Breads & Sides",
+  " Desserts",
+  " Live Counters",
 ];
 
 /* Long-form builder, used by the items that carry their own photograph. */
@@ -85,7 +85,7 @@ const CLASSICS: Dish[] = [
     "ఇడ్లీ సాంబార్",
     "Steamed rice cakes with hot sambar and chutney.",
     "వేడి సాంబార్ మరియు చట్నీతో ఆవిరి మీద ఉడికించిన అన్నపు వడలు.",
-    "Breakfast",
+    " Breakfast",
     "South Indian",
     true,
     ["Silver", "Gold", "Traditional Andhra"],
@@ -97,7 +97,7 @@ const CLASSICS: Dish[] = [
     "పూరీ కుర్మా",
     "Puffed pooris with spiced potato kurma.",
     "మసాలా ఆలూ కుర్మాతో ఉబ్బిన పూరీలు.",
-    "Breakfast",
+    " Breakfast",
     "South Indian",
     true,
     ["Gold", "Premium"],
@@ -108,7 +108,7 @@ const CLASSICS: Dish[] = [
     "ఉప్మా",
     "Soft semolina upma tempered with cashews.",
     "జీడిపప్పుతో తాలింపు చేసిన మెత్తని రవ్వ ఉప్మా.",
-    "Breakfast",
+    " Breakfast",
     "South Indian",
     true,
     ["Silver"],
@@ -119,7 +119,7 @@ const CLASSICS: Dish[] = [
     "నెయ్యి కారం దోశ",
     "Crisp dosa with Andhra karam podi and ghee.",
     "ఆంధ్ర కారం పొడి మరియు నెయ్యితో కరకరలాడే దోశ.",
-    "Breakfast",
+    "🌅 Breakfast",
     "Andhra",
     true,
     ["Gold", "Traditional Andhra"],
@@ -132,7 +132,7 @@ const CLASSICS: Dish[] = [
     "రోజ్ మిల్క్",
     "Chilled milk with rose syrup and basil seeds.",
     "గులాబీ సిరప్ మరియు సబ్జా గింజలతో చల్లని పాలు.",
-    "Beverages",
+    "🥤 Beverages",
     "Indian",
     true,
     ["Silver", "Gold", "Premium"],
@@ -143,7 +143,7 @@ const CLASSICS: Dish[] = [
     "పానకం",
     "Traditional jaggery, ginger and cardamom cooler.",
     "సాంప్రదాయ బెల్లం, అల్లం మరియు ఏలకుల చల్లని పానీయం.",
-    "Beverages",
+    "🥤 Beverages",
     "Andhra",
     true,
     ["Traditional Andhra"],
@@ -154,7 +154,7 @@ const CLASSICS: Dish[] = [
     "వర్జిన్ మొజిటో",
     "Mint, lime and soda over crushed ice.",
     "పుదీనా, నిమ్మకాయ మరియు సోడాతో ఐస్ మీద.",
-    "Beverages",
+    "🥤 Beverages",
     "Continental",
     true,
     ["Premium", "Wedding Special"],
@@ -167,7 +167,7 @@ const CLASSICS: Dish[] = [
     "చికెన్ 65",
     "Spicy, crispy and flavorful chicken starter.",
     "కారంగా, కరకరలాడే రుచికరమైన చికెన్ స్టార్టర్.",
-    "Non-Veg Starters",
+    "🔥 Non-Veg Starters",
     "Andhra",
     false,
     GOLD_UP,
@@ -179,7 +179,7 @@ const CLASSICS: Dish[] = [
     "పనీర్ టిక్కా",
     "Char-grilled paneer in tandoori marinade.",
     "తందూరీ మసాలాలో కాల్చిన పనీర్.",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "North Indian",
     true,
     ["Gold", "Premium"],
@@ -191,7 +191,7 @@ const CLASSICS: Dish[] = [
     "గోబీ మంచూరియన్",
     "Crispy cauliflower florets tossed in manchurian sauce.",
     "మంచూరియన్ సాస్‌లో వేయించిన కరకరలాడే గోబీ ముక్కలు.",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "Chinese",
     true,
     ["Silver", "Gold"],
@@ -202,7 +202,7 @@ const CLASSICS: Dish[] = [
     "అపోలో ఫిష్",
     "Boneless fish tossed with curry leaves and chilli.",
     "కరివేపాకు మరియు మిర్చితో వేయించిన ఎముకలు లేని చేప.",
-    "Non-Veg Starters",
+    "🔥 Non-Veg Starters",
     "Andhra",
     false,
     PREMIUM,
@@ -213,7 +213,7 @@ const CLASSICS: Dish[] = [
     "హరా భరా కబాబ్",
     "Spinach and green pea patties.",
     "పాలకూర మరియు బఠానీ పటీస్.",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "North Indian",
     true,
     ["Silver", "Gold"],
@@ -225,7 +225,7 @@ const CLASSICS: Dish[] = [
     "హైదరాబాదీ చికెన్ బిర్యానీ",
     "Tender chicken dum-cooked with fragrant rice.",
     "సుగంధ బియ్యంతో దమ్ వేసిన మెత్తని చికెన్.",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Hyderabadi",
     false,
     GOLD_UP,
@@ -237,7 +237,7 @@ const CLASSICS: Dish[] = [
     "వెజ్ బిర్యానీ",
     "Aromatic basmati rice cooked with mixed vegetables.",
     "మిశ్రమ కూరగాయలతో వండిన సుగంధ బాస్మతి బియ్యం.",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Hyderabadi",
     true,
     ["Silver", "Gold", "Premium"],
@@ -249,7 +249,7 @@ const CLASSICS: Dish[] = [
     "జీరా రైస్",
     "Fragrant basmati rice tempered with cumin.",
     "జీలకర్ర తాలింపుతో సుగంధ బాస్మతి బియ్యం.",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "North Indian",
     true,
     ["Silver", "Gold"],
@@ -260,7 +260,7 @@ const CLASSICS: Dish[] = [
     "పులిహోర",
     "Tamarind rice with peanuts and curry leaves.",
     "వేరుశెనగ మరియు కరివేపాకుతో చింతపండు అన్నం.",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Andhra",
     true,
     ["Traditional Andhra"],
@@ -271,7 +271,7 @@ const CLASSICS: Dish[] = [
     "దద్దోజనం",
     "Creamy curd rice with a light tempering.",
     "తేలికపాటి తాలింపుతో క్రీమీ పెరుగన్నం.",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Andhra",
     true,
     ["Silver", "Traditional Andhra"],
@@ -283,7 +283,7 @@ const CLASSICS: Dish[] = [
     "పనీర్ బటర్ మసాలా",
     "Soft paneer cubes in rich butter tomato gravy.",
     "గొప్ప వెన్న టమాటో గ్రేవీలో మెత్తని పనీర్ ముక్కలు.",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "North Indian",
     true,
     ["Gold", "Premium"],
@@ -295,7 +295,7 @@ const CLASSICS: Dish[] = [
     "దాల్ తడ్కా",
     "Yellow lentils tempered with spices and herbs.",
     "మసాలాలు మరియు ఆకుకూరలతో తాలింపు చేసిన పసుపు పప్పు.",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "North Indian",
     true,
     ["Silver", "Gold"],
@@ -306,7 +306,7 @@ const CLASSICS: Dish[] = [
     "మటన్ కర్రీ",
     "Succulent mutton in traditional spicy gravy.",
     "సాంప్రదాయ కారపు గ్రేవీలో రసవంతమైన మటన్.",
-    "Non-Veg Mains",
+    "🍖 Non-Veg Mains",
     "Andhra",
     false,
     PREMIUM,
@@ -317,7 +317,7 @@ const CLASSICS: Dish[] = [
     "గుత్తి వంకాయ",
     "Stuffed brinjal in peanut sesame masala.",
     "వేరుశెనగ నువ్వుల మసాలాలో కూర్చిన వంకాయ.",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Traditional Andhra"],
@@ -329,7 +329,7 @@ const CLASSICS: Dish[] = [
     "సాంబార్",
     "Lentil stew with vegetables and tamarind.",
     "కూరగాయలు మరియు చింతపండుతో పప్పు కూర.",
-    "Soups & Salads",
+    "🥗 Soups & Salads",
     "South Indian",
     true,
     ["Silver", "Traditional Andhra"],
@@ -341,7 +341,7 @@ const CLASSICS: Dish[] = [
     "పుల్కా",
     "Soft Indian flatbread made with wheat flour.",
     "గోధుమ పిండితో చేసిన మెత్తని రొట్టె.",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "North Indian",
     true,
     ["Silver", "Gold", "Premium"],
@@ -352,7 +352,7 @@ const CLASSICS: Dish[] = [
     "బటర్ నాన్",
     "Tandoor-baked naan brushed with butter.",
     "వెన్నతో పూసిన తందూర్‌లో కాల్చిన నాన్.",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "North Indian",
     true,
     ["Gold", "Premium"],
@@ -363,7 +363,7 @@ const CLASSICS: Dish[] = [
     "చపాతీ",
     "Everyday soft wheat rotis.",
     "ప్రతిరోజూ తినే మెత్తని గోధుమ రొట్టెలు.",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "North Indian",
     true,
     ["Silver"],
@@ -375,7 +375,7 @@ const CLASSICS: Dish[] = [
     "గులాబ్ జామూన్",
     "Soft cottage cheese dumplings in sugar syrup.",
     "చక్కెర సిరప్‌లో మెత్తని పాల ఉండలు.",
-    "Desserts",
+    "🍰 Desserts",
     "Indian",
     true,
     ["Silver", "Gold", "Premium"],
@@ -387,7 +387,7 @@ const CLASSICS: Dish[] = [
     "డబల్ కా మీఠా",
     "Fried bread pudding in saffron milk.",
     "కుంకుమపువ్వు పాలలో వేయించిన బ్రెడ్ పుడ్డింగ్.",
-    "Desserts",
+    "🍰 Desserts",
     "Hyderabadi",
     true,
     ["Gold", "Wedding Special"],
@@ -398,7 +398,7 @@ const CLASSICS: Dish[] = [
     "పాయసం",
     "Milk and vermicelli kheer with dry fruits.",
     "డ్రై ఫ్రూట్స్‌తో పాలు మరియు సేమియా పాయసం.",
-    "Desserts",
+    "🍰 Desserts",
     "South Indian",
     true,
     ["Traditional Andhra"],
@@ -409,7 +409,7 @@ const CLASSICS: Dish[] = [
     "బొబ్బట్లు",
     "Sweet stuffed flatbread with ghee.",
     "నెయ్యితో తీపి కూర్చిన రొట్టె.",
-    "Desserts",
+    "🍰 Desserts",
     "Andhra",
     true,
     ["Traditional Andhra"],
@@ -420,7 +420,7 @@ const CLASSICS: Dish[] = [
     "ఫ్రూట్ కస్టర్డ్",
     "Fresh fruits in creamy custard.",
     "క్రీమీ కస్టర్డ్‌లో తాజా పండ్లు.",
-    "Desserts",
+    "🍰 Desserts",
     "Continental",
     true,
     ["Silver", "Gold"],
@@ -432,7 +432,7 @@ const CLASSICS: Dish[] = [
     "వెనిల్లా స్కూప్",
     "Classic vanilla ice cream.",
     "క్లాసిక్ వెనిల్లా ఐస్ క్రీం.",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "Continental",
     true,
     ["Gold", "Premium"],
@@ -443,7 +443,7 @@ const CLASSICS: Dish[] = [
     "మలై కుల్ఫీ",
     "Slow-cooked milk kulfi with pistachio.",
     "పిస్తాతో నెమ్మదిగా ఉడికించిన పాల కుల్ఫీ.",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "Indian",
     true,
     PREMIUM,
@@ -455,7 +455,7 @@ const CLASSICS: Dish[] = [
     "చాట్ కౌంటర్",
     "Pani puri, bhel and sev puri, made to order.",
     "ఆర్డర్ మీద చేసిన పానీ పూరి, భేల్ మరియు సేవ్ పూరి.",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "North Indian",
     true,
     PREMIUM,
@@ -467,7 +467,7 @@ const CLASSICS: Dish[] = [
     "పాస్తా కౌంటర్",
     "Penne tossed live in red or white sauce.",
     "రెడ్ లేదా వైట్ సాస్‌లో లైవ్‌గా వేయించిన పెన్నే.",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "Continental",
     true,
     ["Premium"],
@@ -479,7 +479,7 @@ const CLASSICS: Dish[] = [
     "దోశ కౌంటర్",
     "Live dosas with three chutneys.",
     "మూడు చట్నీలతో లైవ్ దోశలు.",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "South Indian",
     true,
     ["Gold", "Premium"],
@@ -491,7 +491,7 @@ const CLASSICS: Dish[] = [
     "ఫిల్టర్ కాఫీ",
     "Strong South Indian decoction coffee.",
     "బలమైన దక్షిణ భారత డికాక్షన్ కాఫీ.",
-    "Beverages",
+    "🥤 Beverages",
     "South Indian",
     true,
     ["Silver", "Gold", "Premium"],
@@ -502,7 +502,7 @@ const CLASSICS: Dish[] = [
     "మసాలా టీ",
     "Spiced tea brewed with ginger and cardamom.",
     "అల్లం మరియు ఏలకులతో ఉడికించిన మసాలా టీ.",
-    "Beverages",
+    "🥤 Beverages",
     "Indian",
     true,
     ["Silver", "Gold"],
@@ -513,7 +513,7 @@ const CLASSICS: Dish[] = [
     "మసాలా మజ్జిగ",
     "Chilled majjiga with curry leaves.",
     "కరివేపాకుతో చల్లని మజ్జిగ.",
-    "Beverages",
+    "🥤 Beverages",
     "Andhra",
     true,
     ["Traditional Andhra"],
@@ -525,7 +525,7 @@ const CLASSICS: Dish[] = [
     "ఆవకాయ",
     "Classic Andhra mango pickle.",
     "క్లాసిక్ ఆంధ్ర మామిడి ఊరగాయ.",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Andhra",
     true,
     ["Traditional Andhra", "Silver"],
@@ -536,7 +536,7 @@ const CLASSICS: Dish[] = [
     "గోంగూర పచ్చడి",
     "Tangy sorrel leaf chutney.",
     "పుల్లని గోంగూర పచ్చడి.",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Andhra",
     true,
     ["Traditional Andhra"],
@@ -549,7 +549,7 @@ const CLASSICS: Dish[] = [
     "అప్పడం",
     "Crisp fried papad.",
     "కరకరలాడే వేయించిన అప్పడాలు.",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Andhra",
     true,
     ["Silver", "Gold", "Traditional Andhra"],
@@ -560,7 +560,7 @@ const CLASSICS: Dish[] = [
     "గార్డెన్ సలాడ్",
     "Fresh cut vegetables with lemon.",
     "నిమ్మకాయతో తాజా కట్ చేసిన కూరగాయలు.",
-    "Soups & Salads",
+    "🥗 Soups & Salads",
     "Continental",
     true,
     ["Gold", "Premium"],
@@ -571,7 +571,7 @@ const CLASSICS: Dish[] = [
     "మిక్స్‌డ్ రైతా",
     "Curd with onion, cucumber and tomato.",
     "ఉల్లిపాయ, దోసకాయ మరియు టమాటాతో పెరుగు.",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "North Indian",
     true,
     ["Gold", "Premium"],
@@ -580,7 +580,7 @@ const CLASSICS: Dish[] = [
 
 /* ──────────────────────────── Non-veg catering ──────────────────────────── */
 
-const BIRYANIS = section("Biryani & Rice", { cuisine: "Hyderabadi", veg: false, packages: GOLD_UP }, [
+const BIRYANIS = section("🍚 Biryani & Rice", { cuisine: "Hyderabadi", veg: false, packages: GOLD_UP }, [
   [
     "chicken-fry-piece-biryani",
     "Chicken Fry Piece Biryani",
@@ -639,14 +639,14 @@ const BIRYANIS = section("Biryani & Rice", { cuisine: "Hyderabadi", veg: false, 
   ],
 ]);
 
-const CHICKEN = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, packages: GOLD_UP }, [
+const CHICKEN = section("🍖 Non-Veg Mains", { cuisine: "Andhra", veg: false, packages: GOLD_UP }, [
   [
     "chicken-soup",
     "Chicken Soup",
     "చికెన్ సూప్",
     "Clear peppered chicken broth, served hot.",
     "మిరియాలతో వేడిగా అందించే స్పష్టమైన చికెన్ సూప్.",
-    { category: "Soups & Salads" },
+    { category: "🥗 Soups & Salads" },
   ],
   [
     "chicken-keema-balls",
@@ -654,7 +654,7 @@ const CHICKEN = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, packag
     "చికెన్ కీమా బాల్స్",
     "Spiced minced chicken balls, served straight off the fire.",
     "మసాలా చికెన్ కీమా ఉండలు, వేడివేడిగా అందిస్తాము.",
-    { category: "Non-Veg Starters" },
+    { category: "🔥 Non-Veg Starters" },
   ],
   [
     "chicken-lollipops",
@@ -662,7 +662,7 @@ const CHICKEN = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, packag
     "చికెన్ లాలీపాప్స్",
     "Frenched wings in a hot, glossy coating.",
     "కారంగా మెరిసే పూతతో చికెన్ వింగ్స్.",
-    { category: "Non-Veg Starters", photo: "chicken65", popular: true },
+    { category: "🔥 Non-Veg Starters", photo: "chicken65", popular: true },
   ],
   [
     "chicken-curry",
@@ -714,14 +714,14 @@ const CHICKEN = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, packag
   ],
 ]);
 
-const MUTTON = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, packages: PREMIUM }, [
+const MUTTON = section("🍖 Non-Veg Mains", { cuisine: "Andhra", veg: false, packages: PREMIUM }, [
   [
     "mutton-keema-balls",
     "Mutton Keema Balls (Hot)",
     "మటన్ కీమా బాల్స్",
     "Minced mutton balls, fried and served hot.",
     "వేయించి వేడిగా అందించే మటన్ కీమా ఉండలు.",
-    { category: "Non-Veg Starters" },
+    { category: "🔥 Non-Veg Starters" },
   ],
   [
     "gongura-mutton",
@@ -773,7 +773,7 @@ const MUTTON = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, package
   ],
 ]);
 
-const PRAWNS = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, packages: PREMIUM }, [
+const PRAWNS = section("🍖 Non-Veg Mains", { cuisine: "Andhra", veg: false, packages: PREMIUM }, [
   [
     "prawns-curry",
     "Prawns Curry",
@@ -808,7 +808,7 @@ const PRAWNS = section("Non-Veg Mains", { cuisine: "Andhra", veg: false, package
   ],
 ]);
 
-const SNACKS = section("Non-Veg Starters", { cuisine: "North Indian", veg: true, packages: GOLD_UP }, [
+const SNACKS = section("🔥 Non-Veg Starters", { cuisine: "North Indian", veg: true, packages: GOLD_UP }, [
   [
     "pani-puri",
     "Pani Puri",
@@ -899,7 +899,7 @@ const SNACKS = section("Non-Veg Starters", { cuisine: "North Indian", veg: true,
   ],
 ]);
 
-const LIVE = section("Live Counters", { cuisine: "Indian", veg: true, packages: PREMIUM }, [
+const LIVE = section("👨‍🍳 Live Counters", { cuisine: "Indian", veg: true, packages: PREMIUM }, [
   [
     "ice-creams",
     "Ice Creams",
@@ -928,7 +928,7 @@ const LIVE = section("Live Counters", { cuisine: "Indian", veg: true, packages: 
 
 /* ────────────────────────────── Veg catering ────────────────────────────── */
 
-const SWEETS = section("Desserts", { cuisine: "Indian", veg: true, packages: GOLD_UP }, [
+const SWEETS = section("🍰 Desserts", { cuisine: "Indian", veg: true, packages: GOLD_UP }, [
   [
     "hangoor-basundi",
     "Hangoor Basundi",
@@ -1164,7 +1164,7 @@ const SWEETS = section("Desserts", { cuisine: "Indian", veg: true, packages: GOL
 ]);
 
 const VEG_STARTERS = section(
-  "Veg Starters",
+  "🌿 Veg Starters",
   { cuisine: "Andhra", veg: true, packages: ALL },
   [
     [
@@ -1315,7 +1315,7 @@ const VEG_STARTERS = section(
 );
 
 const VEG_RICE = section(
-  "Biryani & Rice",
+  "🍚 Biryani & Rice",
   { cuisine: "Hyderabadi", veg: true, packages: ALL },
   [
     [
@@ -1425,7 +1425,7 @@ const VEG_RICE = section(
   ],
 );
 
-const CURD_CHUTNEYS = section("Breads & Sides", { cuisine: "Andhra", veg: true, packages: ALL }, [
+const CURD_CHUTNEYS = section("🫓 Breads & Sides", { cuisine: "Andhra", veg: true, packages: ALL }, [
   [
     "curd-chutney",
     "Curd Chutney (Raita)",
@@ -1452,7 +1452,7 @@ const CURD_CHUTNEYS = section("Breads & Sides", { cuisine: "Andhra", veg: true, 
   ],
 ]);
 
-const CURRIES = section("Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL }, [
+const CURRIES = section("🍛 Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL }, [
   [
     "mixed-korma",
     "Mixed Korma",
@@ -1671,7 +1671,7 @@ const CURRIES = section("Veg Mains", { cuisine: "Andhra", veg: true, packages: A
   ],
 ]);
 
-const DALS = section("Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL }, [
+const DALS = section("🍛 Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL }, [
   [
     "vakaya-dal",
     "Cranberry (Vakaya) Dal",
@@ -1738,7 +1738,7 @@ const DALS = section("Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL 
   ],
 ]);
 
-const FRIES = section("Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL }, [
+const FRIES = section("🍛 Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL }, [
   [
     "brinjal-pakodi-fry",
     "Brinjal Pakodi Fry",
@@ -1837,7 +1837,7 @@ const FRIES = section("Veg Mains", { cuisine: "Andhra", veg: true, packages: ALL
   ],
 ]);
 
-const SIXTY_FIVES = section("Veg Starters", { cuisine: "Andhra", veg: true, packages: GOLD_UP }, [
+const SIXTY_FIVES = section("🌿 Veg Starters", { cuisine: "Andhra", veg: true, packages: GOLD_UP }, [
   [
     "cabbage-65",
     "Cabbage 65",
@@ -1952,7 +1952,7 @@ const SIXTY_FIVES = section("Veg Starters", { cuisine: "Andhra", veg: true, pack
   ],
 ]);
 
-const PICKLES = section("Breads & Sides", { cuisine: "Andhra", veg: true, packages: ALL }, [
+const PICKLES = section("🫓 Breads & Sides", { cuisine: "Andhra", veg: true, packages: ALL }, [
   [
     "red-chilli-gongura-chutney",
     "Red Chilli Gongura Chutney",
@@ -2155,7 +2155,7 @@ const PICKLES = section("Breads & Sides", { cuisine: "Andhra", veg: true, packag
   ],
 ]);
 
-const PODULU = section("Breads & Sides", { cuisine: "Andhra", veg: true, packages: ALL }, [
+const PODULU = section("🫓 Breads & Sides", { cuisine: "Andhra", veg: true, packages: ALL }, [
   [
     "karivepaku-podi",
     "Curry Leaves Podi",
@@ -2207,7 +2207,7 @@ const PODULU = section("Breads & Sides", { cuisine: "Andhra", veg: true, package
 ]);
 
 const RASAMS = section(
-  "Soups & Salads",
+  "🥗 Soups & Salads",
   { cuisine: "South Indian", veg: true, packages: ALL },
   [
     [
@@ -2293,7 +2293,7 @@ const RASAMS = section(
   ],
 );
 
-const ROTIS = section("Breads & Sides", { cuisine: "North Indian", veg: true, packages: GOLD_UP }, [
+const ROTIS = section("🫓 Breads & Sides", { cuisine: "North Indian", veg: true, packages: GOLD_UP }, [
   [
     "rumali-roti",
     "Rumali Roti",
@@ -2311,7 +2311,7 @@ const NEW_ITEMS: Dish[] = [
     "ఎగ్ బజ్జీ",
     "Deep-fried egg fritters.",
     "",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "Andhra",
     false,
     ["Our Special Selection"],
@@ -2322,7 +2322,7 @@ const NEW_ITEMS: Dish[] = [
     "కట్టా (సాలన్)",
     "Tangy gravy served with biryani.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Hyderabadi",
     true,
     ["Our Special Selection"],
@@ -2333,7 +2333,7 @@ const NEW_ITEMS: Dish[] = [
     "వైట్ రైస్",
     "Steamed white rice.",
     "",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2344,12 +2344,12 @@ const NEW_ITEMS: Dish[] = [
     "రొయ్యల ఫ్రై",
     "Spicy coastal prawns fry.",
     "",
-    "Non-Veg Mains",
+    "🍖 Non-Veg Mains",
     "Andhra",
     false,
     ["Our Special Selection"],
   ),
-  d("curd", "Curd", "పెరుగు", "Fresh plain curd.", "", "Breads & Sides", "Indian", true, [
+  d("curd", "Curd", "పెరుగు", "Fresh plain curd.", "", "🫓 Breads & Sides", "Indian", true, [
     "Our Special Selection",
   ]),
   d(
@@ -2358,7 +2358,7 @@ const NEW_ITEMS: Dish[] = [
     "వాటర్ బాటిల్",
     "Packaged drinking water.",
     "",
-    "Beverages",
+    "🥤 Beverages",
     "Indian",
     true,
     ["Our Special Selection"],
@@ -2369,7 +2369,7 @@ const NEW_ITEMS: Dish[] = [
     "కూల్ డ్రింక్",
     "Assorted soft drinks.",
     "",
-    "Beverages",
+    "🥤 Beverages",
     "Continental",
     true,
     ["Our Special Selection"],
@@ -2380,12 +2380,12 @@ const NEW_ITEMS: Dish[] = [
     "సోంపు",
     "Digestive fennel seeds.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Indian",
     true,
     ["Our Special Selection"],
   ),
-  d("poosa", "Poosa", "పూస", "Sweet crisp spirals.", "", "Desserts", "Andhra", true, [
+  d("poosa", "Poosa", "పూస", "Sweet crisp spirals.", "", "🍰 Desserts", "Andhra", true, [
     "Our Special Selection",
   ]),
   d(
@@ -2394,7 +2394,7 @@ const NEW_ITEMS: Dish[] = [
     "రాగి సంకటి",
     "Nutritious finger millet balls.",
     "",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2405,7 +2405,7 @@ const NEW_ITEMS: Dish[] = [
     "కట్టె పొంగలి",
     "Savoury rice and lentil porridge.",
     "",
-    "Breakfast",
+    "🌅 Breakfast",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2416,7 +2416,7 @@ const NEW_ITEMS: Dish[] = [
     "పల్లీ చట్నీ",
     "Creamy peanut chutney.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2427,7 +2427,7 @@ const NEW_ITEMS: Dish[] = [
     "అల్లం పచ్చడి",
     "Sweet and spicy ginger chutney.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2438,12 +2438,12 @@ const NEW_ITEMS: Dish[] = [
     "కారం పొడి",
     "Spicy roasted lentil powder.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Andhra",
     true,
     ["Our Special Selection"],
   ),
-  d("ghee", "Ghee", "నెయ్యి", "Pure clarified butter.", "", "Breads & Sides", "Indian", true, [
+  d("ghee", "Ghee", "నెయ్యి", "Pure clarified butter.", "", "🫓 Breads & Sides", "Indian", true, [
     "Our Special Selection",
   ]),
   d(
@@ -2452,7 +2452,7 @@ const NEW_ITEMS: Dish[] = [
     "క్యారెట్ హల్వా",
     "Sweet carrot pudding with nuts.",
     "",
-    "Desserts",
+    "🍰 Desserts",
     "North Indian",
     true,
     ["Our Special Selection"],
@@ -2463,7 +2463,7 @@ const NEW_ITEMS: Dish[] = [
     "వెజ్ కట్లెట్",
     "Crispy vegetable patties with sauce.",
     "",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "Indian",
     true,
     ["Our Special Selection"],
@@ -2474,7 +2474,7 @@ const NEW_ITEMS: Dish[] = [
     "మిర్చి కట్ బజ్జీ",
     "Fried and sliced stuffed chillies.",
     "",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2485,7 +2485,7 @@ const NEW_ITEMS: Dish[] = [
     "క్యాప్సికం బటర్ మసాలా",
     "Capsicum cooked in rich butter tomato gravy.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "North Indian",
     true,
     ["Our Special Selection"],
@@ -2496,7 +2496,7 @@ const NEW_ITEMS: Dish[] = [
     "దోసకాయ టమాటో పప్పు",
     "Yellow cucumber and tomato dal.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2507,7 +2507,7 @@ const NEW_ITEMS: Dish[] = [
     "ముద్ద పప్పు",
     "Thick, plain boiled toor dal.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2518,7 +2518,7 @@ const NEW_ITEMS: Dish[] = [
     "అరటికాయ చేప పులుసు",
     "Raw banana cooked in fish-style tamarind stew.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2529,7 +2529,7 @@ const NEW_ITEMS: Dish[] = [
     "బెండకాయ ఫ్రై",
     "Crisp lady finger fry.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2540,7 +2540,7 @@ const NEW_ITEMS: Dish[] = [
     "దోసకాయ ముక్కల పచ్చడి",
     "Fresh yellow cucumber piece chutney.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2551,7 +2551,7 @@ const NEW_ITEMS: Dish[] = [
     "పైనాపిల్ రబ్డి",
     "Rich condensed milk with pineapple chunks.",
     "",
-    "Desserts",
+    "🍰 Desserts",
     "North Indian",
     true,
     ["Our Special Selection"],
@@ -2562,7 +2562,7 @@ const NEW_ITEMS: Dish[] = [
     "బీట్‌రూట్ హల్వా",
     "Sweet and nutritious beetroot pudding.",
     "",
-    "Desserts",
+    "🍰 Desserts",
     "North Indian",
     true,
     ["Our Special Selection"],
@@ -2573,7 +2573,7 @@ const NEW_ITEMS: Dish[] = [
     "వెజ్ ఓరియంటల్ దమ్ బిర్యానీ",
     "Fusion veg biryani with oriental spices.",
     "",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Fusion",
     true,
     ["Our Special Selection"],
@@ -2584,7 +2584,7 @@ const NEW_ITEMS: Dish[] = [
     "గోంగూర రైస్",
     "Tangy rice flavored with sorrel leaves.",
     "",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2595,7 +2595,7 @@ const NEW_ITEMS: Dish[] = [
     "సాంబార్ రైస్",
     "Rice cooked with flavorful sambar and ghee.",
     "",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2606,7 +2606,7 @@ const NEW_ITEMS: Dish[] = [
     "పావ్ భాజీ",
     "Spiced vegetable mash with buttered bread.",
     "",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "North Indian",
     true,
     ["Our Special Selection"],
@@ -2617,7 +2617,7 @@ const NEW_ITEMS: Dish[] = [
     "భేల్ పూరి",
     "Puffed rice tossed with chutneys and veggies.",
     "",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "North Indian",
     true,
     ["Our Special Selection"],
@@ -2628,7 +2628,7 @@ const NEW_ITEMS: Dish[] = [
     "కార్న్ మిక్స్‌చర్",
     "Spicy and tangy corn snack.",
     "",
-    "Non-Veg Starters",
+    "🔥 Non-Veg Starters",
     "Indian",
     true,
     ["Our Special Selection"],
@@ -2639,7 +2639,7 @@ const NEW_ITEMS: Dish[] = [
     "నూడుల్స్",
     "Stir-fried vegetable noodles.",
     "",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "Chinese",
     true,
     ["Our Special Selection"],
@@ -2650,7 +2650,7 @@ const NEW_ITEMS: Dish[] = [
     "వెజ్ నగ్గెట్స్",
     "Crispy vegetable nuggets with mayo.",
     "",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "Continental",
     true,
     ["Our Special Selection"],
@@ -2661,7 +2661,7 @@ const NEW_ITEMS: Dish[] = [
     "చీజ్ బాల్స్",
     "Deep-fried cheesy bites.",
     "",
-    "Veg Starters",
+    "🌿 Veg Starters",
     "Continental",
     true,
     ["Our Special Selection"],
@@ -2672,7 +2672,7 @@ const NEW_ITEMS: Dish[] = [
     "ప్రాన్ టిక్కా",
     "Tandoori marinated prawn skewers.",
     "",
-    "Non-Veg Mains",
+    "🍖 Non-Veg Mains",
     "North Indian",
     false,
     ["Our Special Selection"],
@@ -2683,7 +2683,7 @@ const NEW_ITEMS: Dish[] = [
     "5 రకాల మాక్‌టెయిల్స్",
     "Assorted refreshing fruit mocktails.",
     "",
-    "Beverages",
+    "🥤 Beverages",
     "Continental",
     true,
     ["Our Special Selection"],
@@ -2694,12 +2694,12 @@ const NEW_ITEMS: Dish[] = [
     "మామిడి రోల్",
     "Sweet rolled mango dessert.",
     "",
-    "Desserts",
+    "🍰 Desserts",
     "Indian",
     true,
     ["Our Special Selection"],
   ),
-  d("kulcha", "Kulcha", "కుల్చా", "Soft leavened flatbread.", "", "Breads & Sides", "North Indian", true, [
+  d("kulcha", "Kulcha", "కుల్చా", "Soft leavened flatbread.", "", "🫓 Breads & Sides", "North Indian", true, [
     "Our Special Selection",
   ]),
   d(
@@ -2708,7 +2708,7 @@ const NEW_ITEMS: Dish[] = [
     "గుత్తి వంకాయ దమ్ బిర్యానీ",
     "Dum biryani layered with stuffed brinjals.",
     "",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2719,7 +2719,7 @@ const NEW_ITEMS: Dish[] = [
     "పుదీనా రైస్",
     "Aromatic mint flavored rice.",
     "",
-    "Biryani & Rice",
+    "🍚 Biryani & Rice",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2730,7 +2730,7 @@ const NEW_ITEMS: Dish[] = [
     "నవరత్న కుర్మా",
     "Rich curry with nine jewels of vegetables and nuts.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "North Indian",
     true,
     ["Our Special Selection"],
@@ -2741,7 +2741,7 @@ const NEW_ITEMS: Dish[] = [
     "మష్రూమ్ జీడిపప్పు గోంగూర",
     "Mushrooms and cashew cooked in tangy gongura.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2752,7 +2752,7 @@ const NEW_ITEMS: Dish[] = [
     "బెండకాయ జీడిపప్పు ఫ్రై",
     "Crisp lady finger tossed with roasted cashews.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2763,7 +2763,7 @@ const NEW_ITEMS: Dish[] = [
     "కాకరకాయ ఫ్రై చిప్స్",
     "Crispy bitter gourd slices.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2774,7 +2774,7 @@ const NEW_ITEMS: Dish[] = [
     "రింగ్ అప్పడం",
     "Crispy ring-shaped papad.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Indian",
     true,
     ["Our Special Selection"],
@@ -2785,7 +2785,7 @@ const NEW_ITEMS: Dish[] = [
     "మజ్జిగ మిరపకాయలు, వడియాలు",
     "Sun-dried curd chillies and fritters.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2796,7 +2796,7 @@ const NEW_ITEMS: Dish[] = [
     "నవరత్న డ్రై ఫ్రూట్ స్వీట్",
     "Premium sweet loaded with assorted dry fruits.",
     "",
-    "Desserts",
+    "🍰 Desserts",
     "Indian",
     true,
     ["Our Special Selection"],
@@ -2807,7 +2807,7 @@ const NEW_ITEMS: Dish[] = [
     "వెల్‌కమ్ డ్రింక్",
     "Grape and pineapple mocktail.",
     "",
-    "Beverages",
+    "🥤 Beverages",
     "Continental",
     true,
     ["Our Special Selection"],
@@ -2818,7 +2818,7 @@ const NEW_ITEMS: Dish[] = [
     "ఫ్రూట్ స్టాల్",
     "Freshly cut fruits served live.",
     "",
-    "Live Counters",
+    "👨‍🍳 Live Counters",
     "Continental",
     true,
     ["Our Special Selection"],
@@ -2829,7 +2829,7 @@ const NEW_ITEMS: Dish[] = [
     "పప్పులమ్",
     "Traditional dal preparation.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2840,7 +2840,7 @@ const NEW_ITEMS: Dish[] = [
     "బీరకాయ శనగపప్పు",
     "Ridge gourd cooked with chana dal.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2851,7 +2851,7 @@ const NEW_ITEMS: Dish[] = [
     "ఆలూ చిన్న ముక్కల ఫ్రై",
     "Potato fried in small crisp pieces.",
     "",
-    "Veg Mains",
+    "🍛 Veg Mains",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2862,7 +2862,7 @@ const NEW_ITEMS: Dish[] = [
     "పునుగులు",
     "Deep fried batter snack.",
     "",
-    "Breakfast",
+    "🌅 Breakfast",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2873,7 +2873,7 @@ const NEW_ITEMS: Dish[] = [
     "టమాటో బాత్",
     "Spiced upma cooked with tomatoes.",
     "",
-    "Breakfast",
+    "🌅 Breakfast",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2884,7 +2884,7 @@ const NEW_ITEMS: Dish[] = [
     "చట్నీ (2 రకాలు)",
     "Two varieties of fresh chutney.",
     "",
-    "Breads & Sides",
+    "🫓 Breads & Sides",
     "South Indian",
     true,
     ["Our Special Selection"],
@@ -2895,7 +2895,7 @@ const NEW_ITEMS: Dish[] = [
     "వాటర్ బాటిల్ - 150",
     "Bulk packaged drinking water.",
     "",
-    "Beverages",
+    "🥤 Beverages",
     "Indian",
     true,
     ["Our Special Selection"],
@@ -2906,7 +2906,7 @@ const NEW_ITEMS: Dish[] = [
     "పాలతాలికలు",
     "Sweet rice noodle pudding.",
     "",
-    "Desserts",
+    "🍰 Desserts",
     "Andhra",
     true,
     ["Our Special Selection"],
@@ -2917,7 +2917,7 @@ const NEW_ITEMS: Dish[] = [
     "పూర్ణాలు",
     "Sweet lentil stuffed balls.",
     "",
-    "Desserts",
+    "🍰 Desserts",
     "Andhra",
     true,
     ["Our Special Selection"],
