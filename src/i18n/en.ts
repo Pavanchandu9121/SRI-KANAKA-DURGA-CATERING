@@ -356,17 +356,17 @@ export const en: Record<string, unknown> = {
   /* ───── Enum display labels ───── */
   categories: {
     All: "All",
-    "Breakfast": "Breakfast",
-    "Beverages": "Beverages",
-    "Soups & Salads": "Soups & Salads",
-    "Veg Starters": "Veg Starters",
-    "Non-Veg Starters": "Non-Veg Starters",
-    "Veg Mains": "Veg Mains",
-    "Non-Veg Mains": "Non-Veg Mains",
-    "Biryani & Rice": "Biryani & Rice",
-    "Breads & Sides": "Breads & Sides",
-    "Desserts": "Desserts",
-    "Live Counters": "Live Counters",
+    "🌅 Breakfast": "Breakfast",
+    "🥤 Beverages": "Beverages",
+    "🥗 Soups & Salads": "Soups & Salads",
+    "🌿 Veg Starters": "Veg Starters",
+    "🔥 Non-Veg Starters": "Non-Veg Starters",
+    "🍛 Veg Mains": "Veg Mains",
+    "🍖 Non-Veg Mains": "Non-Veg Mains",
+    "🍚 Biryani & Rice": "Biryani & Rice",
+    "🫓 Breads & Sides": "Breads & Sides",
+    "🍰 Desserts": "Desserts",
+    "👨‍🍳 Live Counters": "Live Counters",
   },
 
   cuisines: {

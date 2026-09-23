@@ -360,17 +360,17 @@ export const te: Record<string, unknown> = {
   /* ───── Enum display labels ───── */
   categories: {
     All: "అన్నీ",
-    "Breakfast": "బ్రేక్‌ఫాస్ట్",
-    "Beverages": "పానీయాలు",
-    "Soups & Salads": "సూప్‌లు & సలాడ్‌లు",
-    "Veg Starters": "వెజ్ స్టార్టర్‌లు",
-    "Non-Veg Starters": "నాన్-వెజ్ స్టార్టర్‌లు",
-    "Veg Mains": "వెజ్ మెయిన్స్",
-    "Non-Veg Mains": "నాన్-వెజ్ మెయిన్స్",
-    "Biryani & Rice": "బిర్యానీ & రైస్",
-    "Breads & Sides": "రొట్టెలు & అనుబంధాలు",
-    "Desserts": "డెసర్ట్‌లు",
-    "Live Counters": "లైవ్ కౌంటర్‌లు",
+    "🌅 Breakfast": "బ్రేక్‌ఫాస్ట్",
+    "🥤 Beverages": "పానీయాలు",
+    "🥗 Soups & Salads": "సూప్‌లు & సలాడ్‌లు",
+    "🌿 Veg Starters": "వెజ్ స్టార్టర్‌లు",
+    "🔥 Non-Veg Starters": "నాన్-వెజ్ స్టార్టర్‌లు",
+    "🍛 Veg Mains": "వెజ్ మెయిన్స్",
+    "🍖 Non-Veg Mains": "నాన్-వెజ్ మెయిన్స్",
+    "🍚 Biryani & Rice": "బిర్యానీ & రైస్",
+    "🫓 Breads & Sides": "రొట్టెలు & అనుబంధాలు",
+    "🍰 Desserts": "డెసర్ట్‌లు",
+    "👨‍🍳 Live Counters": "లైవ్ కౌంటర్‌లు",
   },
   
   cuisines: {
