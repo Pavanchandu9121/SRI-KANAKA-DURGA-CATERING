@@ -84,7 +84,7 @@ function BookPage() {
   const [pkg, setPkg] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState(MENU_CATEGORIES[0] || "");
+  const [category, setCategory] = useState("Breakfast");
   const [requests, setRequests] = useState<{ name: string; category: string; notes: string }[]>([]);
   const [reqForm, setReqForm] = useState<{ name: string; category: string; notes: string }>({
     name: "",
