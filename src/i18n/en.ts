@@ -101,7 +101,7 @@ export const en: Record<string, unknown> = {
     t1Year: "2019",
     t1Title: "Humble Beginnings",
     t1Text:
-      "Started as a family kitchen catering local housewarming and temple functions in Vijayawada.",
+      "Started as a family kitchen catering local housewarming and temple functions in Gollapudi.",
     t2Year: "2021",
     t2Title: "First Big Weddings",
     t2Text: "Expanded to full wedding catering with dedicated chefs, transport and serving staff.",
