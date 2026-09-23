@@ -7,8 +7,8 @@ import type { Dish } from "@/types";
  * place to reorder or rename a section.
  */
 export const MENU_CATEGORIES = [
-  "🌅 Breakfast",
   "🥤 Beverages",
+  "🌅 Breakfast",
   "🥗 Soups & Salads",
   "🌿 Veg Starters",
   "🔥 Non-Veg Starters",
