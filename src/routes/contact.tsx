@@ -55,21 +55,18 @@ function ContactPage() {
     e.preventDefault();
     setStatus("sending");
     try {
+      const formData = new FormData();
+      formData.append("access_key", WEB3FORMS_KEY);
+      formData.append("subject", "New Contact Enquiry from Sri Kanaka Durga Caterings");
+      formData.append("name", form.name);
+      formData.append("phone", form.phone);
+      formData.append("email", form.email || "Not provided");
+      formData.append("eventType", form.event || "General enquiry");
+      formData.append("message", form.message || "No message provided");
+
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: "New Contact Enquiry from Sri Kanaka Durga Caterings",
-          name: form.name,
-          phone: form.phone,
-          email: form.email || "Not provided",
-          eventType: form.event || "General enquiry",
-          message: form.message || "No message provided",
-        }),
+        body: formData,
       });
 
       const result = await response.json();

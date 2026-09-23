@@ -645,21 +645,18 @@ function BookPage() {
                   if (!canNext) return;
                   if (step === 1 && !leadCaptured) {
                     setLeadCaptured(true);
+                    const leadFormData = new FormData();
+                    leadFormData.append("access_key", WEB3FORMS_KEY);
+                    leadFormData.append("subject", `New Lead Captured: ${customer.name} - ${eventType}`);
+                    leadFormData.append("name", customer.name);
+                    leadFormData.append("phone", customer.phone);
+                    leadFormData.append("email", customer.email || "Not provided");
+                    leadFormData.append("eventType", eventType);
+                    leadFormData.append("status", "Lead Captured - Menu Not Yet Finished");
+
                     fetch("https://api.web3forms.com/submit", {
                       method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                      },
-                      body: JSON.stringify({
-                        access_key: WEB3FORMS_KEY,
-                        subject: `New Lead Captured: ${customer.name} - ${eventType}`,
-                        name: customer.name,
-                        phone: customer.phone,
-                        email: customer.email || "Not provided",
-                        eventType: eventType,
-                        status: "Lead Captured - Menu Not Yet Finished",
-                      }),
+                      body: leadFormData,
                     }).catch((error) => {
                       console.error("Failed to capture lead via email:", error);
                       // Reset so we can try again if needed, though they already moved to next step
