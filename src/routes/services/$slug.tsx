@@ -57,7 +57,7 @@ function ServiceDetail() {
         </Link>
       </PageHero>
 
-      <section className="px-6 pt-20">
+      <section className="px-4 pt-14 sm:px-6 sm:pt-20">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("serviceDetail.sampleEyebrow")} title={t("serviceDetail.sampleTitle")} />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -77,7 +77,7 @@ function ServiceDetail() {
         </div>
       </section>
 
-      <section className="px-6 pt-24">
+      <section className="px-4 pt-16 sm:px-6 sm:pt-24">
         <div className="mx-auto max-w-3xl">
           <SectionHeading eyebrow={t("serviceDetail.faqEyebrow")} title={t("serviceDetail.faqTitle")} />
           <Accordion type="single" collapsible className="mt-10">

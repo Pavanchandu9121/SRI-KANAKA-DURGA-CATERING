@@ -41,8 +41,8 @@ function Confirmed() {
   }, []);
 
   return (
-    <div className="px-6 py-24">
-      <div className="mx-auto max-w-3xl rounded-[2rem] border border-primary/30 bg-card p-10 text-center">
+    <div className="px-4 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-3xl rounded-[2rem] border border-primary/30 bg-card p-6 text-center sm:p-10">
         <CheckCircle2 className="mx-auto size-16 animate-bounce text-primary" />
         <h1 className="mt-6 font-display text-4xl text-cream">{t("bookingConfirmed.title")}</h1>
         <p className="mt-3 text-sm text-muted-foreground">

@@ -11,21 +11,26 @@ import { l } from "@/i18n";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Sri Kanaka Durga Caterings" },
+      { title: "Contact Sri Kanaka Durga Caterings Vijayawada" },
       {
         name: "description",
         content:
-          "Call, WhatsApp or email our catering team in Gollapudi, Andhra Pradesh. Business hours, location map and enquiry form.",
+          "Call, WhatsApp or email our catering team in Gollapudi, Vijayawada. Business hours, location map and catering enquiry form.",
       },
-      { property: "og:title", content: "Contact Us" },
+      {
+        name: "keywords",
+        content:
+          "contact Sri Kanaka Durga Caterings, catering phone number Vijayawada, caterers contact Gollapudi, book catering Vijayawada, catering enquiries, food service contact, event catering booking, food for occasions contact",
+      },
+      { property: "og:title", content: "Contact Us — Sri Kanaka Durga Caterings Vijayawada" },
       {
         property: "og:description",
-        content: "Reach our catering team 24×7 for enquiries and quotations.",
+        content: "Reach our catering team 24×7 for enquiries and quotations in Vijayawada.",
       },
       { property: "og:url", content: "https://srikanakadurgacaterings.in/contact" },
       { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
-      { name: "twitter:title", content: "Contact Sri Kanaka Durga Caterings" },
-      { name: "twitter:description", content: "Reach our catering team 24×7 for enquiries and quotations." },
+      { name: "twitter:title", content: "Contact Sri Kanaka Durga Caterings Vijayawada" },
+      { name: "twitter:description", content: "Reach our catering team 24×7 for enquiries and quotations in Vijayawada." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
     ],
     links: [
@@ -88,9 +93,9 @@ function ContactPage() {
         subtitle={t("contactPage.heroSubtitle")}
         image={IMAGES.heroFeast}
       />
-      <section className="px-6 pt-14">
+      <section className="px-4 pt-10 sm:px-6 sm:pt-14">
         <div className="mx-auto grid max-w-350 gap-8 lg:grid-cols-2">
-          <div className="rounded-3xl border border-primary/25 bg-card p-8">
+          <div className="rounded-3xl border border-primary/25 bg-card p-5 sm:p-8">
             <h2 className="font-display text-2xl text-cream">{t("contactPage.sendEnquiry")}</h2>
             <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
               <input

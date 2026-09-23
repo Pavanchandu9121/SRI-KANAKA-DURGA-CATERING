@@ -22,21 +22,26 @@ export const Route = createFileRoute("/book")({
   },
   head: () => ({
     meta: [
-      { title: "Book Catering — Request a Custom Quotation" },
+      { title: "Book Catering — Request a Custom Quotation | Vijayawada" },
       {
         name: "description",
         content:
-          "Book catering in a few steps: choose your event, share venue and guest details, build a package or custom menu, add services and submit your request.",
+          "Book catering in Vijayawada in a few steps: choose your event, share venue and guest details, build a package or custom menu, add services and submit your request.",
       },
-      { property: "og:title", content: "Book Your Catering" },
+      {
+        name: "keywords",
+        content:
+          "book catering Vijayawada, catering quotation Gollapudi, order catering near me, book event food, custom catering menu, wedding catering booking, catering estimate Vijayawada",
+      },
+      { property: "og:title", content: "Book Your Catering in Vijayawada" },
       {
         property: "og:description",
-        content: "Build your menu and request a quotation in minutes.",
+        content: "Build your menu and request a catering quotation in minutes.",
       },
       { property: "og:url", content: "https://srikanakadurgacaterings.in/book" },
       { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
-      { name: "twitter:title", content: "Book Catering — Sri Kanaka Durga Caterings" },
-      { name: "twitter:description", content: "Build your menu and request a quotation in minutes." },
+      { name: "twitter:title", content: "Book Catering — Sri Kanaka Durga Caterings Vijayawada" },
+      { name: "twitter:description", content: "Build your menu and request a catering quotation in minutes." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
     ],
     links: [
@@ -174,7 +179,7 @@ function BookPage() {
     step === 4;
 
   return (
-    <div className="px-6 py-16">
+    <div className="px-4 py-10 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-300">
         <SectionHeading eyebrow={t("bookPage.heroEyebrow")} title={t("bookPage.heroTitle")} />
 
@@ -195,7 +200,7 @@ function BookPage() {
           ))}
         </ol>
 
-        <div className="mt-10 rounded-[2rem] border border-primary/25 bg-card p-8">
+        <div className="mt-8 rounded-[1.5rem] border border-primary/25 bg-card p-5 sm:mt-10 sm:rounded-[2rem] sm:p-8">
           {step === 0 && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {EVENT_TYPES.map((e) => (
@@ -215,7 +220,7 @@ function BookPage() {
           )}
 
           {step === 2 && (
-            <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+            <div className="grid gap-6 lg:grid-cols-[1fr_280px] xl:grid-cols-[1fr_320px]">
               <div>
                 {!mode && (
                   <div className="grid gap-5 sm:grid-cols-2">

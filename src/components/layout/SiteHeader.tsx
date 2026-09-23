@@ -21,7 +21,7 @@ export function SiteHeader() {
   return (
     <div className="sticky top-0 z-50 bg-forest-deep/95 backdrop-blur-md">
       <div className="border-b border-border/60">
-        <div className="mx-auto flex max-w-375 items-center justify-between gap-2 px-4 py-2 text-[9px] tracking-wide text-muted-foreground sm:gap-3 sm:px-6 sm:text-[11px]">
+        <div className="mx-auto flex max-w-375 items-center justify-between gap-2 px-3 py-1.5 text-[8px] tracking-wide text-muted-foreground sm:gap-3 sm:px-6 sm:py-2 sm:text-[11px]">
           <span className="flex min-w-0 items-center gap-1.5 sm:gap-2">
             <Sparkles className="size-3 shrink-0 text-primary sm:size-3.5" />
             <span className="truncate">{t("header.tagline")}</span>
@@ -45,12 +45,12 @@ export function SiteHeader() {
       </div>
 
       <header className="border-b border-border/40">
-        <div className="mx-auto flex max-w-375 items-center justify-between gap-6 px-6 py-4">
+        <div className="mx-auto flex max-w-375 items-center justify-between gap-3 px-3 py-2 sm:gap-6 sm:px-6 sm:py-4">
           <Link to="/" className="flex items-center gap-4">
             <img 
               src="/logo.png" 
               alt="Sri Kanaka Durga Caterings Logo" 
-              className="h-20 w-20 rounded-full object-cover shadow-xl"
+              className="h-12 w-12 rounded-full object-cover shadow-xl sm:h-20 sm:w-20"
               onError={(e) => {
                 // Fallback to icon if logo not yet provided
                 e.currentTarget.style.display = 'none';
@@ -61,12 +61,12 @@ export function SiteHeader() {
             <div className="hidden size-16 place-items-center rounded-full border-2 border-primary/50 text-primary">
               <Sparkles className="size-8" />
             </div>
-            <div className="hidden leading-tight md:block">
-              <p className="font-display text-[12px] font-bold tracking-[0.35em] text-primary/90">
+            <div className="leading-tight">
+              <p className="hidden font-display text-[12px] font-bold tracking-[0.35em] text-primary/90 md:block">
                 {t("header.brandName")}
               </p>
-              <p className="font-display text-3xl tracking-[0.22em] text-accent drop-shadow-sm">{t("header.brandSub")}</p>
-              <p className="text-[10px] tracking-[0.3em] text-primary/80">{t("header.brandMotto")}</p>
+              <p className="font-display text-sm tracking-[0.12em] text-accent drop-shadow-sm sm:text-lg md:text-3xl md:tracking-[0.22em]">{t("header.brandSub")}</p>
+              <p className="hidden text-[10px] tracking-[0.3em] text-primary/80 md:block">{t("header.brandMotto")}</p>
             </div>
           </Link>
 
@@ -99,10 +99,11 @@ export function SiteHeader() {
             </a>
             <Link
               to="/book"
-              className="btn-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[11px] font-medium tracking-[0.14em] uppercase"
+              className="btn-gold inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[9px] font-medium tracking-[0.1em] uppercase sm:gap-2 sm:px-5 sm:py-2.5 sm:text-[11px] sm:tracking-[0.14em]"
             >
-              <CalendarDays className="size-4" />
-              {t("header.bookCatering")}
+              <CalendarDays className="size-3.5 sm:size-4" />
+              <span className="hidden sm:inline">{t("header.bookCatering")}</span>
+              <span className="sm:hidden">{t("header.bookCatering")}</span>
             </Link>
             <button
               aria-label="Toggle menu"
@@ -115,7 +116,7 @@ export function SiteHeader() {
         </div>
 
         {open && (
-          <nav className="mx-auto grid max-w-375 gap-1 px-6 pb-5 text-sm xl:hidden">
+          <nav className="mx-auto grid max-w-375 gap-1 px-4 pb-5 text-sm sm:px-6 xl:hidden">
             {NAV.map((item) => (
               <Link
                 key={item.to}

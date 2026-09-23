@@ -11,7 +11,7 @@ export function SiteFooter() {
 
   return (
     <footer className="mt-24 border-t border-border/40 bg-forest-deep">
-      <div className="mx-auto grid max-w-375 gap-10 px-6 py-16 md:grid-cols-2 xl:grid-cols-5">
+      <div className="mx-auto grid max-w-375 gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-16 md:grid-cols-2 xl:grid-cols-5">
         <div className="xl:col-span-1">
           <p className="font-display text-xl tracking-[0.22em] text-accent">
             {t("header.brandName")}
@@ -110,7 +110,7 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-border/40">
-        <div className="mx-auto flex max-w-375 flex-col items-center justify-between gap-3 px-6 py-5 text-xs text-muted-foreground sm:flex-row">
+        <div className="mx-auto flex max-w-375 flex-col items-center justify-between gap-3 px-4 py-4 text-xs text-muted-foreground sm:flex-row sm:px-6 sm:py-5">
           <p>© {new Date().getFullYear()} {t("footer.copyright")}</p>
           <div className="flex flex-wrap gap-5">
             <Link to="/privacy" className="hover:text-primary">

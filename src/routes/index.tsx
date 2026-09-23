@@ -28,23 +28,28 @@ import { l } from "@/i18n";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering" },
+      { title: "Sri Kanaka Durga Caterings — Best Catering Services in Vijayawada & Andhra Pradesh" },
       {
         name: "description",
         content:
-          "Premium multi-cuisine catering across Andhra Pradesh for weddings, receptions, corporate events and temple functions. 10+ years, 1000+ celebrations.",
+          "Top-rated catering services in Vijayawada, Gollapudi & Andhra Pradesh. Wedding catering, reception food, corporate events, birthday parties, temple functions. Veg & non-veg multi-cuisine food for all occasions. 10+ years, 1000+ celebrations.",
       },
-      { property: "og:title", content: "Sri Kanaka Durga Caterings" },
+      {
+        name: "keywords",
+        content:
+          "catering services in Vijayawada, caterers near me, best caterers Vijayawada, catering near me, food for occasions, wedding catering Vijayawada, food service Vijayawada, caterers in Gollapudi, catering Andhra Pradesh, reception catering, birthday catering, corporate catering, temple catering, outdoor catering, veg catering Vijayawada, non-veg catering, party food service, bulk food order, Sri Kanaka Durga Caterings, best food catering near me",
+      },
+      { property: "og:title", content: "Sri Kanaka Durga Caterings — Best Catering in Vijayawada" },
       {
         property: "og:description",
         content:
-          "Crafting unforgettable celebrations through exceptional cuisine — weddings, receptions and grand events across Andhra Pradesh.",
+          "Top-rated multi-cuisine catering in Vijayawada & Andhra Pradesh — weddings, receptions, corporate events, birthday parties and all occasions.",
       },
       { property: "og:url", content: "https://srikanakadurgacaterings.in/" },
       { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
       { property: "og:image:alt", content: "Sri Kanaka Durga Caterings Logo" },
-      { name: "twitter:title", content: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering" },
-      { name: "twitter:description", content: "Crafting unforgettable celebrations through exceptional cuisine — weddings, receptions and grand events across Andhra Pradesh." },
+      { name: "twitter:title", content: "Sri Kanaka Durga Caterings — Catering Services in Vijayawada" },
+      { name: "twitter:description", content: "Top-rated multi-cuisine catering in Vijayawada & Andhra Pradesh — weddings, receptions, corporate events and all occasions." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
     ],
     links: [
@@ -108,33 +113,33 @@ function Index() {
           <source src={heroVideo} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-linear-to-r from-forest-deep/75 via-forest-deep/40 to-forest-deep/20" />
-        <div className="relative mx-auto max-w-375 px-5 pt-20 pb-20 sm:px-10 md:px-20">
+        <div className="relative mx-auto max-w-375 px-4 pt-16 pb-16 sm:px-10 sm:pt-20 sm:pb-20 md:px-20">
           <div className="max-w-2xl">
-            <p className="flex items-center gap-4 text-[10px] tracking-[0.32em] text-accent/90 uppercase sm:text-[12px]">
+            <p className="flex items-center gap-3 text-[9px] tracking-[0.25em] text-accent/90 uppercase sm:gap-4 sm:text-[12px] sm:tracking-[0.32em]">
               <Flourish /> {t("home.heroEyebrow")} <Flourish />
             </p>
-            <h1 className="mt-6 font-display text-4xl leading-[1.1] text-cream sm:text-5xl md:text-6xl">
+            <h1 className="mt-4 font-display text-3xl leading-[1.1] text-cream sm:mt-6 sm:text-4xl md:text-5xl lg:text-6xl">
               {t("home.heroTitle")}
               <br />
               <span className="text-gradient-gold">{t("home.heroHighlight")}</span>
             </h1>
-            <div className="mt-6 flex items-center gap-3">
-              <span className="h-px w-40 bg-primary/50" />
+            <div className="mt-4 flex items-center gap-3 sm:mt-6">
+              <span className="h-px w-20 bg-primary/50 sm:w-40" />
               <Flourish />
             </div>
-            <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 max-w-xl text-xs leading-relaxed text-muted-foreground sm:mt-6 sm:text-sm">
               {t("home.heroDesc")}
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
               <Link
                 to="/book"
-                className="btn-gold inline-flex items-center gap-3 rounded-full px-8 py-4 text-[12px] font-medium tracking-[0.16em] uppercase"
+                className="btn-gold inline-flex items-center gap-2 rounded-full px-5 py-3 text-[10px] font-medium tracking-[0.14em] uppercase sm:gap-3 sm:px-8 sm:py-4 sm:text-[12px] sm:tracking-[0.16em]"
               >
                 {t("home.bookCatering")} <ArrowRight className="size-4" />
               </Link>
               <Link
                 to="/menu"
-                className="inline-flex items-center gap-3 rounded-full border border-cream/50 px-8 py-4 text-[12px] tracking-[0.16em] text-cream uppercase transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center gap-2 rounded-full border border-cream/50 px-5 py-3 text-[10px] tracking-[0.14em] text-cream uppercase transition-colors hover:border-primary hover:text-primary sm:gap-3 sm:px-8 sm:py-4 sm:text-[12px] sm:tracking-[0.16em]"
               >
                 {t("home.exploreMenu")} <BookOpen className="size-4" />
               </Link>
@@ -144,9 +149,9 @@ function Index() {
       </section>
 
       {/* Highlights card — cream, curved, gold-bordered */}
-      <section className="relative z-10 mx-auto py-16 max-w-350 px-6">
+      <section className="relative z-10 mx-auto py-10 max-w-350 px-4 sm:py-16 sm:px-6">
         <div className="rounded-[2rem] border border-primary/60 bg-cream p-2 shadow-[0_30px_70px_-40px_oklch(0_0_0/0.9)]">
-          <div className="grid grid-cols-1 gap-y-9 rounded-[1.65rem] border border-primary/25 px-2 py-9 text-forest-deep sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-y-6 rounded-[1.65rem] border border-primary/25 px-2 py-6 text-forest-deep sm:gap-y-9 sm:py-9 lg:grid-cols-5">
             {HIGHLIGHTS.map((h, i) => {
               const Icon = HIGHLIGHT_ICONS[i];
 
@@ -159,25 +164,25 @@ function Index() {
                    * between columns — and only at lg, where the row is a single
                    * five-across strip.
                    */
-                  className={`flex items-center justify-center gap-4 px-5 ${
-                    i > 0 ? "lg:border-l lg:border-forest-deep/12" : ""
+                  className={`flex items-center justify-center gap-3 px-3 sm:gap-4 sm:px-5 ${
+                    i > 0 ? "lg:border-l lg:border-forest-deep/12" : "col-span-2 sm:col-span-1 lg:col-span-1"
                   }`}
                 >
                   <span className="shrink-0 text-[oklch(0.58_0.12_74)]">
                     {Icon ? (
-                      <Icon className="size-11" strokeWidth={1.3} />
+                      <Icon className="size-8 sm:size-11" strokeWidth={1.3} />
                     ) : (
-                      <LaurelWreath className="size-11" />
+                      <LaurelWreath className="size-8 sm:size-11" />
                     )}
                   </span>
                   <div className="min-w-0">
-                    <p className="font-display text-[1.6rem] leading-[1.15] text-[oklch(0.58_0.12_74)]">
+                    <p className="font-display text-[1.2rem] leading-[1.15] text-[oklch(0.58_0.12_74)] sm:text-[1.6rem]">
                       {h.value}
                     </p>
-                    <p className="font-display text-[1.05rem] leading-tight text-forest-deep">
+                    <p className="font-display text-[0.85rem] leading-tight text-forest-deep sm:text-[1.05rem]">
                       {l(h, "label", lang)}
                     </p>
-                    <p className="mt-2 text-[0.78rem] leading-[1.45] text-forest-deep/60">
+                    <p className="mt-1 text-[0.68rem] leading-[1.45] text-forest-deep/60 sm:mt-2 sm:text-[0.78rem]">
                       {l(h, "note", lang)}
                     </p>
                   </div>
@@ -189,7 +194,7 @@ function Index() {
       </section>
 
       {/* About preview */}
-      <section className="px-6 py-28">
+      <section className="px-4 py-16 sm:px-6 sm:py-28">
         <div className="mx-auto grid max-w-350 items-center gap-12 lg:grid-cols-2">
           <img
             src={IMAGES.aboutKitchen}
@@ -230,7 +235,7 @@ function Index() {
       </section>
 
       {/* Why choose us */}
-      <section className="px-6 py-28">
+      <section className="px-4 py-16 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("home.whyEyebrow")} title={t("home.whyTitle")} />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -251,7 +256,7 @@ function Index() {
       </section>
 
       {/* Services */}
-      <section className="px-6 py-28">
+      <section className="px-4 py-16 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("home.svcEyebrow")} title={t("home.svcTitle")} />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -295,7 +300,7 @@ function Index() {
       </section>
 
       {/* Featured menu */}
-      <section className="px-6 py-28">
+      <section className="px-4 py-16 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("home.menuEyebrow")} title={t("home.menuTitle")} />
           <div className="mt-10 flex flex-wrap justify-center gap-3">
@@ -337,7 +342,7 @@ function Index() {
       </section>
 
       {/* Testimonials */}
-      <section className="px-6 py-28">
+      <section className="px-4 py-16 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("home.testEyebrow")} title={t("home.testTitle")} />
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -361,9 +366,9 @@ function Index() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 py-28">
-        <div className="mx-auto max-w-350 rounded-[2rem] border border-primary/40 bg-card px-8 py-14 text-center">
-          <h2 className="font-display text-4xl text-cream md:text-5xl">
+      <section className="px-4 py-16 sm:px-6 sm:py-28">
+        <div className="mx-auto max-w-350 rounded-[2rem] border border-primary/40 bg-card px-5 py-10 text-center sm:px-8 sm:py-14">
+          <h2 className="font-display text-3xl text-cream sm:text-4xl md:text-5xl">
             {t("home.ctaTitle")}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">

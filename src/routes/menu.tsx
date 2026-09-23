@@ -12,22 +12,27 @@ import type { Dish } from "@/types";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu Explorer — Sri Kanaka Durga Caterings" },
+      { title: "Catering Menu — Veg & Non-Veg Food | Sri Kanaka Durga Caterings Vijayawada" },
       {
         name: "description",
         content:
-          "Browse our full veg and non-veg catering menu: biryanis, chicken, mutton and prawns items, sweets, starters, curries, dals, fries, 65 varieties, pickles, podulu and rasams. Filter by category, diet and cuisine.",
+          "Browse 300+ veg and non-veg catering dishes in Vijayawada: biryanis, Andhra chicken, mutton, prawns, sweets, starters, curries, dals, fries, 65 varieties. South Indian, Andhra, Hyderabadi, North Indian & Chinese cuisines.",
       },
-      { property: "og:title", content: "Our Complete Catering Menu" },
+      {
+        name: "keywords",
+        content:
+          "catering menu Vijayawada, veg catering menu, non-veg catering menu, Andhra food menu, South Indian catering menu, biryani catering, wedding food menu, catering food list Vijayawada, party food menu, corporate food menu, best food for events, bulk food menu Vijayawada",
+      },
+      { property: "og:title", content: "Catering Menu — Sri Kanaka Durga Caterings" },
       {
         property: "og:description",
         content:
-          "Hundreds of dishes across Andhra, Hyderabadi, North Indian and Chinese cuisines — filter by category to build your spread.",
+          "300+ dishes across Andhra, South Indian, Hyderabadi, North Indian and Chinese cuisines — filter by category to build your catering spread in Vijayawada.",
       },
       { property: "og:url", content: "https://srikanakadurgacaterings.in/menu" },
       { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
-      { name: "twitter:title", content: "Menu Explorer — Sri Kanaka Durga Caterings" },
-      { name: "twitter:description", content: "Hundreds of dishes across Andhra, Hyderabadi, North Indian and Chinese cuisines." },
+      { name: "twitter:title", content: "Catering Menu — Sri Kanaka Durga Caterings Vijayawada" },
+      { name: "twitter:description", content: "300+ dishes across Andhra, South Indian, Hyderabadi, North Indian and Chinese cuisines." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
     ],
     links: [
@@ -71,7 +76,17 @@ function MenuPage() {
     if (q && !`${d.name} ${d.nameTe} ${d.desc}`.toLowerCase().includes(q.toLowerCase())) return false;
     if (diet === "veg" && !d.veg) return false;
     if (diet === "nonveg" && d.veg) return false;
-    if (cuisine !== "All" && d.cuisine !== cuisine) return false;
+    if (cuisine !== "All") {
+      if (cuisine === "South Indian") {
+        if (!["South Indian", "Andhra", "Hyderabadi"].includes(d.cuisine)) return false;
+      } else if (cuisine === "Andhra" || cuisine === "Hyderabadi") {
+        if (d.cuisine !== cuisine && d.cuisine !== "South Indian") return false;
+      } else if (cuisine === "Indian") {
+        if (["Chinese", "Continental"].includes(d.cuisine)) return false;
+      } else {
+        if (d.cuisine !== cuisine) return false;
+      }
+    }
     if (tag === "popular" && !d.popular) return false;
     if (tag === "new" && !d.isNew) return false;
     return true;
@@ -152,8 +167,8 @@ function MenuPage() {
         image={IMAGES.heroFeast}
       />
 
-      <section className="px-6 pt-12 pb-4">
-        <div className="mx-auto grid max-w-350 gap-8 lg:grid-cols-[17rem_1fr] lg:gap-10">
+      <section className="px-4 pt-10 pb-4 sm:px-6 sm:pt-12">
+        <div className="mx-auto grid max-w-350 gap-6 lg:grid-cols-[17rem_1fr] lg:gap-10">
           {/* ── Category rail ── */}
           <aside className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-9rem)] lg:self-start lg:overflow-y-auto">
             <div className="hidden rounded-[1.75rem] border border-primary/25 bg-card/60 p-4 lg:block">
@@ -201,7 +216,7 @@ function MenuPage() {
           <div>
             <div className="rounded-[2rem] border border-primary/50 bg-cream p-2">
               <div className="flex flex-wrap items-center gap-3 rounded-[1.65rem] border border-primary/25 p-4">
-                <div className="relative min-w-55 flex-1">
+                <div className="relative min-w-0 flex-1">
                   <Search className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-forest-deep/50" />
                   <input
                     value={q}

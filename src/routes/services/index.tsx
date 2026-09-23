@@ -11,22 +11,27 @@ import { l } from "@/i18n";
 export const Route = createFileRoute("/services/")({
   head: () => ({
     meta: [
-      { title: "Catering Services — Weddings, Corporate & More" },
+      { title: "Catering Services in Vijayawada — Weddings, Corporate & More" },
       {
         name: "description",
         content:
-          "Wedding, reception, birthday, corporate, temple, housewarming, outdoor and festival catering across Andhra Pradesh, with sample menus for each.",
+          "Wedding, reception, birthday, corporate, temple, housewarming, outdoor and festival catering services in Vijayawada, Gollapudi and across Andhra Pradesh, with sample menus for each.",
       },
-      { property: "og:title", content: "Our Catering Services" },
+      {
+        name: "keywords",
+        content:
+          "wedding catering Vijayawada, reception catering, birthday party catering, corporate catering Vijayawada, temple catering, housewarming catering, outdoor catering, festival catering, caterers near me, food for occasions, event food service Vijayawada, best catering services Gollapudi",
+      },
+      { property: "og:title", content: "Catering Services — Sri Kanaka Durga Caterings" },
       {
         property: "og:description",
         content:
-          "Eight dedicated catering services, each with sample menus, galleries and booking.",
+          "Eight dedicated catering services in Vijayawada, each with sample menus, galleries and booking.",
       },
       { property: "og:url", content: "https://srikanakadurgacaterings.in/services" },
       { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
-      { name: "twitter:title", content: "Catering Services — Sri Kanaka Durga Caterings" },
-      { name: "twitter:description", content: "Wedding, reception, birthday, corporate, temple and festival catering across Andhra Pradesh." },
+      { name: "twitter:title", content: "Catering Services — Sri Kanaka Durga Caterings Vijayawada" },
+      { name: "twitter:description", content: "Wedding, reception, birthday, corporate, temple and festival catering across Vijayawada & Andhra Pradesh." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
     ],
     links: [
@@ -46,7 +51,7 @@ function ServicesIndex() {
         subtitle={t("servicesPage.heroSubtitle")}
         image={IMAGES.galleryLive}
       />
-      <section className="px-6 pt-20">
+      <section className="px-4 pt-14 sm:px-6 sm:pt-20">
         <div className="mx-auto grid max-w-350 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s) => (
             <article

@@ -71,7 +71,7 @@ export function SectionHeading({
           <Flourish /> {eyebrow} <Flourish />
         </p>
       )}
-      <h2 className="mt-4 font-display text-4xl text-cream md:text-5xl">{title}</h2>
+      <h2 className="mt-4 font-display text-3xl text-cream sm:text-4xl md:text-5xl">{title}</h2>
       <div
         className={cn(
           "mt-4 flex w-40 items-center gap-2",
@@ -117,18 +117,18 @@ export function PageHero({
             src={image}
             alt=""
             aria-hidden
-            className="absolute inset-y-0 right-0 h-full w-[60%] object-cover"
+            className="absolute inset-y-0 right-0 h-full w-full object-cover sm:w-[60%]"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-forest-deep via-forest-deep/95 to-forest-deep/40" />
+          <div className="absolute inset-0 bg-forest-deep/80 sm:bg-linear-to-r sm:from-forest-deep sm:via-forest-deep/95 sm:to-forest-deep/40" />
         </>
       )}
-      <div className="relative mx-auto max-w-375 px-6 py-20">
+      <div className="relative mx-auto max-w-375 px-4 py-14 sm:px-6 sm:py-20">
         {eyebrow && (
-          <p className="flex items-center gap-4 text-[12px] tracking-[0.32em] text-accent/90 uppercase">
+          <p className="flex items-center gap-3 text-[10px] tracking-[0.25em] text-accent/90 uppercase sm:gap-4 sm:text-[12px] sm:tracking-[0.32em]">
             <Flourish /> {eyebrow}
           </p>
         )}
-        <h1 className="mt-5 font-display text-5xl text-cream md:text-6xl">{title}</h1>
+        <h1 className="mt-4 font-display text-3xl text-cream sm:mt-5 sm:text-5xl md:text-6xl">{title}</h1>
         {subtitle && (
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">{subtitle}</p>
         )}
