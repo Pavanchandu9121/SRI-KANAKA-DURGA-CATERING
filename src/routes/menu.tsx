@@ -323,15 +323,9 @@ function MenuPage() {
                         <span className="rounded-full border border-primary/30 px-3 py-1 text-primary/85">
                           {t(`categories.${d.category}`)}
                         </span>
-                        {Array.from(new Set([
-                          d.cuisine,
-                          ...(d.cuisine === "Andhra" || d.cuisine === "Hyderabadi" ? ["South Indian", "Indian"] : []),
-                          ...(d.cuisine === "South Indian" || d.cuisine === "North Indian" ? ["Indian"] : [])
-                        ])).map(c => (
-                          <span key={c} className="rounded-full border border-primary/20 px-3 py-1 text-muted-foreground">
-                            {t(`cuisines.${c}`)}
-                          </span>
-                        ))}
+                        <span className="rounded-full border border-primary/20 px-3 py-1 text-muted-foreground">
+                          {t(`cuisines.${d.cuisine}`)}
+                        </span>
                       </div>
 
                       <p className="mt-4 text-xs text-muted-foreground">
