@@ -97,7 +97,7 @@ const JSON_LD = JSON.stringify({
   logo: "https://srikanakadurgacaterings.in/logo.png",
   image: "https://srikanakadurgacaterings.in/og-image.png",
   description:
-    "Premium multi-cuisine catering across Andhra Pradesh for weddings, receptions, corporate events and temple functions.",
+    "Premium multi-cuisine catering in Vijayawada, Gollapudi and across Andhra Pradesh for weddings, receptions, corporate events, temple functions and all occasions. Best caterers near you.",
   telephone: "+919247364197",
   email: "srikanakadurgacaterings112@gmail.com",
   address: {
@@ -131,10 +131,20 @@ const JSON_LD = JSON.stringify({
   priceRange: "₹₹",
   currenciesAccepted: "INR",
   paymentAccepted: "Cash, UPI, Bank Transfer",
-  areaServed: {
-    "@type": "State",
-    name: "Andhra Pradesh",
-  },
+  areaServed: [
+    {
+      "@type": "City",
+      name: "Vijayawada",
+    },
+    {
+      "@type": "Place",
+      name: "Gollapudi",
+    },
+    {
+      "@type": "State",
+      name: "Andhra Pradesh",
+    },
+  ],
   sameAs: [
     "https://www.instagram.com/srikanakadurgacaterings",
   ],
@@ -145,18 +155,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering" },
+      { title: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering in Vijayawada" },
       {
         name: "description",
         content:
-          "Premium multi-cuisine catering across Andhra Pradesh for weddings, receptions, corporate events and temple functions.",
+          "Best catering services in Vijayawada, Gollapudi & Andhra Pradesh for weddings, receptions, birthdays, corporate events and temple functions. Veg & non-veg food for all occasions.",
+      },
+      {
+        name: "keywords",
+        content:
+          "catering services in Vijayawada, catering services in Gollapudi, catering services in Andhra Pradesh, caterers near me, catering near me, best caterers in Vijayawada, food service, food for occasions, wedding catering Vijayawada, reception catering, birthday party catering, corporate catering Vijayawada, temple catering, housewarming catering, outdoor catering Vijayawada, veg catering, non-veg catering, multi-cuisine catering, Andhra catering, South Indian catering, Sri Kanaka Durga Caterings, caterers Gollapudi, food catering services, event catering, party catering near me, bulk food order Vijayawada",
       },
       { name: "author", content: "Sri Kanaka Durga Caterings" },
-      { property: "og:title", content: "Sri Kanaka Durga Caterings" },
+      { property: "og:title", content: "Sri Kanaka Durga Caterings — Best Catering in Vijayawada" },
       {
         property: "og:description",
         content:
-          "Premium multi-cuisine catering across Andhra Pradesh — weddings, receptions, corporate events and temple functions.",
+          "Premium multi-cuisine catering in Vijayawada, Gollapudi & Andhra Pradesh — weddings, receptions, corporate events, temple functions and all occasions.",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Sri Kanaka Durga Caterings" },
@@ -167,11 +182,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:alt", content: "Sri Kanaka Durga Caterings — Premium Multi-Cuisine Catering" },
       { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Sri Kanaka Durga Caterings" },
-      { name: "twitter:description", content: "Premium multi-cuisine catering across Andhra Pradesh — weddings, receptions, corporate events and temple functions." },
+      { name: "twitter:title", content: "Sri Kanaka Durga Caterings — Catering in Vijayawada" },
+      { name: "twitter:description", content: "Premium multi-cuisine catering in Vijayawada & Andhra Pradesh — weddings, receptions, corporate events and all occasions." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
       { name: "geo.region", content: "IN-AP" },
-      { name: "geo.placename", content: "Gollapudi, Andhra Pradesh" },
+      { name: "geo.placename", content: "Vijayawada, Gollapudi, Andhra Pradesh" },
+      { name: "geo.position", content: "16.5486;80.5821" },
+      { name: "ICBM", content: "16.5486, 80.5821" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

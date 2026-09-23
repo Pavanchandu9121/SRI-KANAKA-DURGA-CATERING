@@ -15,18 +15,23 @@ import { l } from "@/i18n";
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: "FAQ — Catering Questions Answered" },
+      { title: "FAQ — Catering Questions Answered | Vijayawada" },
       {
         name: "description",
         content:
-          "Answers about service areas, minimum guest counts, staff and equipment, tastings, satvik menus and how to get a catering quotation.",
+          "Answers about service areas in Vijayawada and AP, minimum guest counts, staff and equipment, tastings, satvik menus and how to get a catering quotation.",
       },
-      { property: "og:title", content: "Frequently Asked Questions" },
-      { property: "og:description", content: "Everything you need to know before booking your catering." },
+      {
+        name: "keywords",
+        content:
+          "catering FAQ, catering questions, catering service areas Vijayawada, catering quotation Gollapudi, satvik catering Vijayawada, event catering cost, caterers near me",
+      },
+      { property: "og:title", content: "Frequently Asked Questions — Catering in Vijayawada" },
+      { property: "og:description", content: "Everything you need to know before booking your catering in Vijayawada." },
       { property: "og:url", content: "https://srikanakadurgacaterings.in/faq" },
       { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
-      { name: "twitter:title", content: "FAQ — Sri Kanaka Durga Caterings" },
-      { name: "twitter:description", content: "Everything you need to know before booking your catering." },
+      { name: "twitter:title", content: "FAQ — Sri Kanaka Durga Caterings Vijayawada" },
+      { name: "twitter:description", content: "Everything you need to know before booking your catering in Vijayawada." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
     ],
     links: [
@@ -46,7 +51,7 @@ function FaqPage() {
         subtitle={t("faqPage.heroSubtitle")}
         image={IMAGES.aboutKitchen}
       />
-      <section className="px-6 pt-14">
+      <section className="px-4 pt-10 sm:px-6 sm:pt-14">
         <div className="mx-auto max-w-3xl">
           <Accordion type="single" collapsible>
             {FAQS.map((f) => (

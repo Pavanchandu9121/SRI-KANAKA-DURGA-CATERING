@@ -11,21 +11,26 @@ import { l } from "@/i18n";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Us — Sri Kanaka Durga Caterings" },
+      { title: "About Us — Sri Kanaka Durga Caterings Vijayawada" },
       {
         name: "description",
         content:
-          "Our story, mission, team and achievements: a decade of multi-cuisine catering across Andhra Pradesh with hygienic kitchens and experienced chefs.",
+          "Our story, mission, team and achievements: a decade of multi-cuisine catering across Vijayawada, Gollapudi and Andhra Pradesh with hygienic kitchens and experienced chefs.",
       },
-      { property: "og:title", content: "About Sri Kanaka Durga Caterings" },
+      {
+        name: "keywords",
+        content:
+          "about Sri Kanaka Durga Caterings, best catering team Vijayawada, catering experience, professional caterers Gollapudi, authentic Andhra catering, expert chefs Vijayawada, catering company profile, food service Vijayawada",
+      },
+      { property: "og:title", content: "About Sri Kanaka Durga Caterings Vijayawada" },
       {
         property: "og:description",
-        content: "A decade of serving happiness — our history, mission, kitchens and team.",
+        content: "A decade of serving happiness — our history, mission, kitchens and team in Vijayawada.",
       },
       { property: "og:url", content: "https://srikanakadurgacaterings.in/about" },
       { property: "og:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
       { name: "twitter:title", content: "About Us — Sri Kanaka Durga Caterings" },
-      { name: "twitter:description", content: "A decade of serving happiness — our history, mission, kitchens and team." },
+      { name: "twitter:description", content: "A decade of serving happiness — our history, mission, kitchens and team in Vijayawada." },
       { name: "twitter:image", content: "https://srikanakadurgacaterings.in/og-image.png" },
     ],
     links: [
@@ -59,7 +64,7 @@ function About() {
         image={IMAGES.aboutKitchen}
       />
 
-      <section className="px-6 py-20">
+      <section className="px-4 py-14 sm:px-6 sm:py-20">
         <div className="mx-auto grid max-w-350 gap-6 md:grid-cols-2">
           {[
             { icon: Target, title: t("about.missionTitle"), text: t("about.missionText") },
@@ -76,7 +81,7 @@ function About() {
         </div>
       </section>
 
-      <section className="px-6 py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("about.journeyEyebrow")} title={t("about.journeyTitle")} />
           <ol className="mt-12 space-y-6 border-l border-primary/30 pl-8">
@@ -94,7 +99,7 @@ function About() {
         </div>
       </section>
 
-      <section className="px-6 py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("about.teamEyebrow")} title={t("about.teamTitle")} />
           <div className="mt-12 flex flex-col items-center sm:flex-row sm:justify-center gap-6 sm:gap-8">
@@ -112,7 +117,7 @@ function About() {
         </div>
       </section>
 
-      <section className="px-6 py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-350">
           <SectionHeading eyebrow={t("about.achEyebrow")} title={t("about.achTitle")} />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
