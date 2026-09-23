@@ -84,7 +84,7 @@ function BookPage() {
   const [pkg, setPkg] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("Breakfast");
+  const [category, setCategory] = useState(MENU_CATEGORIES[0] || "");
   const [requests, setRequests] = useState<{ name: string; category: string; notes: string }[]>([]);
   const [reqForm, setReqForm] = useState<{ name: string; category: string; notes: string }>({
     name: "",
@@ -187,13 +187,12 @@ function BookPage() {
           {STEPS.map((s, i) => (
             <li
               key={s}
-              className={`rounded-full border px-4 py-2 text-[11px] tracking-[0.14em] uppercase ${
-                i === step
-                  ? "border-primary bg-primary/15 text-primary"
-                  : i < step
-                    ? "border-primary/40 text-primary/70"
-                    : "border-primary/20 text-muted-foreground"
-              }`}
+              className={`rounded-full border px-4 py-2 text-[11px] tracking-[0.14em] uppercase ${i === step
+                ? "border-primary bg-primary/15 text-primary"
+                : i < step
+                  ? "border-primary/40 text-primary/70"
+                  : "border-primary/20 text-muted-foreground"
+                }`}
             >
               {i + 1}. {t(`bookSteps.${s}`)}
             </li>
@@ -207,11 +206,10 @@ function BookPage() {
                 <button
                   key={e}
                   onClick={() => setEventType(e)}
-                  className={`rounded-2xl border px-5 py-6 font-display text-xl ${
-                    eventType === e
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-primary/25 text-cream hover:border-primary/60"
-                  }`}
+                  className={`rounded-2xl border px-5 py-6 font-display text-xl ${eventType === e
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-primary/25 text-cream hover:border-primary/60"
+                    }`}
                 >
                   {t(`eventTypes.${e}`)}
                 </button>
@@ -303,11 +301,10 @@ function BookPage() {
                             <button
                               onClick={() => toggle(selected, setSelected, d.id)}
                               aria-label={on ? `Remove ${d.name}` : `Add ${d.name}`}
-                              className={`grid size-9 shrink-0 place-items-center rounded-full border ${
-                                on
-                                  ? "border-primary bg-primary/15 text-primary"
-                                  : "border-primary/40 text-primary"
-                              }`}
+                              className={`grid size-9 shrink-0 place-items-center rounded-full border ${on
+                                ? "border-primary bg-primary/15 text-primary"
+                                : "border-primary/40 text-primary"
+                                }`}
                             >
                               {on ? <Check className="size-4" /> : <Plus className="size-4" />}
                             </button>
@@ -469,11 +466,10 @@ function BookPage() {
               {ADDITIONAL_SERVICES.map((a) => (
                 <label
                   key={a}
-                  className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-5 py-4 text-sm ${
-                    addons.includes(a)
-                      ? "border-primary text-primary"
-                      : "border-primary/25 text-muted-foreground"
-                  }`}
+                  className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-5 py-4 text-sm ${addons.includes(a)
+                    ? "border-primary text-primary"
+                    : "border-primary/25 text-muted-foreground"
+                    }`}
                 >
                   <input
                     type="checkbox"
