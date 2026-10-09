@@ -42,17 +42,39 @@ export const Route = createFileRoute("/menu")({
   component: MenuPage,
 });
 
-const dishImages = import.meta.glob("../assets/dishes/*.jpg", { eager: true, import: "default" });
-
 /*
- * Photos are matched by convention: assets/dishes/<id>.jpg, or <photo>.jpg when
+ * Photos are matched by convention: /dishes/<id>.jpg, or <photo>.jpg when
  * a dish borrows another's picture. Anything without a file gets the brand tile
  * below rather than a broken <img>, so the grid stays intact while the
  * photography catches up with the menu.
  */
-function dishPhoto(dish: Dish): string | undefined {
-  const key = `../assets/dishes/${dish.photo ?? dish.id}.jpg`;
-  return dishImages[key] as string | undefined;
+function dishPhoto(dish: Dish): string {
+  return `/dishes/${dish.photo ?? dish.id}.jpg`;
+}
+
+function DishImage({ dish, lang, t }: { dish: Dish; lang: any; t: any }) {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <div className="flex size-full flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_50%_35%,var(--forest),var(--forest-deep))]">
+        <UtensilsCrossed className="size-8 text-primary/45" strokeWidth={1.25} />
+        <span className="px-6 text-center font-display text-sm text-primary/55">
+          {t("menuPage.photoSoon")}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={dishPhoto(dish)}
+      alt={l(dish, "name", lang)}
+      className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
+      onError={() => setError(true)}
+    />
+  );
 }
 
 function MenuPage() {
@@ -268,29 +290,13 @@ function MenuPage() {
 
             <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {results.map((d) => {
-                const photo = dishPhoto(d);
                 return (
                   <article
                     key={d.id}
                     className="group flex flex-col overflow-hidden rounded-3xl border border-primary/25 bg-card"
                   >
                     <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
-                      {photo ? (
-                        <img
-                          src={photo}
-                          alt={l(d, "name", lang)}
-                          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      ) : (
-                        /* Brand tile stands in until the dish is photographed. */
-                        <div className="flex size-full flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_50%_35%,var(--forest),var(--forest-deep))]">
-                          <UtensilsCrossed className="size-8 text-primary/45" strokeWidth={1.25} />
-                          <span className="px-6 text-center font-display text-sm text-primary/55">
-                            {t("menuPage.photoSoon")}
-                          </span>
-                        </div>
-                      )}
+                      <DishImage dish={d} lang={lang} t={t} />
                       {/* Veg/Non-veg dot */}
                       <div className="absolute top-4 right-4">
                         <span
