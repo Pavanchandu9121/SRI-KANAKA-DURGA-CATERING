@@ -1,0 +1,22 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Menu file uploads ────────────────────────────────────────────
+    // Allow ONLY PDF, JPEG, and PNG uploads under 5 MB.
+    // Block public listing, reading, and deletion.
+    match /menus/{fileName} {
+      allow create: if request.resource.size < 5 * 1024 * 1024
+                    && request.resource.contentType.matches('application/pdf|image/jpeg|image/png');
+
+      // Only authenticated admins can read or delete uploaded files.
+      allow read, delete: if request.auth != null
+                          && request.auth.token.admin == true;
+    }
+
+    // ── Default: deny everything else ────────────────────────────────
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

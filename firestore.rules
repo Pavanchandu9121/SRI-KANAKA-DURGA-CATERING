@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Booking inquiries ──────────────────────────────────────────────
+    // Public users can ONLY create new inquiries.
+    // They can NEVER read, update, or delete any booking.
+    match /bookings/{bookingId} {
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'phone', 'eventType'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() <= 20
+        && request.resource.data.eventType is string
+        && request.resource.data.eventType.size() <= 50;
+
+      // Only authenticated admins can read/update/delete bookings.
+      allow read, update, delete: if request.auth != null
+                                   && request.auth.token.admin == true;
+    }
+
+    // ── Contact / enquiry submissions ──────────────────────────────────
+    match /enquiries/{enquiryId} {
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'phone', 'message'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() <= 20
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 2000;
+
+      allow read, update, delete: if request.auth != null
+                                   && request.auth.token.admin == true;
+    }
+
+    // ── Default: deny everything else ──────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
