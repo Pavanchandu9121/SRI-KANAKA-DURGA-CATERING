@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { CONTACT, WEB3FORMS_KEY } from "@/config/contact";
-import { ArrowLeft, ArrowRight, Check, Plus, Trash2, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Loader2, Plus, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
 
 import {
@@ -79,6 +79,7 @@ function BookPage() {
     instructions: "",
   });
   const [leadCaptured, setLeadCaptured] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [mode, setMode] = useState<"package" | "custom" | "">("");
   const [pkg, setPkg] = useState("");
@@ -125,6 +126,7 @@ function BookPage() {
   );
 
   const submit = async () => {
+    setSubmitting(true);
     const bookingId = `SKD-${Date.now().toString().slice(-6)}`;
     const summary = {
       bookingId,
@@ -145,7 +147,9 @@ function BookPage() {
     formData.append("subject", `New Booking Request: ${bookingId} - ${eventType}`);
     formData.append("name", customer.name);
     formData.append("phone", customer.phone);
-    formData.append("email", customer.email || "Not provided");
+    if (customer.email && customer.email.trim()) {
+      formData.append("email", customer.email.trim());
+    }
     formData.append("eventType", eventType);
     formData.append("status", "Booking Submitted - Menu Finished");
     formData.append("bookingId", bookingId);
@@ -153,22 +157,58 @@ function BookPage() {
     formData.append("addons", addons.join(", "));
     formData.append("instructions", customer.instructions || "None");
 
+    const messageContent = [
+      `📋 BOOKING DETAILS (${bookingId})`,
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+      `Customer: ${customer.name}`,
+      `Phone: ${customer.phone}`,
+      customer.whatsapp ? `WhatsApp: ${customer.whatsapp}` : null,
+      customer.email ? `Email: ${customer.email}` : null,
+      `Event: ${eventType}`,
+      customer.city
+        ? `Location: ${[customer.address1, customer.address2, customer.city, customer.district, customer.pincode].filter(Boolean).join(", ")}`
+        : null,
+      `Preferred Contact Time: ${customer.contactTime || "Anytime"}`,
+      ``,
+      `🍽️ MENU SELECTION (${selectedDishes.length} dishes)`,
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+      selectedDishes.length > 0
+        ? selectedDishes.map((d) => `• ${d.name} (${d.category})`).join("\n")
+        : "None selected",
+      requests.length > 0
+        ? `\nCustom Requests:\n${requests.map((r) => `• ${r.name}${r.notes ? ` (${r.notes})` : ""}`).join("\n")}`
+        : null,
+      addons.length > 0
+        ? `\n✨ Additional Services:\n${addons.map((a) => `• ${a}`).join("\n")}`
+        : null,
+      customer.instructions
+        ? `\n📝 Special Instructions:\n${customer.instructions}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    formData.append("message", messageContent);
+
     files.forEach((file) => {
       formData.append("attachment", file);
     });
 
-    // Send final booking details email (fire and forget so UI doesn't freeze)
-    fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData,
-    }).catch((error) => {
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+        keepalive: true,
+      });
+    } catch (error) {
       console.error("Failed to send final email:", error);
-    });
-
-    if (typeof window !== "undefined") {
-      window.sessionStorage.setItem("skd-booking", JSON.stringify(summary));
+    } finally {
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("skd-booking", JSON.stringify(summary));
+      }
+      setSubmitting(false);
+      navigate({ to: "/booking-confirmed" });
     }
-    navigate({ to: "/booking-confirmed" });
   };
 
   const canNext =
@@ -646,13 +686,20 @@ function BookPage() {
                     leadFormData.append("subject", `New Lead Captured: ${customer.name} - ${eventType}`);
                     leadFormData.append("name", customer.name);
                     leadFormData.append("phone", customer.phone);
-                    leadFormData.append("email", customer.email || "Not provided");
+                    if (customer.email && customer.email.trim()) {
+                      leadFormData.append("email", customer.email.trim());
+                    }
                     leadFormData.append("eventType", eventType);
-                    leadFormData.append("status", "Lead Captured - Menu Not Yet Finished");
+                    leadFormData.append("status", "Lead Captured - Menu In Progress");
+                    leadFormData.append(
+                      "message",
+                      `New Lead Captured!\nCustomer: ${customer.name}\nPhone: ${customer.phone}\nEvent: ${eventType}\nStatus: Customer started booking flow and entered contact details.`,
+                    );
 
                     fetch("https://api.web3forms.com/submit", {
                       method: "POST",
                       body: leadFormData,
+                      keepalive: true,
                     }).catch((error) => {
                       console.error("Failed to capture lead via email:", error);
                       // Reset so we can try again if needed, though they already moved to next step
@@ -670,9 +717,18 @@ function BookPage() {
             ) : (
               <button
                 onClick={submit}
-                className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-3 text-[11px] tracking-[0.14em] uppercase"
+                disabled={submitting}
+                className="btn-gold inline-flex items-center gap-2 rounded-full px-8 py-3 text-[11px] tracking-[0.14em] uppercase disabled:opacity-50"
               >
-                {t("book.submitRequest")} <Check className="size-4" />
+                {submitting ? (
+                  <>
+                    Submitting... <Loader2 className="size-4 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    {t("book.submitRequest")} <Check className="size-4" />
+                  </>
+                )}
               </button>
             )}
           </div>

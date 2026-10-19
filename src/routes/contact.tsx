@@ -60,13 +60,16 @@ function ContactPage() {
       formData.append("subject", "New Contact Enquiry from Sri Kanaka Durga Caterings");
       formData.append("name", form.name);
       formData.append("phone", form.phone);
-      formData.append("email", form.email || "Not provided");
+      if (form.email && form.email.trim()) {
+        formData.append("email", form.email.trim());
+      }
       formData.append("eventType", form.event || "General enquiry");
       formData.append("message", form.message || "No message provided");
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
+        keepalive: true,
       });
 
       const result = await response.json();
