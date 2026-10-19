@@ -22,6 +22,6 @@ export const CONTACT = {
 
 /** Web3Forms access key — safe for client-side use per Web3Forms docs. */
 export const WEB3FORMS_KEY =
-  import.meta.env.VITE_WEB3FORMS_KEY || "b51f1e38-7e7b-4489-8988-5a1eb7da807a";
+  import.meta.env.VITE_WEB3FORMS_KEY;
 
 export const IMAGES = { heroBiryani, aboutKitchen, galleryLive };
